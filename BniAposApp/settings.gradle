@@ -1,0 +1,3 @@
+rootProject.name = "BniApos"
+include ':app'
+include ':paymentsdk'
