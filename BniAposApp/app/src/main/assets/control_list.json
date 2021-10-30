@@ -1,0 +1,124 @@
+{
+  "controlList": [
+    {
+      "controlKey": "AMT",
+      "controlType": "Text",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "Amount",
+      "screenId": 1,
+      "sortOrder": 3,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    },
+    {
+      "controlKey": "DESC",
+      "controlType": "Text",
+      "defaultValue": "This is good",
+      "relatedControlKey": null,
+      "label": "Description",
+      "screenId": 1,
+      "sortOrder": 2,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    },
+    {
+      "controlKey": "GNDR",
+      "controlType": "RADIO",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "Gender",
+      "screenId": 1,
+      "sortOrder": 1,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": "countryList"
+    },
+    {
+      "controlKey": "country",
+      "controlType": "DropDown",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "Country",
+      "screenId": 1,
+      "sortOrder": 4,
+      "maxLength": 0,
+      "minLength": 0,
+      "dataSet": "countryList"
+    },
+    {
+      "controlKey": "state",
+      "controlType": "DropDown",
+      "defaultValue": "10",
+      "relatedControlKey": "country",
+      "label": "State",
+      "screenId": 1,
+      "sortOrder": 5,
+      "maxLength": 0,
+      "minLength": 0,
+      "dataSet": "stateList"
+    },
+    {
+      "controlKey": "city",
+      "controlType": "DropDown",
+      "defaultValue": "10",
+      "relatedControlKey": "state",
+      "label": "City",
+      "screenId": 1,
+      "sortOrder": 6,
+      "maxLength": 0,
+      "minLength": 0,
+      "dataSet": "cityList"
+    },
+    {
+      "controlKey": "RMRK",
+      "controlType": "Text",
+      "defaultValue": "Cool",
+      "relatedControlKey": null,
+      "label": "Remark",
+      "screenId": 2,
+      "sortOrder": 2,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    },
+    {
+      "controlKey": "PHN",
+      "controlType": "Text",
+      "defaultValue": "7827190823",
+      "relatedControlKey": null,
+      "label": "Phone Number",
+      "screenId": 2,
+      "sortOrder": 1,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    },
+    {
+      "controlKey": "FRSTNM",
+      "controlType": "Text",
+      "defaultValue": "Ayush",
+      "relatedControlKey": null,
+      "label": "FirstName",
+      "screenId": 3,
+      "sortOrder": 1,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    },
+    {
+      "controlKey": "LSTNM",
+      "controlType": "Text",
+      "defaultValue": "Pant",
+      "relatedControlKey": null,
+      "label": "Last Name",
+      "screenId": 3,
+      "sortOrder": 2,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    }
+  ]
+}

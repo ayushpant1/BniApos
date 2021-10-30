@@ -1,4 +1,4 @@
-package com.example.BniApos
+package com.example.bniapos
 
 import org.junit.Test
 

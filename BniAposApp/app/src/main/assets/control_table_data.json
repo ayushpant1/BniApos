@@ -1,0 +1,46 @@
+{
+  "controlTableData": [
+    {
+      "value": "ind",
+      "name": "india",
+      "dataSetKey": "countryList",
+      "referenceDataSetKey": null
+    },
+    {
+      "value": "fr",
+      "name": "france",
+      "dataSetKey": "countryList",
+      "referenceDataSetKey": null
+    },
+    {
+      "value": "hr",
+      "name": "haryana",
+      "dataSetKey": "stateList",
+      "referenceDataSetKey": "ind"
+    },
+    {
+      "value": "up",
+      "name": "uttarpradesh",
+      "dataSetKey": "stateList",
+      "referenceDataSetKey": "ind"
+    },
+    {
+      "value": "nod",
+      "name": "noida",
+      "dataSetKey": "cityList",
+      "referenceDataSetKey": "up"
+    },
+    {
+      "value": "snp",
+      "name": "sonipath",
+      "dataSetKey": "cityList",
+      "referenceDataSetKey": "hr"
+    },
+    {
+      "value": "pr",
+      "name": "paris",
+      "dataSetKey": "stateList",
+      "referenceDataSetKey": "fr"
+    }
+  ]
+}
