@@ -1,0 +1,34 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="128.475dp"
+    android:height="100dp"
+    android:viewportWidth="128.475"
+    android:viewportHeight="100">
+    <path
+        android:pathData="M23.156,15.304v-15.3h-21.771a1.386,1.386 0,0 0,-1.385 1.385,1.386 1.386,0 0,0 1.385,1.385h19v15.057A8.406,8.406 0,0 1,23.156 15.304Z"
+        android:fillColor="#fff"/>
+    <path
+        android:pathData="M120.384,14.383h-93.7a7.231,7.231 0,0 0,-3.527 0.922,8.414 8.414,0 0,0 -2.771,2.523 10.189,10.189 0,0 0,-1.6 7.754l9.421,49.478c0.808,4.249 4.1,7.273 7.9,7.273h74.863c3.8,0 7.091,-3.028 7.9,-7.273l9.421,-49.478C129.379,19.828 125.54,14.383 120.384,14.383ZM93.747,58.319h-36.944a1.386,1.386 0,0 1,-1.386 -1.385,1.386 1.386,0 0,1 1.386,-1.385h36.944a1.385,1.385 0,0 1,1.386 1.385A1.385,1.385 0,0 1,93.746 58.319ZM109.911,37.076h-67.424a1.385,1.385 0,0 1,-1.385 -1.385,1.386 1.386,0 0,1 1.385,-1.385h67.424a1.385,1.385 0,0 1,1.385 1.385A1.385,1.385 0,0 1,109.91 37.076Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startY="14.383"
+                android:startX="73.95041"
+                android:endY="82.333"
+                android:endX="73.95041"
+                android:type="linear">
+                <item android:offset="0" android:color="#FFFFFFFF"/>
+                <item android:offset="1" android:color="#1CFFFFFF"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M95.986,84.239m-15.761,0a15.761,15.761 0,1 1,31.522 0a15.761,15.761 0,1 1,-31.522 0"
+        android:strokeAlpha="0.7"
+        android:fillColor="#fff"
+        android:fillAlpha="0.7"/>
+    <path
+        android:pathData="M50.26,68.479a15.76,15.76 0,0 1,15.76 15.76,15.761 15.761,0 0,1 -15.76,15.76 15.761,15.761 0,0 1,-15.761 -15.76,15.761 15.761,0 0,1 15.761,-15.76Z"
+        android:strokeAlpha="0.7"
+        android:fillColor="#fff"
+        android:fillAlpha="0.7"/>
+</vector>

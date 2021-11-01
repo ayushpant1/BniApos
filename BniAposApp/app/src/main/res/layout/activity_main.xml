@@ -10,7 +10,7 @@
         android:layout_above="@+id/btn_next"
         android:fillViewport="true"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context=".activities.MainActivity">
 
 
         <LinearLayout

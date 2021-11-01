@@ -1,0 +1,103 @@
+{
+  "menuList": [
+    {
+      "id": 6,
+      "parentId": 0,
+      "displayText": "ALIPAY",
+      "IconName": "ALIPAY",
+      "sortOrder": 2,
+      "Type": "action",
+      "schemaId": 0
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 339,
+      "parentId": 0,
+      "displayText": "SALE",
+      "IconName": "SALE",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 56
+    },
+    {
+      "id": 1001,
+      "parentId": 6,
+      "displayText": "QR Scan",
+      "IconName": "QR_SCAN",
+      "sortOrder": 1,
+      "Type": "txn",
+      "schemaId": 101
+    },
+    {
+      "id": 1001,
+      "parentId": 6,
+      "displayText": "Show QR",
+      "IconName": "SHOW_QR",
+      "sortOrder": 2,
+      "Type": "txn",
+      "schemaId": 103
+    }
+  ]
+}

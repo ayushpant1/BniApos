@@ -1,10 +1,12 @@
-package com.example.bniapos
+package com.example.bniapos.activities
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bniapos.R
+import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.models.ControlList
