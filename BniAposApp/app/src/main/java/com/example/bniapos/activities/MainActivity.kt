@@ -30,6 +30,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         llParentBody = findViewById(R.id.ll_parent_body)
         btnNext = findViewById(R.id.btn_next)
+        Toast.makeText(
+            this,
+            intent.getStringExtra("menuName") + intent.getIntExtra("menuId", 0),
+            Toast.LENGTH_LONG
+        ).show()
+
         val json = loadJSONFromAsset()
         val jsonTable = loadTableJSONFromAsset()
         val gson = Gson()
