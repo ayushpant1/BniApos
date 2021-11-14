@@ -5,16 +5,16 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.cti.generic.Terminal.TerminalModels.CardReadOutput;
-import com.cti.generic.Terminal.util.Util;
-import com.cti.generic.R;
-import com.cti.generic.sdk.api.ICCpuReader;
-import com.cti.generic.sdk.api.MagReader;
-import com.cti.generic.sdk.api.PinpadForMKSK;
-import com.cti.generic.sdk.api.RFReader;
-import com.cti.generic.sdk.util.data.BytesUtil;
-import com.cti.generic.sdk.util.pinpad.KeyId;
-import com.cti.generic.sdk.util.pinpad.MockKey;
+
+import com.example.bniapos.R;
+import com.example.bniapos.terminallib.CardReadOutput;
+import com.example.bniapos.terminallib.api.ICCpuReader;
+import com.example.bniapos.terminallib.api.MagReader;
+import com.example.bniapos.terminallib.api.PinpadForMKSK;
+import com.example.bniapos.terminallib.api.RFReader;
+import com.example.bniapos.terminallib.util.data.BytesUtil;
+import com.example.bniapos.terminallib.util.pinpad.KeyId;
+import com.example.bniapos.terminallib.util.pinpad.MockKey;
 import com.usdk.apiservice.aidl.data.ApduResponse;
 import com.usdk.apiservice.aidl.data.BytesValue;
 import com.usdk.apiservice.aidl.data.IntValue;

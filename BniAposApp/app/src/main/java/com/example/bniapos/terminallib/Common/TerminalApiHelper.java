@@ -7,11 +7,9 @@ import android.os.RemoteException;
 
 import android.widget.Toast;
 
-import com.cti.generic.Terminal.Common.ISuccessResponse;
-import com.cti.generic.R;
 
-import com.cti.generic.sdk.api.ScannerForBack;
-
+import com.example.bniapos.R;
+import com.example.bniapos.terminallib.api.ScannerForBack;
 import com.usdk.apiservice.aidl.scanner.OnScanListener;
 
 public class TerminalApiHelper {

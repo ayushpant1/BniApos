@@ -3,10 +3,10 @@ package com.example.bniapos.terminallib.util.emv;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.cti.generic.sdk.api.EMV;
-import com.cti.generic.sdk.util.data.BytesUtil;
-import com.cti.generic.sdk.util.transaction.Session;
-import com.cti.generic.Terminal.TerminalModels.TransactionConfig;
+import com.example.bniapos.terminallib.api.EMV;
+import com.example.bniapos.terminallib.util.data.BytesUtil;
+import com.example.bniapos.terminallib.util.transaction.Session;
+import com.example.bniapos.terminallib.util.transaction.TransactionConfig;
 import com.usdk.apiservice.aidl.emv.ActionFlag;
 import com.usdk.apiservice.aidl.emv.CandidateAID;
 import com.usdk.apiservice.aidl.emv.EMVData;

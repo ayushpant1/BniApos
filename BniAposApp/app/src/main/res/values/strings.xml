@@ -2,6 +2,14 @@
     <string name="app_name">Bni app</string>
 
 
+    <!--Common Strings-->
+    <string name="cancel">Cancel</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="print">Print</string>
+    <string name="get_printer_status">Get Printer Status</string>
+    <string name="waiting_for_printing">Waiting For Printing</string>
+    <string name="unknown_card">Unknown Card</string>
+
     <!--Device Manager Strings-->
     <string name="update_date_time_error">Update Date Time Error</string>
 
@@ -108,7 +116,7 @@
     <string name="pinpad_reset_error">Pinpad Reset Error</string>
     <string name="verify_offline_pin_error">Verify Offline PIN Error</string>
 
-        <!--Pinpad Error-->
+    <!--Pinpad Error-->
     <string name="pinpad_error_error">other error</string>
     <string name="pinpad_error_abolish">press cancel quit</string>
     <string name="pinpad_error_no_such_pinpad">user specified pinpad does not exist</string>
@@ -165,6 +173,24 @@
     <string name="init_engine_error">Init Engine Error</string>
     <string name="no_init">No Init</string>
     <string name="start_scanner_fail">Start Scanner Fail</string>
+
+    <!--Printer Error-->
+    <string name="printer_paper_ended">Out of paper</string>
+    <string name="printer_hardware_error">Hardware error</string>
+    <string name="printer_overheat">Overheat</string>
+    <string name="printer_buffer_overflow">Buffer overflow</string>
+    <string name="printer_low_vol">Low VOL protection</string>
+    <string name="printer_paper_ending">Out of paper soon</string>
+    <string name="printer_engine_error">Printer engine error</string>
+    <string name="printer_pe_not_found">Failed to locate automatically, paper returned to the original position</string>
+    <string name="printer_paper_jam">Paper jam</string>
+    <string name="printer_no_bm">Black mark not found</string>
+    <string name="printer_busy">Printer is busy</string>
+    <string name="printer_bm_black">Black signal</string>
+    <string name="printer_power_on">Printer is powered on</string>
+    <string name="printer_lift_head">Printer head is lifted</string>
+    <string name="printer_cutter_position_error">Cutter not in position</string>
+    <string name="printer_low_temperature">Low temperature</string>
 
 
 </resources>

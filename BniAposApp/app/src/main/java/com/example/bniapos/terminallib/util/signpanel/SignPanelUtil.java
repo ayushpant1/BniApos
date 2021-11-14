@@ -2,7 +2,7 @@ package com.example.bniapos.terminallib.util.signpanel;
 
 import android.content.Context;
 
-import com.cti.generic.R;
+import com.example.bniapos.R;
 import com.smartpos.signpanel.SignPanel;
 
 import java.util.Hashtable;

@@ -8,15 +8,8 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.cti.generic.Terminal.Common.ISuccessResponse;
-import com.cti.generic.Terminal.CommonController;
-import com.cti.generic.Terminal.Constant;
-import com.cti.generic.Terminal.TerminalModels.PrintFormat;
-import com.cti.generic.Terminal.TerminalModels.PrintReciept;
-import com.cti.generic.R;
-
-import com.cti.generic.Terminal.util.SingeltonActivity;
-import com.cti.generic.sdk.util.printer.Printer;
+import com.example.bniapos.R;
+import com.example.bniapos.terminallib.util.printer.Printer;
 import com.usdk.apiservice.aidl.printer.ASCScale;
 import com.usdk.apiservice.aidl.printer.ASCSize;
 import com.usdk.apiservice.aidl.printer.AlignMode;

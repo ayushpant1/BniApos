@@ -1,7 +1,7 @@
 package com.example.bniapos.terminallib.util.emv;
 
-import com.cti.generic.sdk.util.data.BytesUtil;
-import com.cti.generic.sdk.util.data.TLVList;
+import com.example.bniapos.terminallib.util.data.BytesUtil;
+import com.example.bniapos.terminallib.util.data.TLVList;
 import com.usdk.apiservice.aidl.emv.CAPublicKey;
 import com.usdk.apiservice.aidl.emv.EMVTag;
 

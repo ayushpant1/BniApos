@@ -2,9 +2,8 @@ package com.example.bniapos.terminallib.Common;
 
 import android.os.RemoteException;
 
-import com.cti.generic.Terminal.Constant;
-import com.cti.generic.sdk.api.Beeper;
-import com.cti.generic.sdk.api.LED;
+import com.example.bniapos.terminallib.api.Beeper;
+import com.example.bniapos.terminallib.api.LED;
 import com.usdk.apiservice.aidl.led.Light;
 
 public class TerminalLightBeepLogic {

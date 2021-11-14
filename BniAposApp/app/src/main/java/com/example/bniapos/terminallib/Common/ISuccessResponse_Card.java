@@ -1,7 +1,7 @@
 package com.example.bniapos.terminallib.Common;
 
 
-import com.cti.generic.Terminal.TerminalModels.CardReadOutput;
+import com.example.bniapos.terminallib.CardReadOutput;
 
 public interface ISuccessResponse_Card {
     void processFinish(CardReadOutput CardOutput);

@@ -1,6 +1,7 @@
 package com.example.bniapos.terminallib.util.printer;
 
-import android.support.annotation.IntDef;
+
+import androidx.annotation.IntDef;
 
 import com.usdk.apiservice.aidl.printer.ECLevel;
 

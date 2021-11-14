@@ -1,15 +1,17 @@
 package com.example.bniapos.terminallib.util.printer;
+
 import android.content.Context;
 import android.os.RemoteException;
-import com.cti.generic.CTIApplication;
-import com.cti.generic.R;
+
+import com.example.bniapos.CTIApplication;
+import com.example.bniapos.R;
 import com.usdk.apiservice.aidl.printer.OnPrintListener;
 import com.usdk.apiservice.aidl.printer.PrinterError;
 import com.usdk.apiservice.aidl.printer.UPrinter;
+
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import io.reactivex.Completable;
 
 /**
  * Printer API.
@@ -242,7 +244,7 @@ public class Printer {
      * @param context context
      */
     public static void initWebView(Context context) {
-        com.printerutils.PrinterUtils.initWebView(context,WIDTH);
+        com.printerutils.PrinterUtils.initWebView(context, WIDTH);
     }
 
     /**
@@ -250,7 +252,9 @@ public class Printer {
      *
      * @return Single allows getting print results using Rx .
      */
-    public Completable print() {
+
+    //todo import io.reactivex.Completable;
+   /* public Completable print() {
         return Completable.create(e -> printer.startPrint(new com.usdk.apiservice.aidl.printer.OnPrintListener.Stub() {
             @Override
             public void onFinish() throws RemoteException {
@@ -262,5 +266,5 @@ public class Printer {
                 e.onError(new Exception("nymph_printer_print_error"));
             }
         }));
-    }
+    }*/
 }

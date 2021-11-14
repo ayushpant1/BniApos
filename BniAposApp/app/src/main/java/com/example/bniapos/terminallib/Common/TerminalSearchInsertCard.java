@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.cti.generic.Terminal.Constant;
-import com.cti.generic.Terminal.TerminalModels.CardReadOutput;
-import com.cti.generic.Terminal.util.TransactionUtils;
-import com.cti.generic.Terminal.util.Util;
-import com.cti.generic.sdk.api.DeviceManager;
-import com.cti.generic.sdk.api.EMV;
-import com.cti.generic.sdk.util.transaction.Session;
+import com.example.bniapos.terminallib.CardReadOutput;
+import com.example.bniapos.terminallib.api.DeviceManager;
+import com.example.bniapos.terminallib.api.EMV;
+import com.example.bniapos.terminallib.util.transaction.Session;
 import com.usdk.apiservice.aidl.constants.RFDeviceName;
 import com.usdk.apiservice.aidl.emv.SearchCardListener;
 

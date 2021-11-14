@@ -7,33 +7,27 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.cti.generic.Terminal.Common.CustomUtils;
-import com.cti.generic.Terminal.Constant;
-
-import com.cti.generic.Terminal.TerminalModels.AIDFile;
-import com.cti.generic.Terminal.TerminalModels.CardReadOutput;
-import com.cti.generic.Terminal.util.InputUtil;
-import com.cti.generic.Terminal.util.TransactionUtils;
-import com.cti.generic.Terminal.util.Util;
-import com.cti.generic.R;
-import com.cti.generic.sdk.api.Beeper;
-import com.cti.generic.sdk.api.DeviceManager;
-import com.cti.generic.sdk.api.EMV;
-import com.cti.generic.sdk.api.LED;
-import com.cti.generic.sdk.api.PinpadForDUKPT;
-import com.cti.generic.sdk.api.PinpadForMKSK;
-import com.cti.generic.sdk.util.data.BytesUtil;
-import com.cti.generic.sdk.util.data.DateUtil;
-import com.cti.generic.sdk.util.data.StringUtil;
-import com.cti.generic.sdk.util.data.TLV;
-import com.cti.generic.sdk.util.data.TLVList;
-import com.cti.generic.sdk.util.emv.EmvData;
-import com.cti.generic.sdk.util.emv.EmvParameterException;
-import com.cti.generic.sdk.util.emv.EmvParameterInitializer;
-import com.cti.generic.sdk.util.emv.EmvTags;
-import com.cti.generic.sdk.util.pinpad.KeyId;
-import com.cti.generic.sdk.util.transaction.Session;
-import com.cti.generic.Terminal.TerminalModels.TransactionConfig;
+import com.example.bniapos.R;
+import com.example.bniapos.terminallib.CardReadOutput;
+import com.example.bniapos.terminallib.api.Beeper;
+import com.example.bniapos.terminallib.api.DeviceManager;
+import com.example.bniapos.terminallib.api.EMV;
+import com.example.bniapos.terminallib.api.LED;
+import com.example.bniapos.terminallib.api.PinpadForDUKPT;
+import com.example.bniapos.terminallib.api.PinpadForMKSK;
+import com.example.bniapos.terminallib.util.AIDFile;
+import com.example.bniapos.terminallib.util.data.BytesUtil;
+import com.example.bniapos.terminallib.util.data.DateUtil;
+import com.example.bniapos.terminallib.util.data.StringUtil;
+import com.example.bniapos.terminallib.util.data.TLV;
+import com.example.bniapos.terminallib.util.data.TLVList;
+import com.example.bniapos.terminallib.util.emv.EmvData;
+import com.example.bniapos.terminallib.util.emv.EmvParameterException;
+import com.example.bniapos.terminallib.util.emv.EmvParameterInitializer;
+import com.example.bniapos.terminallib.util.emv.EmvTags;
+import com.example.bniapos.terminallib.util.pinpad.KeyId;
+import com.example.bniapos.terminallib.util.transaction.Session;
+import com.example.bniapos.terminallib.util.transaction.TransactionConfig;
 import com.usdk.apiservice.aidl.constants.RFDeviceName;
 import com.usdk.apiservice.aidl.emv.ACType;
 import com.usdk.apiservice.aidl.emv.ActionFlag;
@@ -63,7 +57,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.cti.generic.Terminal.util.Util.saveLogs;
 
 public class TerminalCardApiHelper implements AutoCloseable {
 
@@ -1410,6 +1403,10 @@ public class TerminalCardApiHelper implements AutoCloseable {
 
             successResponse.processFailed("Transaction failed while processing EMV.",getEntryMode());
         }
+    }
+
+    private void saveLogs(String className, String handleCommunicationCompleted, String s) {
+
     }
 
     /**
