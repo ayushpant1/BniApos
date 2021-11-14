@@ -1,3 +1,170 @@
 <resources>
     <string name="app_name">Bni app</string>
+
+
+    <!--Device Manager Strings-->
+    <string name="update_date_time_error">Update Date Time Error</string>
+
+
+    <!--EMV Error Code-->
+    <string name="succeed">Succeed</string>
+    <string name="service_crash">Service Crash</string>
+    <string name="request_exception">Request Exception</string>
+    <string name="emv_power_up_card_error">UNABLE TO READ CARD</string>
+    <string name="emv_activate_card_error">ACTIVATE CARD ERROR</string>
+    <string name="wait_card_timeout">WAIT CARD TIMEOUT</string>
+    <string name="not_start_process">Not start process</string>
+    <string name="emv_param_error">Emv parameter error</string>
+    <string name="amount_empty">Amount empty</string>
+    <string name="multi_card_error">Multi Card Error</string>
+    <string name="emv_thread_is_working_please_try_again_later">EMV thread is working, please try again later</string>
+    <string name="the_card_no_candidate_applications">The card no candidate applications</string>
+    <string name="public_key_not_set_transaction_is_terminated">public key not set.</string>
+    <string name="the_application_of_the_card_has_expired_transaction_terminated">The application of the card has expired, transaction terminated</string>
+    <string name="contactless_quickpass_torn_transaction_transaction_is_terminated_please_take_remedial_measures">Contactless quickpass torn transaction, transaction is terminated, please take remedial measures.</string>
+    <string name="termination_is_required_transaction_exits_automatically">Termination is required,transaction exits automatically</string>
+    <string name="power_up_the_card_again_and_start_transaction">Power up the card again and start transaction(No need to input amount again)</string>
+    <string name="service_is_not_allowed_by_the_card">Service is not allowed by the card</string>
+    <string name="card_is_locked">Card is locked</string>
+    <string name="application_is_locked">Application is locked</string>
+    <string name="amount_limit_the_number_of_transactions_limit">Amount limit/The number of transactions limit</string>
+    <string name="apdu_error">CARD REMOVED</string>
+    <string name="apdu_status_code_error">CARD STATUS ERROR</string>
+    <string name="return_all_flash_card_process">Return all flash card process</string>
+    <string name="other_error">Other Error</string>
+
+    <!--ICAT24CxxReader Error-->
+    <string name="insert_error">Insert Error</string>
+    <string name="power_up_error">Power Up Error</string>
+    <string name="device_used">Device Used</string>
+    <string name="timeout">Timeout</string>
+    <string name="param_error">Param Error</string>
+    <string name="device_disable">Device Disable</string>
+    <string name="failed">Failed</string>
+    <string name="ic_atr_error">IC ATR Error</string>
+    <string name="ic_timeout">IC Timeout</string>
+    <string name="ic_need_reset">IC Need Reset</string>
+    <string name="ic_type_error">IC Type Error</string>
+    <string name="ic_data_error">IC Data Error</string>
+    <string name="ic_no_power">IC No Power</string>
+    <string name="ic_for_response">IC For Response</string>
+    <string name="ic_sw_error">IC SW Error</string>
+    <string name="ic_no_card">IC No Card</string>
+
+
+    <!--ICAT1604Reader Error-->
+    <string name="ic_no_verify">IC No Verify</string>
+    <string name="error">Error</string>
+
+    <!--ICAT1608Reader Error-->
+    <string name="ack_error">ACK Error</string>
+    <string name="auth_error">Auth Error</string>
+    <string name="fuse_done">Fuse Done</string>
+    <string name="init_auth_error">Init Auth Error</string>
+    <string name="ic_no_auth">IC No Auth</string>
+    <string name="operation_forbid">Operation Forbid</string>
+    <string name="operation_fail">Operation Fail</string>
+    <string name="read_aac_error">Read AAC Error</string>
+    <string name="read_ar_error">Read AR Error</string>
+    <string name="read_ci_error">Read CI Error</string>
+    <string name="read_fail">Read Fail</string>
+    <string name="read_fuse_fail">Read Fuse Fail</string>
+    <string name="read_nc_error">Read NC Error</string>
+    <string name="read_only">Read Only</string>
+    <string name="read_pac_error">Read PAC Error</string>
+    <string name="return_power_up_information_error">Return Power-Up Information Error</string>
+    <string name="save_password_without_verify">Save Password Without Verify</string>
+    <string name="user_zone_not_set">User Zone Not Set</string>
+    <string name="verify_count_over_limit">Verify Count Over Limit</string>
+    <string name="verify_fail">Verify Fail</string>
+    <string name="write_fail">Write Fail</string>
+
+    <!--ICCpuReader-->
+    <string name="exchange_apdu_error">Exchange APDU Error</string>
+
+    <!--ICSIM4428Reader Error-->
+    <string name="change_disable">Change Disable</string>
+
+    <!--LKITool Error-->
+    <string name="lki_error_open_device">LKI Open Device Error</string>
+    <string name="lki_error_status">LKI Status Error</string>
+    <string name="lki_error_cancel">LKI Cancel</string>
+    <string name="lki_error_connecting">LKI Connecting</string>
+    <string name="lki_error_end">LKI End</string>
+    <string name="lki_error_process">LKI Process Error</string>
+    <string name="lki_error_get_tk">LKI Get TK</string>
+    <string name="lki_error_get_tk_end">LKI Get TK End</string>
+    <string name="lki_error_inject_key">LKI Inject Key</string>
+    <string name="lki_error_inject_key_end">LKI Inject Key End</string>
+
+    <!--MagReader Error-->
+    <string name="verify_track_or_data_error">Verify Track Or Data Error</string>
+    <string name="need_restart">Need Restart</string>
+    <string name="empty_card">Empty Card</string>
+
+    <!--Pinpad-->
+    <string name="display_error">Display Error</string>
+    <string name="pinpad_beep_error">Pinpad Beep Error</string>
+    <string name="pinpad_reset_error">Pinpad Reset Error</string>
+    <string name="verify_offline_pin_error">Verify Offline PIN Error</string>
+
+        <!--Pinpad Error-->
+    <string name="pinpad_error_error">other error</string>
+    <string name="pinpad_error_abolish">press cancel quit</string>
+    <string name="pinpad_error_no_such_pinpad">user specified pinpad does not exist</string>
+    <string name="pinpad_error_invalid_argument">invalid argument</string>
+    <string name="pinpad_error_no_enough_space">no enough space</string>
+    <string name="pinpad_error_time_out">time out</string>
+    <string name="pinpad_error_comm_err">communication error</string>
+    <string name="pinpad_error_unsupported_func">unsupported function</string>
+    <string name="pinpad_error_busy">pinpad hardware busy</string>
+    <string name="pinpad_error_no_such_key">no such key</string>
+    <string name="pinpad_error_fail_to_auth">fail to auth</string>
+    <string name="pinpad_error_cancelled_by_user">press cancel by user when enter pin</string>
+    <string name="pinpad_error_no_pin_entered">no enter pin press cancel</string>
+    <string name="pinpad_error_dukpt_counter_overflow">DUKPT counter overflow</string>
+    <string name="pinpad_error_reopen_pinpad">reopen pinpad device</string>
+    <string name="pinpad_error_bad_status">the current status of the module is incorrect</string>
+    <string name="pinpad_error_bad_key_usage">bad key usage</string>
+    <string name="pinpad_error_bad_mode_of_key_use">bad mode of key use</string>
+    <string name="pinpad_error_invalid_key_handle">invalid key handle</string>
+    <string name="pinpad_error_no_such_kap">the key area does not exist</string>
+    <string name="pinpad_error_kap_already_exist">the key area is already exist</string>
+    <string name="pinpad_error_permission_deny">app have no api permission</string>
+    <string name="pinpad_error_refer_to_key_outside_kap">refer to key outside kap</string>
+    <string name="pinpad_error_key_usage_and_mode_of_use_not_match">key usage and mode of use not match</string>
+    <string name="pinpad_error_accessing_kap_deny">access kap deny</string>
+    <string name="pinpad_error_wrong_kap_mode">the key area incompatible</string>
+    <string name="pinpad_error_pin_entry_too_frequently">pin entry too frequently</string>
+    <string name="pinpad_error_dukpt_not_inited">DUKPT not inited</string>
+    <string name="pinpad_error_incompatible_key_system">current key incompatible with key system</string>
+    <string name="pinpad_error_enc_key_fmt_too_simple">enter enc key format too simple</string>
+    <string name="pinpad_error_same_key_value_detected">same key value detected</string>
+    <string name="pinpad_error_key_bundle_err">key bundle error</string>
+    <string name="pinpad_error_encrypt_mag_track_too_frequently">encrypt mag track too frequently</string>
+    <string name="pinpad_error_input_comm_err">input comm error</string>
+    <string name="pinpad_error_input_timeout">input timeout</string>
+    <string name="pinpad_error_input_unknown">input unknown</string>
+    <string name="pinpad_error_service_died">service died</string>
+    <string name="pinpad_error_argument_conflict">argument conflict</string>
+
+    <!--RFReader Error-->
+    <string name="invalid_call">Invalid Call</string>
+    <string name="no_activate">No Activate</string>
+    <string name="transaction_error">Transaction Error</string>
+    <string name="data_norm_error">Data Norm Error</string>
+    <string name="card_no_act">Card No ACT</string>
+
+    <!-- ScannerForBack Error-->
+    <string name="already_init">Already Init</string>
+    <string name="auth_license_error">Auth License Error</string>
+    <string name="init_decoder_library_fail">Init Decoder Library Fail</string>
+    <string name="open_camera_error">Open Camera Error</string>
+
+    <!--ScannerForFront Error-->
+    <string name="init_engine_error">Init Engine Error</string>
+    <string name="no_init">No Init</string>
+    <string name="start_scanner_fail">Start Scanner Fail</string>
+
+
 </resources>

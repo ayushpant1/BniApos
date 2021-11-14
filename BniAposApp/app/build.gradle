@@ -51,5 +51,10 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:2.3.0")
 
+    //terminal libraries
+    implementation(name: 'printer-utils', ext: 'aar')
+    implementation files('libs/usdk_api_aidl_ovs_v12.1.0.20201026.jar')
+    implementation files('libs/signpanel.jar')
+
     implementation project(path: ':paymentsdk')
 }

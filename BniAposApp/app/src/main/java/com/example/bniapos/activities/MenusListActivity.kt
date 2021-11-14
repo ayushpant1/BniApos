@@ -134,8 +134,7 @@ class MenusListActivity : AppCompatActivity() {
 
     val adapterListener = object : MenuListAdapterListener {
         override fun onItemClick(position: Int, list: List<MenuLink>, isFirstTimeLoaded: Boolean) {
-            if (list[position].type == actionType)
-                stack!!.add(list)
+            stack!!.add(list)
             val menuId = list[position].id
             val menuName = list[position].displayText
             subMenuListImpl =
@@ -168,6 +167,7 @@ class MenusListActivity : AppCompatActivity() {
                         )
                     }
                 } else {
+                    stack!!.pop()
                     var intent = Intent(this@MenusListActivity, MainActivity::class.java)
                     intent.putExtra("menuName", menuName)
                     intent.putExtra("menuId", menuId)
