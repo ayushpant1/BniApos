@@ -1,0 +1,40 @@
+{
+  "controlList": [
+    {
+      "controlKey": "AMT",
+      "controlType": "Text",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "Amount",
+      "screenId": 1,
+      "sortOrder": 1,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": null
+    },
+    {
+      "controlKey": "CRD",
+      "controlType": "Card",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "",
+      "screenId": 2,
+      "sortOrder": 1,
+      "maxLength": 0,
+      "minLength": 0,
+      "dataSet": null
+    },
+    {
+      "controlKey": "SCRPN",
+      "controlType": "SecurePin",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "",
+      "screenId": 3,
+      "sortOrder": 1,
+      "maxLength": 0,
+      "minLength": 0,
+      "dataSet": null
+    }
+  ]
+}

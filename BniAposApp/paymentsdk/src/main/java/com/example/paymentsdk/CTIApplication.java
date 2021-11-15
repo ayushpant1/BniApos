@@ -8,7 +8,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import com.example.paymentsdk.Common.Constant;
+import com.example.paymentsdk.Common.TerminalSecurity;
 import com.example.paymentsdk.api.DeviceService;
+import com.example.paymentsdk.util.data.BytesUtil;
 import com.usdk.apiservice.aidl.UDeviceService;
 
 
@@ -98,6 +101,10 @@ public class CTIApplication {
                 deviceService = new DeviceService(UDeviceService.Stub.asInterface(service));
                 deviceService.register();
                 deviceService.debugLog(true, true);
+                 /*
+                 for now calling constant Master and Session Key ,load it from server
+                 */
+                loadMasterAndSessionKey();
                 //Log.d(TAG, "SDK deviceService initiated version:" + deviceService.getVersion() + ".");
             } catch (RemoteException e) {
                 throw new RuntimeException("SDK deviceService initiating failed.", e);
@@ -108,6 +115,12 @@ public class CTIApplication {
             } catch (RemoteException e) {
                 throw new RuntimeException("SDK service link to death error.", e);
             }
+        }
+
+        private void loadMasterAndSessionKey() {
+            TerminalSecurity.LoadMasterKey(BytesUtil.hexString2ByteArray(
+                    Constant.PINBMasterKey), null);
+            TerminalSecurity.LoadSessionKey(context, BytesUtil.hexString2ByteArray(Constant.PINBSessionKey));
         }
 
         private void linkToDeath(IBinder service) throws RemoteException {

@@ -66,7 +66,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
     private CardReadOutput _CardOutput;
     private String className = "LandiTerminalCardApiHelper";
 
-    private boolean isCardHolderVerificationPerformed=false;
+    private boolean isCardHolderVerificationPerformed = false;
     private boolean isRefund = false;
 
     private String panNumber = "";
@@ -87,7 +87,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
      */
     private CardRecord cardRecord;
 
-    private boolean isCardDataRecorded=false;
+    private boolean isCardDataRecorded = false;
 
 
     public static final String SEARCH_CARD_FIRST = "SEARCH_CARD_FIRST";
@@ -122,9 +122,9 @@ public class TerminalCardApiHelper implements AutoCloseable {
     /**
      * Is search card first.
      */
-    private boolean isSearchCardFirst=true;
+    private boolean isSearchCardFirst = true;
 
-    private boolean isBreakEMIFlow=false;
+    private boolean isBreakEMIFlow = false;
 
     /**
      * Transaction config.
@@ -132,17 +132,17 @@ public class TerminalCardApiHelper implements AutoCloseable {
     private TransactionConfig transactionConfig;
 
     public ISuccessResponse_Card successResponse = null;
-    private String getEntryMode()
-    {
-       return (session!= null && session.getAccountEntryMode()!=null)?session.getAccountEntryMode() : Constant.POSENT_Not_Available;
+
+    private String getEntryMode() {
+        return (session != null && session.getAccountEntryMode() != null) ? session.getAccountEntryMode() : Constant.POSENT_Not_Available;
     }
+
     //Context _context,
-    public TerminalCardApiHelper(Context _context, ISuccessResponse_Card _successResponse)
-    {
+    public TerminalCardApiHelper(Context _context, ISuccessResponse_Card _successResponse) {
         this.session = null;
         this._CardOutput = null;
 
-       this.context = _context;
+        this.context = _context;
         this.successResponse = _successResponse;
 
         session = new Session();
@@ -151,6 +151,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         transactionConfig = new TransactionConfig();
         emvParameter = new EmvParameterInitializer(EMV.getInstance(), session, transactionConfig);
     }
+
     private void stopEMVProcess() throws RemoteException {
         EMV.getInstance().stopSearch();
         EMV.getInstance().halt();
@@ -159,6 +160,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
             EMV.getInstance().stopProcess();
         }
     }
+
     /**
      * Send message.
      */
@@ -232,12 +234,12 @@ public class TerminalCardApiHelper implements AutoCloseable {
             }
         } catch (RemoteException e) {
 
-                successResponse.processFailed(e.getLocalizedMessage(),getEntryMode());
+            successResponse.processFailed(e.getLocalizedMessage(), getEntryMode());
             try {
                 stopEMVProcess();
             } catch (RemoteException e1) {
 
-                     successResponse.processFailed(e1.getLocalizedMessage(),getEntryMode());
+                successResponse.processFailed(e1.getLocalizedMessage(), getEntryMode());
             }
         }
     }
@@ -254,7 +256,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         if (cardRecord.getExpiry() != null && cardRecord.getExpiry().length > 0) {
             String dateExpiration = BytesUtil.byteArray2HexString(cardRecord.getExpiry());
             // Format expiration (from YYYYMMDD to YYMM)
-            dateExpiration = dateExpiration.substring(2, 4) +"/"+ dateExpiration.substring(4, 6);
+            dateExpiration = dateExpiration.substring(2, 4) + "/" + dateExpiration.substring(4, 6);
 
             session.setExpirationDate(dateExpiration);
         }
@@ -347,10 +349,8 @@ public class TerminalCardApiHelper implements AutoCloseable {
         if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_DUKPT)) {
             try {
 
-            }
-            catch (Exception ex)
-            {
-                Log.e(Constant.LogKey,ex.getLocalizedMessage());
+            } catch (Exception ex) {
+                Log.e(Constant.LogKey, ex.getLocalizedMessage());
             }
 
         } else if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_MKSK)) {
@@ -361,13 +361,13 @@ public class TerminalCardApiHelper implements AutoCloseable {
         }
     }
 
-    public void initOfflinePinEntry(Bundle param) throws  RemoteException {
+    public void initOfflinePinEntry(Bundle param) throws RemoteException {
         if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_DUKPT)) {
 
             Intent intent = new Intent("com.landicorp.pinpad.pinentry.server.SET_SKIN");
             intent.putExtra("disorder", false);
             context.sendBroadcast(intent);
-            
+
             PinpadForDUKPT.getInstance().open();
             PinpadForDUKPT.getInstance().startOfflinePinEntry(param, new OnPinEntryListener.Stub() {
 
@@ -446,13 +446,13 @@ public class TerminalCardApiHelper implements AutoCloseable {
         }
     }
 
-    public void initOnlinePinEntry(Bundle param) throws  RemoteException {
+    public void initOnlinePinEntry(Bundle param) throws RemoteException {
         if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_DUKPT)) {
 
             Intent intent = new Intent("com.landicorp.pinpad.pinentry.server.SET_SKIN");
             intent.putExtra("disorder", false);
             context.sendBroadcast(intent);
-            
+
             PinpadForDUKPT.getInstance().open();
             PinpadForDUKPT.getInstance().startPinEntry(KeyId.mainKey, param, new OnPinEntryListener.Stub() {
 
@@ -495,7 +495,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
             Intent intent = new Intent("com.landicorp.pinpad.pinentry.server.SET_SKIN");
             intent.putExtra("disorder", false);
             context.sendBroadcast(intent);
-            
+
             PinpadForMKSK.getInstance().open();
             PinpadForMKSK.getInstance().startPinEntry(KeyId.pinKey, param, new OnPinEntryListener.Stub() {
 
@@ -536,13 +536,13 @@ public class TerminalCardApiHelper implements AutoCloseable {
 
     }
 
-    public void ManageCardDetailsFromOutSide(CardReadOutput CardDetails)
-    {
+    public void ManageCardDetailsFromOutSide(CardReadOutput CardDetails) {
         session.setAccountEntryMode(Session.ACCOUNT_ENTRY_MODE_MAGCARD);
         session.setPan(CardDetails.getCardNo());
-        isBreakEMIFlow=true;
+        isBreakEMIFlow = true;
 
     }
+
     /**
      * Handle card record confirm.
      */
@@ -563,7 +563,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
                  * we must only show Pin option in this case, and there must be no option of choosing signature
                  */
                 inputOnlinePin();
-             //   successResponse.SelectVerificationOption();
+                //   successResponse.SelectVerificationOption();
 
 
                 return;
@@ -575,12 +575,12 @@ public class TerminalCardApiHelper implements AutoCloseable {
             TLVList tlvList = new TLVList();
 
 
-           tlvList.addTLV(EmvTags.EMV_TAG_TM_AUTHAMNTN, BytesUtil.toBCDAmountBytes(session.getTransactionAmount()));
-           tlvList.addTLV(EmvTags.EMV_TAG_TM_OTHERAMNTN, BytesUtil.toBCDAmountBytes(0L));
+            tlvList.addTLV(EmvTags.EMV_TAG_TM_AUTHAMNTN, BytesUtil.toBCDAmountBytes(session.getTransactionAmount()));
+            tlvList.addTLV(EmvTags.EMV_TAG_TM_OTHERAMNTN, BytesUtil.toBCDAmountBytes(0L));
             tlvList.addTLV(EmvTags.EMV_TAG_TM_TRANSDATE, BytesUtil.hexString2ByteArray(DateUtil.getDate(new Date(), "yyMMdd")));
             tlvList.addTLV(EmvTags.EMV_TAG_TM_TRANSTIME, BytesUtil.hexString2ByteArray(DateUtil.getDate(new Date(), "HHmmss")));
             tlvList.addTLV(EmvTags.EMV_TAG_TM_TRSEQCNTR, BytesUtil.hexString2ByteArray(session.getSystemTraceAuditNumber()));
-            if(isRefund)
+            if (isRefund)
                 tlvList.addTLV(EmvTags.DEF_TAG_SERVICE_TYPE, new byte[]{EMV.SERVICE_TYPE_REFUND});
             else
                 tlvList.addTLV(EmvTags.DEF_TAG_SERVICE_TYPE, new byte[]{EMV.SERVICE_TYPE_GOODS_SERVICE});
@@ -602,13 +602,13 @@ public class TerminalCardApiHelper implements AutoCloseable {
         } catch (Exception ex) {
             stopEMVProcess();
 
-            successResponse.processFailed(ex.getLocalizedMessage(),getEntryMode());
+            successResponse.processFailed(ex.getLocalizedMessage(), getEntryMode());
         }
     }
-    private void handleCAPK(CardRecord cardRecord) throws  RemoteException
-    {
 
-        if(cardRecord !=null) {
+    private void handleCAPK(CardRecord cardRecord) throws RemoteException {
+
+        if (cardRecord != null) {
 
             byte[] rid = BytesUtil.subBytes(cardRecord.getAID(), 0, 5);
 
@@ -646,13 +646,12 @@ public class TerminalCardApiHelper implements AutoCloseable {
         Bundle param = new Bundle();
         param.putByteArray("panBlock", BytesUtil.hexString2Bytes(session.getPan())); //)
         param.putInt("timeout", Constant.DefaultTimeOutInSeconds);
-        param.putInt("betweenPinKeyTimeout",  Constant.DefaultTimeOutInSeconds);
+        param.putInt("betweenPinKeyTimeout", Constant.DefaultTimeOutInSeconds);
         param.putByteArray("pinLimit", transactionConfig.getPinRule());
 
         doSetKeys();
         initOfflinePinEntry(param);
     }
-
 
 
     /*
@@ -661,16 +660,16 @@ public class TerminalCardApiHelper implements AutoCloseable {
     public void setPan(String pan) {
         panNumber = pan;
     }
-    
+
     /**
      * Input online pin.
      */
     public void inputOnlinePin() throws RemoteException {
 
-        String _panCard   = panNumber;
+        String _panCard = panNumber;
         String _entryMode = "07";
         if (session.getPan() != null) {
-            _panCard   = session.getPan();
+            _panCard = session.getPan();
             _entryMode = session.getAccountEntryMode();
         } else if (_CardOutput.getCardNo() != null) {
             _panCard = _CardOutput.getCardNo();
@@ -682,7 +681,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
             Bundle param = new Bundle();
             param.putByteArray("panBlock", BytesUtil.hexString2Bytes(_panCard));
             param.putInt("timeout", Constant.DefaultTimeOutInSeconds);
-            param.putInt("betweenPinKeyTimeout",  Constant.DefaultTimeOutInSeconds);
+            param.putInt("betweenPinKeyTimeout", Constant.DefaultTimeOutInSeconds);
             if (_entryMode.equalsIgnoreCase(Session.ACCOUNT_ENTRY_MODE_CONTACTLESS)) {
                 param.putByteArray("pinLimit", new byte[]{4, 6});
             } else {
@@ -700,9 +699,9 @@ public class TerminalCardApiHelper implements AutoCloseable {
     private void handleVerifyOfflinePin(int flag, byte[] random, CAPublicKey publicKey, OfflinePinVerifyResult result) {
 
         // Set offline pin verify params.
-        String PINVerificationResult="";
+        String PINVerificationResult = "";
         byte fmtOfPin = (flag == 1 ? OfflinePinVerify.FOPTBV_ENCRYPTED_BY_PUBLIC_KEY : OfflinePinVerify.FOPTBV_PLAIN_TEXT);
-        PINVerificationResult += BytesUtil.byte2HexString(fmtOfPin) +"   ";
+        PINVerificationResult += BytesUtil.byte2HexString(fmtOfPin) + "   ";
         int icToken = 0; // 0 is default value
         byte cmdFmt = OfflinePinVerify.VCF_DEFAULT;
         OfflinePinVerify offlinePinVerify = new OfflinePinVerify(fmtOfPin, icToken, cmdFmt, random);
@@ -753,7 +752,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
 
         } catch (RemoteException e) {
             result.setResult(EMV.VERIFY_OFFLINE_PIN_ERROR);
-            PINVerificationResult+=" ---- FAIL ---";
+            PINVerificationResult += " ---- FAIL ---";
             return;
         }
 
@@ -761,7 +760,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         byte sw1 = pinVerifyResult.getSW1();
         byte sw2 = pinVerifyResult.getSW2();
         byte apduRet = pinVerifyResult.getAPDURet();
-         PINVerificationResult += "APDU ret = " + BytesUtil.byte2HexString(apduRet) + ", SW1 = " + BytesUtil.byte2HexString(sw1) + ", SW2 = " + BytesUtil.byte2HexString(sw2);
+        PINVerificationResult += "APDU ret = " + BytesUtil.byte2HexString(apduRet) + ", SW1 = " + BytesUtil.byte2HexString(sw1) + ", SW2 = " + BytesUtil.byte2HexString(sw2);
         Log.d(TAG, PINVerificationResult);
 
         // Set SW and result to EMV
@@ -785,13 +784,11 @@ public class TerminalCardApiHelper implements AutoCloseable {
     private void handleSwipeCard(Bundle bundle) {
         // Save card record
         session.setAccountEntryMode(Session.ACCOUNT_ENTRY_MODE_MAGCARD);
-        if(Constant.isShowDummyCard)
-        {
+        if (Constant.isShowDummyCard) {
             session.setPan(Constant.DummyCardNo);
             session.setTrack2Data(Constant.DummyTrack2Data);
             session.setExpirationDate(Constant.DummyExpiryDate);
-        }
-        else{
+        } else {
             session.setPan(bundle.getString("PAN"));
             session.setTrack2Data(bundle.getString("TRACK2"));
             session.setExpirationDate(bundle.getString("EXPIRED_DATE"));
@@ -799,13 +796,13 @@ public class TerminalCardApiHelper implements AutoCloseable {
 
 
         String Service_Code = bundle.getString("SERVICE_CODE");
-        boolean onlySwipeAvailable=true;
+        boolean onlySwipeAvailable = true;
 
-        if(transactionConfig.isContactIcCardSupported() || transactionConfig.isRfCardSupported())
-            onlySwipeAvailable=false;
+        if (transactionConfig.isContactIcCardSupported() || transactionConfig.isRfCardSupported())
+            onlySwipeAvailable = false;
 
 
-        if (!onlySwipeAvailable && ( Service_Code.startsWith("2") || Service_Code.startsWith("6"))) {
+        if (!onlySwipeAvailable && (Service_Code.startsWith("2") || Service_Code.startsWith("6"))) {
 
             successResponse.processFailed("CARD SWIPE NOT ALLOWED");
 
@@ -855,12 +852,10 @@ public class TerminalCardApiHelper implements AutoCloseable {
             } else {
                 EMV.getInstance().responseCard();
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             stopEMVProcess();
 
-              successResponse.processFailed(ex.getLocalizedMessage(),getEntryMode());
+            successResponse.processFailed(ex.getLocalizedMessage(), getEntryMode());
         }
     }
 
@@ -896,7 +891,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         } catch (Exception e) {
             stopEMVProcess();
 
-            successResponse.processFailed(e.getLocalizedMessage(),getEntryMode());
+            successResponse.processFailed(e.getLocalizedMessage(), getEntryMode());
         }
     }
 
@@ -907,8 +902,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_DUKPT)) {
             // Close pinpad
             PinpadForDUKPT.getInstance().close();
-        }
-        else if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_MKSK)) {
+        } else if (Constant.PINB_SecurityType.equalsIgnoreCase(Constant.PINB_MKSK)) {
             // Close pinpad
             PinpadForMKSK.getInstance().close();
         }
@@ -922,11 +916,9 @@ public class TerminalCardApiHelper implements AutoCloseable {
             return;
         }
 
-        if(isCardHolderVerificationPerformed) {
+        if (isCardHolderVerificationPerformed) {
             EMV.getInstance().responseEvent(TLV.fromData(EMVTag.DEF_TAG_CHV_STATUS, new byte[]{PinpadForMKSK.VERIFY_STATUS_CANCEL}).toString());
-        }
-        else
-        {
+        } else {
             FinalizingRequestForEMV();
         }
     }
@@ -1014,7 +1006,6 @@ public class TerminalCardApiHelper implements AutoCloseable {
     }
 
 
-
     /**
      * Handle init EMV.
      */
@@ -1022,8 +1013,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         // Init aids.
 
 
-
-       // emvParameter.initEmvAids();
+        // emvParameter.initEmvAids();
 
 
         // Clear all the aids in EMV kernel.
@@ -1053,7 +1043,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
 //        tlvList.addTLV(TLV.fromData(EMVTag.DEF_TAG_RAND_SLT_PER, BytesUtil.hexString2Bytes("00")));
 //        tlvList.addTLV(TLV.fromData(EMVTag.DEF_TAG_RAND_SLT_MAXPER, BytesUtil.hexString2Bytes("99")));
 //        tlvList.addTLV(TLV.fromData(EMVTag.C_TAG_TM_9F66, BytesUtil.hexString2Bytes("26000080")));
- //       tlvList.addTLV(TLV.fromData(EMVTag.C_TAG_TM_9F7A, BytesUtil.hexString2Bytes("01")));
+        //       tlvList.addTLV(TLV.fromData(EMVTag.C_TAG_TM_9F7A, BytesUtil.hexString2Bytes("01")));
 //       tlvList.addTLV(TLV.fromData(EMVTag.C_TAG_TM_9F7B, BytesUtil.hexString2Bytes("999999999999")));
 //        tlvList.addTLV(TLV.fromData(EMVTag.C_TAG_TM_DF69, BytesUtil.hexString2Bytes("01")));
 //        tlvList.addTLV(TLV.fromData(EMVTag.C_TAG_TM_TRANS_LIMIT, BytesUtil.hexString2Bytes("999999999999")));
@@ -1064,8 +1054,8 @@ public class TerminalCardApiHelper implements AutoCloseable {
 
     }
 
-    public void publishEMVDataStep1(long Amount,long AdditionalAmount,
-                                    CardReadOutput cardOutput,boolean breakEMIFlow,boolean isPinEntryRequired) throws RemoteException {
+    public void publishEMVDataStep1(long Amount, long AdditionalAmount,
+                                    CardReadOutput cardOutput, boolean breakEMIFlow, boolean isPinEntryRequired) throws RemoteException {
 
 
         _CardOutput = cardOutput;
@@ -1076,7 +1066,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         // Clear all the aids in EMV kernel.
         // Set gpo to EMV kernel
 
-        if(!breakEMIFlow && cardOutput.getInsertMode().equalsIgnoreCase("insert")) {
+        if (!breakEMIFlow && cardOutput.getInsertMode().equalsIgnoreCase("insert")) {
         }
 
 
@@ -1095,8 +1085,8 @@ public class TerminalCardApiHelper implements AutoCloseable {
 //        else
 //        {
 
-            handleCardRecordConfirmed();
-       // }
+        handleCardRecordConfirmed();
+        // }
         //BytesUtil.ConvertNumericWithLeadingZeros(9000,12)
 
 //        var authorisedAmount = new ByteString("000000000001", HEX);
@@ -1115,12 +1105,10 @@ public class TerminalCardApiHelper implements AutoCloseable {
     }
 
 
-
-    private List<AIDFile> TransferAIDForSystemUse(List<CandidateAID> aids)
-    {
+    private List<AIDFile> TransferAIDForSystemUse(List<CandidateAID> aids) {
         List<AIDFile> allAIds = new ArrayList<>();
-        for (CandidateAID aid:aids
-             ) {
+        for (CandidateAID aid : aids
+        ) {
             AIDFile file = new AIDFile();
             file.setAID(aid.getAID());
             file.setAPID(aid.getAPID());
@@ -1135,6 +1123,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         }
         return allAIds;
     }
+
     /**
      * Handle app select.
      */
@@ -1163,6 +1152,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         if (!isValidAID)
             successResponse.Communication(true);
     }
+
     public void handleMultipleAppSelection(AIDFile aid) throws RemoteException {
         boolean isValidAID = false;
         if (aid != null) {
@@ -1226,7 +1216,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
                 //tlvList.addTLV(EmvTags.DEF_TAG_ACCUMULATE_AMOUNT, BytesUtil.toBCDAmountBytes(0L));
 
                 // Pan in black.
-               // tlvList.addTLV(EmvTags.DEF_TAG_PAN_IN_BLACK, new byte[]{(byte) 0x0}); // 0- false, 1- true
+                // tlvList.addTLV(EmvTags.DEF_TAG_PAN_IN_BLACK, new byte[]{(byte) 0x0}); // 0- false, 1- true
 
                 if (transactionConfig.isRfOnlineForced()) {
                     tlvList.addTLV(EmvTags.DEF_TAG_GAC_CONTROL, new byte[]{EMV.GAC_ONLINE});
@@ -1238,7 +1228,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
             EMV.getInstance().responseEvent(tlvList.toString());
         } catch (Exception ex) {
             stopEMVProcess();
-            successResponse.processFailed(ex.getLocalizedMessage(),getEntryMode());
+            successResponse.processFailed(ex.getLocalizedMessage(), getEntryMode());
         }
     }
 
@@ -1305,7 +1295,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
                 // Stop EMV process
                 stopEMVProcess();
 
-                successResponse.processFailed(context.getString(R.string.unknown_error),getEntryMode());
+                successResponse.processFailed(context.getString(R.string.unknown_error), getEntryMode());
 
 
                 return;
@@ -1351,7 +1341,6 @@ public class TerminalCardApiHelper implements AutoCloseable {
             }
             tlvList.addTLV(EmvTags.DEF_TAG_AUTHORIZE_FLAG, BytesUtil.hexString2Bytes(isTransactionSucceeded ? "01" : "00"));
             saveLogs(className, "handleCommunicationCompleted", "[~1342] Authorize flag");
-
 
 
             // Online response chip data(Field 55 data).
@@ -1403,7 +1392,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
             stopEMVProcess();
             ex.printStackTrace();
 
-            successResponse.processFailed("Transaction failed while processing EMV.",getEntryMode());
+            successResponse.processFailed("Transaction failed while processing EMV.", getEntryMode());
         }
     }
 
@@ -1433,25 +1422,26 @@ public class TerminalCardApiHelper implements AutoCloseable {
         session.setExpirationDate(date);
 
 
-            switch (transData.getACType()) {
-                case ACType.EMV_ACTION_TC:
-                    // EMV kernel approves transaction.
-                    transactionApproved();
+        switch (transData.getACType()) {
+            case ACType.EMV_ACTION_TC:
+                // EMV kernel approves transaction.
+                transactionApproved();
 
-                    break;
+                break;
 
-                case ACType.EMV_ACTION_AAC:
-                    // EMV kernel denies transaction.
-                    transactionDeclined();
-                    break;
+            case ACType.EMV_ACTION_AAC:
+                // EMV kernel denies transaction.
+                transactionDeclined();
+                break;
 
-                case ACType.EMV_ACTION_ARQC:
-                    // EMV kernel requires online transaction.
-                    handleOnlineProcess();
-                    break;
-            }
+            case ACType.EMV_ACTION_ARQC:
+                // EMV kernel requires online transaction.
+                handleOnlineProcess();
+                break;
+        }
 
     }
+
     /**
      * Transaction interrupted.
      */
@@ -1465,12 +1455,12 @@ public class TerminalCardApiHelper implements AutoCloseable {
             //showToast(getString(EMV.getErrorId(resultCode)));
             stopEMVProcess();
 
-            successResponse.processFailed(context.getString(EMV.getErrorId(resultCode)),getEntryMode());
+            successResponse.processFailed(context.getString(EMV.getErrorId(resultCode)), getEntryMode());
 
         } else {
             stopEMVProcess();
 
-            successResponse.processFailed(context.getString(EMV.getErrorId(resultCode)),getEntryMode());
+            successResponse.processFailed(context.getString(EMV.getErrorId(resultCode)), getEntryMode());
         }
     }
 
@@ -1483,8 +1473,6 @@ public class TerminalCardApiHelper implements AutoCloseable {
         successResponse.TransactionApproved();
 
 
-
-
         // Show transaction result.
         //showToast(getString(R.string.transaction_approved));
 
@@ -1492,24 +1480,23 @@ public class TerminalCardApiHelper implements AutoCloseable {
 //        onPrint(session.getDisplayAmount(), session.getPan(), session.getExpirationDate());
 //        printRecordByHtml(session);
     }
+
     /**
      * Transaction declined.
      */
     private void transactionDeclined() throws RemoteException {
         // Turn on red light.
-        if(Constant.isForceApprove_ARPC_EMV)
-        {
+        if (Constant.isForceApprove_ARPC_EMV) {
             LED.getInstance().turnOffAll();
             successResponse.TransactionApproved();
 
-        }
-        else {
+        } else {
             LED.getInstance().turnOffAll();
             LED.getInstance().turnOn(Light.RED);
             successResponse.TransactionDeclined();
         }
         // Show transaction result.
-       // showToast(getString(R.string.transaction_declined));
+        // showToast(getString(R.string.transaction_declined));
     }
 
     /**
@@ -1517,41 +1504,42 @@ public class TerminalCardApiHelper implements AutoCloseable {
      */
     private void handleOnlineProcess() throws RemoteException {
 
-            try {
-                // If the transaction need to online process.
-                if (!transactionConfig.isOnlineNeeded()) {
+        try {
+            // If the transaction need to online process.
+            if (!transactionConfig.isOnlineNeeded()) {
 
-                    // It is simple EMV process if no need to be online,the EMV process is stopProcess at this time so that exist process directly.
-                    stopEMVProcess();
-                    successResponse.processFailed("Declined by Terminal",getEntryMode());
-                    return;
-                }
-            } catch (Exception ex) {
-                successResponse.processFailed("Error in Terminal Processing: "+ex.getLocalizedMessage(),getEntryMode());
-                ex.printStackTrace();
+                // It is simple EMV process if no need to be online,the EMV process is stopProcess at this time so that exist process directly.
+                stopEMVProcess();
+                successResponse.processFailed("Declined by Terminal", getEntryMode());
+                return;
             }
+        } catch (Exception ex) {
+            successResponse.processFailed("Error in Terminal Processing: " + ex.getLocalizedMessage(), getEntryMode());
+            ex.printStackTrace();
+        }
 
-            // Simulate online
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        LED.getInstance().operateGreenLight();
-                        sleep(300);
-                        LED.getInstance().operateGreenLight();
-                        sleep(300);
-                        LED.getInstance().operateGreenLight();
-                        sleep(300);
-                        sendMessage(TransactionEvent.COMM_EVENT_COMPLETED.ordinal(), "00"); // "00" means successful
-                    } catch (RemoteException | InterruptedException e) {
-                        //
+        // Simulate online
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    LED.getInstance().operateGreenLight();
+                    sleep(300);
+                    LED.getInstance().operateGreenLight();
+                    sleep(300);
+                    LED.getInstance().operateGreenLight();
+                    sleep(300);
+                    sendMessage(TransactionEvent.COMM_EVENT_COMPLETED.ordinal(), "00"); // "00" means successful
+                } catch (RemoteException | InterruptedException e) {
+                    //
 
-                        successResponse.processFailed(e.getLocalizedMessage(),getEntryMode());
-                    }
+                    successResponse.processFailed(e.getLocalizedMessage(), getEntryMode());
                 }
-            }.start();
+            }
+        }.start();
 
     }
+
     /**
      * Show card record view.
      */
@@ -1608,12 +1596,10 @@ public class TerminalCardApiHelper implements AutoCloseable {
         CardOutput.setCustomerName(CardHolderName);
         CardOutput.setTransactionCount(TransactionCount);
 
-        if(Constant.isShowDummyCard && CardOutput.getInsertMode().equalsIgnoreCase("swipe"))
-        {
+        if (Constant.isShowDummyCard && CardOutput.getInsertMode().equalsIgnoreCase("swipe")) {
             CardOutput.setCardNo(Constant.DummyCardNo);
             CardOutput.setTrack2Data(Constant.DummyTrack2Data);
-        }
-        else {
+        } else {
 
             CardOutput.setCardNo(pan);
             CardOutput.setTrack2Data(Track2);
@@ -1623,21 +1609,20 @@ public class TerminalCardApiHelper implements AutoCloseable {
 //
 //        CardOutput.setEMVData(TLVData);
 
-        if(session.getAccountEntryMode().equalsIgnoreCase(Session.ACCOUNT_ENTRY_MODE_CONTACTLESS)) {
-            _CardOutput=CardOutput;
+        if (session.getAccountEntryMode().equalsIgnoreCase(Session.ACCOUNT_ENTRY_MODE_CONTACTLESS)) {
+            _CardOutput = CardOutput;
             _CardOutput.setTransactionCategoryCode("00");
-           String CardExpiry = _CardOutput.getCardExpiry();
-           if(CardExpiry.length() > 4) {
-               CardExpiry = CardExpiry.substring(0, 4);
-               _CardOutput.setCardExpiry(CardExpiry);
-           }
+            String CardExpiry = _CardOutput.getCardExpiry();
+            if (CardExpiry.length() > 4) {
+                CardExpiry = CardExpiry.substring(0, 4);
+                _CardOutput.setCardExpiry(CardExpiry);
+            }
             AddRequestForEMV();
             successResponse.processFinish(_CardOutput);
 
             // we will be sending common var, in this case
             //as it contains all the response for emv and no further processing required.
-        }
-        else {
+        } else {
 
             successResponse.processFinish(CardOutput);
             isCardDataRecorded = true;
@@ -1746,21 +1731,20 @@ public class TerminalCardApiHelper implements AutoCloseable {
                     Log.d(TAG, "TVR: " + transData.getTLVData());
 
 
-                    String CodeToVerifyInLogs = transData.getCVM() +"$"+ transData.getACType();
-                    _CardOutput.setPubKIndex(_CardOutput.getPubKIndex() != null ?_CardOutput.getPubKIndex()+"()"+CodeToVerifyInLogs:"NULL()"+CodeToVerifyInLogs);
+                    String CodeToVerifyInLogs = transData.getCVM() + "$" + transData.getACType();
+                    _CardOutput.setPubKIndex(_CardOutput.getPubKIndex() != null ? _CardOutput.getPubKIndex() + "()" + CodeToVerifyInLogs : "NULL()" + CodeToVerifyInLogs);
                     //if card has not forced for input pin....
                     if (!isCardHolderVerificationPerformed) {
                         try {
-                             if( transactionConfig.isPinInputNeeded()) {
-                                 //inputOnlinePin();
-                                 successResponse.SelectVerificationOption();
-                             }
-                             else {
-                                 if (_CardOutput.getRID().equalsIgnoreCase(Constant.VisaRID))
-                                     successResponse.processSignature(); //ADVT Wants it MTIP not wants
+                            if (transactionConfig.isPinInputNeeded()) {
+                                //inputOnlinePin();
+                                successResponse.SelectVerificationOption();
+                            } else {
+                                if (_CardOutput.getRID().equalsIgnoreCase(Constant.VisaRID))
+                                    successResponse.processSignature(); //ADVT Wants it MTIP not wants
 
-                                 FinalizingRequestForEMV();
-                             }
+                                FinalizingRequestForEMV();
+                            }
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -1800,12 +1784,11 @@ public class TerminalCardApiHelper implements AutoCloseable {
                     sendMessage(TransactionEvent.EMV_EVENT_SEND_OUT.ordinal(), command);
                 }
             });
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
     private void AddRequestForEMV() {
         try {
 
@@ -1841,7 +1824,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
             if (ATC != null && ATC.length() > 0)
                 tlvList.addTLV(TLV.fromData("9F36", BytesUtil.hexString2Bytes(ATC)));
 
-            if(isContactLessTxn) {
+            if (isContactLessTxn) {
 //                String Tag_9F6C = EMV.getInstance().getTLV("9F6C");
 //                if (Tag_9F6C != null && Tag_9F6C.length() > 0)
 //                    tlvList.addTLV(TLV.fromData("9F6C", BytesUtil.hexString2Bytes(Tag_9F6C)));
@@ -1850,7 +1833,6 @@ public class TerminalCardApiHelper implements AutoCloseable {
 //                  String Tag_9F66 = EMV.getInstance().getTLV("9F66");
 //                if (Tag_9F66 != null && Tag_9F66.length() > 0)
 //                    tlvList.addTLV(TLV.fromData("9F66", BytesUtil.hexString2Bytes(Tag_9F66)));
-
 
 
                 String Tag_9F7C = EMV.getInstance().getTLV("9F7C");
@@ -1907,21 +1889,21 @@ public class TerminalCardApiHelper implements AutoCloseable {
 
             String CVM = EMV.getInstance().getTLV("9F34"); //Cardholder Verification Method
 
-            if (CVM != null && CVM.length() > 0 && !CVM.equalsIgnoreCase("000000") ) {//
+            if (CVM != null && CVM.length() > 0 && !CVM.equalsIgnoreCase("000000")) {//
                 tlvList.addTLV(TLV.fromData("9F34", BytesUtil.hexString2Bytes(CVM)));
             }
 //            else
 //                tlvList.addTLV(TLV.fromData("9F34", BytesUtil.hexString2Bytes("000000")));
 
             String PANSeqNo = EMV.getInstance().getTLV("5F34"); //PAN Sequence No.
-           // if(!_CardOutput.getCardAppName().startsWith("JCB")) {
+            // if(!_CardOutput.getCardAppName().startsWith("JCB")) {
 
 //            if (!(PANSeqNo != null && PANSeqNo.length() > 0))
 //                PANSeqNo = "00";  //MTIP Case 50 01 01 = Failed due to adding default value "00"
 
-                if (!isContactLessTxn && PANSeqNo != null && PANSeqNo.length() > 0)
-                    if(!_CardOutput.getCardAppName().startsWith("JCB"))
-                        tlvList.addTLV(TLV.fromData("5F34", BytesUtil.hexString2Bytes(PANSeqNo)));
+            if (!isContactLessTxn && PANSeqNo != null && PANSeqNo.length() > 0)
+                if (!_CardOutput.getCardAppName().startsWith("JCB"))
+                    tlvList.addTLV(TLV.fromData("5F34", BytesUtil.hexString2Bytes(PANSeqNo)));
             //}
 
             if (_CardOutput.getCardAID().equalsIgnoreCase("A0000006021010")) //for debit card only
@@ -1941,10 +1923,8 @@ public class TerminalCardApiHelper implements AutoCloseable {
             }
 
 
-
-
             String AID = EMV.getInstance().getTLV("84"); //Application Identification
-            if (AID != null && AID.length() > 0 ) {
+            if (AID != null && AID.length() > 0) {
                 if (!isContactLessTxn)
                     tlvList.addTLV(TLV.fromData("84", BytesUtil.hexString2Bytes(AID)));
                 else if (!(_CardOutput.getCardAppName().toLowerCase().startsWith("visa")))
@@ -1957,24 +1937,18 @@ public class TerminalCardApiHelper implements AutoCloseable {
                 tlvList.addTLV(TLV.fromData("9F09", BytesUtil.hexString2Bytes(AVN)));
 
 
-
             String SerialNo = Constant.HSN;
-            if(SerialNo != null && SerialNo.length() > 8)
-            {
-                SerialNo = SerialNo.substring(0,8);
+            if (SerialNo != null && SerialNo.length() > 8) {
+                SerialNo = SerialNo.substring(0, 8);
             }
             String IFD = Util.toHex(SerialNo);//Terminal - Interface Device Serial Number
             if (IFD != null && IFD.length() > 0 && !isContactLessTxn)
                 tlvList.addTLV(TLV.fromData("9F1E", BytesUtil.hexString2Bytes(IFD)));
 
 
-
-
-
             String TType = EMV.getInstance().getTLV("9F35");//Terminal Type
-            if (TType != null && TType.length() > 0 && !isContactLessTxn  )
+            if (TType != null && TType.length() > 0 && !isContactLessTxn)
                 tlvList.addTLV(TLV.fromData("9F35", BytesUtil.hexString2Bytes(TType)));
-
 
 
             String TxnSequenceCounter = EMV.getInstance().getTLV("9F41");//Transaction sequence counter;
@@ -1982,16 +1956,16 @@ public class TerminalCardApiHelper implements AutoCloseable {
                 tlvList.addTLV(TLV.fromData("9F41", BytesUtil.hexString2Bytes(TxnSequenceCounter)));
 
             String Tag_9F53 = EMV.getInstance().getTLV("9F53");
-                //CVR (Card Verification Result) or TxnCategoryCode
+            //CVR (Card Verification Result) or TxnCategoryCode
 
-                if (Tag_9F53 != null && Tag_9F53.length() > 0 && !isContactLessTxn)
+            if (Tag_9F53 != null && Tag_9F53.length() > 0 && !isContactLessTxn)
+                tlvList.addTLV(TLV.fromData("9F53", BytesUtil.hexString2Bytes(Tag_9F53)));
+            else if (_CardOutput != null && _CardOutput.getTransactionCategoryCode() != null &&
+                    _CardOutput.getTransactionCategoryCode().length() > 0 && !isContactLessTxn) { //
+                Tag_9F53 = _CardOutput.getTransactionCategoryCode();
+                if (!_CardOutput.getCardAppName().startsWith("JCB"))
                     tlvList.addTLV(TLV.fromData("9F53", BytesUtil.hexString2Bytes(Tag_9F53)));
-                else if (_CardOutput != null && _CardOutput.getTransactionCategoryCode() != null &&
-                        _CardOutput.getTransactionCategoryCode().length() > 0 && !isContactLessTxn) { //
-                    Tag_9F53 = _CardOutput.getTransactionCategoryCode();
-                    if(!_CardOutput.getCardAppName().startsWith("JCB"))
-                        tlvList.addTLV(TLV.fromData("9F53", BytesUtil.hexString2Bytes(Tag_9F53)));
-                }
+            }
 
 
             String IACOnline = EMV.getInstance().getTLV("9F0F");
@@ -2058,6 +2032,7 @@ public class TerminalCardApiHelper implements AutoCloseable {
         }
 
     }
+
     private void FinalizingRequestForEMV() {
 
         if (isEMVProcess)
@@ -2076,10 +2051,11 @@ public class TerminalCardApiHelper implements AutoCloseable {
         successResponse.processFinish(_CardOutput);
 
     }
-    public void ProcessEMVCompletionFlow(String EMVD,String IAC){
+
+    public void ProcessEMVCompletionFlow(String EMVD, String IAC) {
         session.setField55(EMVD);
-        session.setAuthCode(IAC !=null ? IAC.trim() : "0"); //IAC
-        Log.d("RESPONSE_CODE",EMVD);
+        session.setAuthCode(IAC != null ? IAC.trim() : "0"); //IAC
+        Log.d("RESPONSE_CODE", EMVD);
 
 //        byte AuthFlag = (session.getAuthCode() != null && session.getAuthCode() != "0")?(byte)0x01:(byte)0X00;
 //
@@ -2092,14 +2068,15 @@ public class TerminalCardApiHelper implements AutoCloseable {
 //        }
         //We need to run this after response
         sendMessage(TransactionEvent.EMV_EVENT_ONLINE_PROCESS.ordinal(), null);
-     //   sendMessage(TransactionEvent.COMM_EVENT_COMPLETED.ordinal(), "00");
+        //   sendMessage(TransactionEvent.COMM_EVENT_COMPLETED.ordinal(), "00");
     }
-    public void startCardScan(TransactionConfig config,String STAN,boolean isRefundTxn) throws  RemoteException {
+
+    public void startCardScan(TransactionConfig config, String STAN, boolean isRefundTxn) throws RemoteException {
 
         //  session.setSystemTraceAuditNumber(STAN);
         session.setSystemTraceAuditNumber(InputUtil.ProcessNumericToFixedDigits(8, STAN));
 
-        isRefund=isRefundTxn;
+        isRefund = isRefundTxn;
         transactionConfig = config;
         if (config.getAmount() > 0)
             session.setTransactionAmount(config.getAmount());
@@ -2109,15 +2086,15 @@ public class TerminalCardApiHelper implements AutoCloseable {
             startEMVProcess();
     }
 
-    public void startCardProcessor( TransactionConfig config, String BatchNo,String InvoiceNo,
-                                   String TxnName,String ProcessingCode) {
+    public void startCardProcessor(TransactionConfig config, String BatchNo, String InvoiceNo,
+                                   String TxnName, String ProcessingCode) {
 //        ,Long TransactionAmount,
 //        TransactionConfig _transConfig
         // Set session.
         session.setTransactionName(TxnName);//"Sale"
 
         session.setProcessingCode(ProcessingCode); //"000000"
-      //  session.setSystemTraceAuditNumber(InvoiceNo);
+        //  session.setSystemTraceAuditNumber(InvoiceNo);
         session.setBatchNumber(BatchNo);
 
         // Set transaction config.
@@ -2125,12 +2102,11 @@ public class TerminalCardApiHelper implements AutoCloseable {
         transactionConfig = config;
 
 
-
-
     }
+
     public void searchCard() throws RemoteException {
         // Set card config
-        if(DeviceManager.getInstance() !=null) {
+        if (DeviceManager.getInstance() != null) {
             Bundle bundle = new Bundle();
             bundle.putBoolean("supportICCard", transactionConfig.isContactIcCardSupported());
             bundle.putBoolean("supportRFCard", transactionConfig.isRfCardSupported());
@@ -2206,17 +2182,17 @@ public class TerminalCardApiHelper implements AutoCloseable {
                     Log.d(TAG, error + " : " + message);
                     stopEMVProcess();
 
-                    successResponse.processFailed(message,getEntryMode());
+                    successResponse.processFailed(message, getEntryMode());
 
                     // Stop EMV process
                     //  showToast(getString(EMV.getErrorId(error)));
 
                 }
             });
-        }
-        else
+        } else
             successResponse.processFailed("Device Manager is not initialized");
     }
+
     @Override
     public void close() throws Exception {
         try {
@@ -2237,22 +2213,18 @@ public class TerminalCardApiHelper implements AutoCloseable {
                 EMV.getInstance().stopProcess();
             }
 
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
 
     }
-    public void StopProcess()
-    {
+
+    public void StopProcess() {
         try {
             if (isEMVProcess) {
 
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
     }

@@ -1,16 +1,21 @@
 package com.example.bniapos.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bniapos.BniApplication
 import com.example.bniapos.R
 import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.models.ControlList
+import com.example.paymentsdk.CardReadOutput
+import com.example.paymentsdk.Common.ISuccessResponse_Card
+import com.example.paymentsdk.Common.TerminalCardApiHelper
+import com.example.paymentsdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import org.json.JSONObject
@@ -25,8 +30,13 @@ class MainActivity : AppCompatActivity() {
     private var btnNext: Button? = null
     private var output: MutableMap<String, Any>? = HashMap()
     private var filteredObjectList: MutableList<ControlList>? = ArrayList()
+    private var cardReadOutput: CardReadOutput? = null
+    private var emvProcessor: TerminalCardApiHelper? = null
+    private var transactionConfig: TransactionConfig? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override
+
+    fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
@@ -50,15 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         btnNext?.setOnClickListener {
             if (btnNext?.text == "Submit") {
-                setValues()
                 submitData()
             } else {
                 if (validateRequiredValues()) {
                     setValues()
                     Toast.makeText(this@MainActivity, output.toString(), Toast.LENGTH_LONG).show()
-                    llParentBody?.removeAllViews()
-                    mainScreenId += 1
-                    loadScreen(objectList, mainScreenId)
+                    loadNextScreen(objectList)
                 }
             }
         }
@@ -87,6 +94,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun submitData() {
+        setValues()
         Toast.makeText(this@MainActivity, output.toString(), Toast.LENGTH_LONG).show()
     }
 
@@ -96,6 +104,9 @@ class MainActivity : AppCompatActivity() {
                 "TEXT" -> {
                     val editText = controls.controlObject as EditText
                     output?.put(controls.controlKey, editText.text)
+                }
+                "CARD", "SECUREPIN" -> {
+                    output?.put(controls.controlKey, cardReadOutput!!)
                 }
             }
         }
@@ -136,6 +147,74 @@ class MainActivity : AppCompatActivity() {
                     controls.controlObject = edittext as Object
                     llParentBody?.addView(view)
                 }
+
+                "CARD" -> {
+                    val view: View = inflater.inflate(R.layout.dynamic_card_layout, null)
+                    llParentBody?.addView(view)
+                    btnNext?.visibility = GONE
+                    runOnUiThread {
+                        emvProcessor =
+                            TerminalCardApiHelper(
+                                this@MainActivity,
+                                object : ISuccessResponse_Card {
+                                    override fun processFinish(CardOutput: CardReadOutput?) {
+                                        cardReadOutput = CardReadOutput()
+                                        cardReadOutput = CardOutput
+                                        loadNextScreen(objectList)
+                                    }
+
+                                    override fun PinProcessConfirm(output: CardReadOutput?) {
+                                        Log.d("CardOutput", output.toString())
+                                    }
+
+                                    override fun PinProcessFailed(Exception: String?) {
+                                        Log.d("CardOutput", Exception.toString())
+                                    }
+
+                                    override fun processFailed(Exception: String?) {
+                                        Log.d("CardOutput", Exception.toString())
+                                    }
+
+                                    override fun Communication(breakEMVConnection: Boolean) {
+                                        Log.d("CardOutput", "communication")
+                                    }
+
+                                    override fun processTimeOut() {
+                                        Log.d("CardOutput", "timeout")
+                                    }
+
+                                    override fun TransactionApproved() {
+                                        Log.d("CardOutput", "approved")
+                                    }
+
+                                    override fun TransactionDeclined() {
+                                        Log.d("CardOutput", "declined")
+                                    }
+
+                                })
+                        transactionConfig = TransactionConfig()
+                        transactionConfig?.amount = 100
+                        transactionConfig?.isContactIcCardSupported = true
+                        emvProcessor!!.startCardScan(
+                            transactionConfig,
+                            "51263", false
+                        )
+                    }
+
+                }
+
+                "SECUREPIN" -> {
+                    transactionConfig?.isPinInputNeeded = true
+                    emvProcessor?.publishEMVDataStep1(
+                        transactionConfig?.amount!!,
+                        0,
+                        cardReadOutput,
+                        false,
+                        true
+                    )
+                }
+
+
                 "RADIO" -> {
                     val view: View = inflater.inflate(R.layout.dynamic_radio_buttons, null)
                     val radioGroup: RadioGroup = view.findViewById(R.id.rg_dynamic)
@@ -228,6 +307,18 @@ class MainActivity : AppCompatActivity() {
         btnNext?.text = btnText
     }
 
+    private fun loadNextScreen(objectList: List<ControlList>) {
+        runOnUiThread {
+            llParentBody?.removeAllViews()
+            if (btnNext?.text == "Next") {
+                mainScreenId += 1
+                loadScreen(objectList, mainScreenId)
+            } else {
+                submitData()
+            }
+        }
+    }
+
     private fun setAdapter(spnData: List<String>?, spn: Spinner) {
         val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(
             this,
@@ -259,7 +350,7 @@ class MainActivity : AppCompatActivity() {
         val charset: Charset = Charsets.UTF_8
         var json: String? = null
         json = try {
-            val `is`: InputStream = getAssets().open("control_list.json")
+            val `is`: InputStream = getAssets().open("controls.json")
             val size: Int = `is`.available()
             val buffer = ByteArray(size)
             `is`.read(buffer)
