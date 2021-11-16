@@ -11,6 +11,7 @@ import com.example.bniapos.R
 import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
+import com.example.bniapos.enums.ControlType
 import com.example.bniapos.models.ControlList
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.Common.ISuccessResponse_Card
@@ -34,9 +35,12 @@ class MainActivity : AppCompatActivity() {
     private var emvProcessor: TerminalCardApiHelper? = null
     private var transactionConfig: TransactionConfig? = null
 
-    override
 
-    fun onCreate(savedInstanceState: Bundle?) {
+
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
@@ -76,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     private fun validateRequiredValues(): Boolean {
         filteredObjectList?.forEach { controls ->
             when (controls.controlType.uppercase()) {
-                "TEXT" -> {
+                ControlType.TEXT.name -> {
                     if (controls.minLength != 0) {
                         val editText = controls.controlObject as EditText
                         if (editText.text.length !in controls.minLength..controls.maxLength) {
@@ -101,11 +105,11 @@ class MainActivity : AppCompatActivity() {
     private fun setValues() {
         filteredObjectList?.forEach { controls ->
             when (controls.controlType.uppercase()) {
-                "TEXT" -> {
+                ControlType.TEXT.name -> {
                     val editText = controls.controlObject as EditText
                     output?.put(controls.controlKey, editText.text)
                 }
-                "CARD", "SECUREPIN" -> {
+                ControlType.CARD.name, ControlType.SECUREPIN.name -> {
                     output?.put(controls.controlKey, cardReadOutput!!)
                 }
             }
@@ -134,7 +138,7 @@ class MainActivity : AppCompatActivity() {
         filteredObjectList!!.forEach { controls ->
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             when (controls.controlType.uppercase()) {
-                "TEXT" -> {
+                ControlType.TEXT.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_edit_text, null)
                     val tilDynamic: TextInputLayout = view.findViewById(R.id.til_dynamic)
                     val edittext: EditText = view.findViewById(R.id.dynamic_edit_text)
@@ -148,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                     llParentBody?.addView(view)
                 }
 
-                "CARD" -> {
+                ControlType.CARD.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_card_layout, null)
                     llParentBody?.addView(view)
                     btnNext?.visibility = GONE
@@ -203,7 +207,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-                "SECUREPIN" -> {
+                ControlType.SECUREPIN.name -> {
                     transactionConfig?.isPinInputNeeded = true
                     emvProcessor?.publishEMVDataStep1(
                         transactionConfig?.amount!!,
@@ -215,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
 
-                "RADIO" -> {
+                ControlType.RADIO.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_radio_buttons, null)
                     val radioGroup: RadioGroup = view.findViewById(R.id.rg_dynamic)
                     val rgText: TextView = view.findViewById(R.id.rg_text_dynamic)
@@ -240,7 +244,7 @@ class MainActivity : AppCompatActivity() {
                     controls.controlObject = radioGroup as Object
                     llParentBody?.addView(view)
                 }
-                "DROPDOWN" -> {
+                ControlType.DROPDOWN.name -> {
                     var data: List<ControlTable>? = ArrayList()
                     var spnData: List<String>? = ArrayList()
                     val view: View = inflater.inflate(R.layout.dynamic_spinner, null)
