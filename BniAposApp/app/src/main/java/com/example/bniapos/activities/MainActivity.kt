@@ -26,6 +26,9 @@ import java.nio.charset.Charset
 
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = MainActivity().localClassName
+
     private var mainScreenId = 1
     private var llParentBody: LinearLayout? = null
     private var btnNext: Button? = null
@@ -36,8 +39,10 @@ class MainActivity : AppCompatActivity() {
     private var transactionConfig: TransactionConfig? = null
 
 
-
-
+    private val menuName = "menuName"
+    private val menuId = "menuId"
+    private val submit = "Submit"
+    private val next = "Next"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         btnNext = findViewById(R.id.btn_next)
         Toast.makeText(
             this,
-            intent.getStringExtra("menuName") + intent.getIntExtra("menuId", 0),
+            intent.getStringExtra(menuName) + intent.getIntExtra(menuId, 0),
             Toast.LENGTH_LONG
         ).show()
 
@@ -63,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         loadScreen(objectList, mainScreenId)
 
         btnNext?.setOnClickListener {
-            if (btnNext?.text == "Submit") {
+            if (btnNext?.text == submit) {
                 submitData()
             } else {
                 if (validateRequiredValues()) {
@@ -125,14 +130,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadScreen(objectList: List<ControlList>, screenId: Int) {
-        var screenDataSet: MutableMap<String, List<ControlTable>>? = HashMap()
-        var btnText = "Submit"
+        val screenDataSet: MutableMap<String, List<ControlTable>> = HashMap()
+        var btnText = submit
         filteredObjectList =
             objectList.filter { controlList -> controlList.screenId == screenId }.sortedWith(
                 compareBy { it.sortOrder }).toMutableList()
         objectList.forEach { controls ->
             if (controls.screenId > screenId) {
-                btnText = "Next"
+                btnText = next
             }
         }
         filteredObjectList!!.forEach { controls ->
@@ -168,31 +173,31 @@ class MainActivity : AppCompatActivity() {
                                     }
 
                                     override fun PinProcessConfirm(output: CardReadOutput?) {
-                                        Log.d("CardOutput", output.toString())
+                                        Log.d(TAG, output.toString())
                                     }
 
                                     override fun PinProcessFailed(Exception: String?) {
-                                        Log.d("CardOutput", Exception.toString())
+                                        Log.d(TAG, Exception.toString())
                                     }
 
                                     override fun processFailed(Exception: String?) {
-                                        Log.d("CardOutput", Exception.toString())
+                                        Log.d(TAG, Exception.toString())
                                     }
 
                                     override fun Communication(breakEMVConnection: Boolean) {
-                                        Log.d("CardOutput", "communication")
+                                        Log.d(TAG, "communication")
                                     }
 
                                     override fun processTimeOut() {
-                                        Log.d("CardOutput", "timeout")
+                                        Log.d(TAG, "timeout")
                                     }
 
                                     override fun TransactionApproved() {
-                                        Log.d("CardOutput", "approved")
+                                        Log.d(TAG, "approved")
                                     }
 
                                     override fun TransactionDeclined() {
-                                        Log.d("CardOutput", "declined")
+                                        Log.d(TAG, "declined")
                                     }
 
                                 })
@@ -233,14 +238,13 @@ class MainActivity : AppCompatActivity() {
                         radioGroup.addView(rb[i])
                     }
                     radioGroup.check(0)
-                    output?.put(controls.controlKey, data.get(0).value!!)
-                    radioGroup.setOnCheckedChangeListener(object :
-                        RadioGroup.OnCheckedChangeListener {
-                        override fun onCheckedChanged(p0: RadioGroup?, p1: Int) {
-                            output?.put(controls.controlKey, data.get(p1).value!!)
-                        }
-
-                    })
+                    output?.put(controls.controlKey, data[0].value!!)
+                    radioGroup.setOnCheckedChangeListener { p0, p1 ->
+                        output?.put(
+                            controls.controlKey,
+                            data[p1].value!!
+                        )
+                    }
                     controls.controlObject = radioGroup as Object
                     llParentBody?.addView(view)
                 }
@@ -258,8 +262,8 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         spn.isEnabled = false
                     }
-                    screenDataSet?.put(controls.controlKey, data!!)
-                    spnData = data?.convertToDataString()
+                    screenDataSet.put(controls.controlKey, data!!)
+                    spnData = data.convertToDataString()
                     spn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             p0: AdapterView<*>?,
@@ -269,15 +273,15 @@ class MainActivity : AppCompatActivity() {
                         ) {
                             p0?.getItemAtPosition(p2)
                             if (p2 != 0) {
-                                data = screenDataSet?.get(controls.controlKey)
+                                data = screenDataSet.get(controls.controlKey)
                                 filteredObjectList!!.forEach {
                                     if (it.relatedControlKey == controls.controlKey) {
                                         val referenceData = getData(
                                             it.dataSet,
                                             data?.get(p2 - 1)!!.value!!
                                         )
-                                        screenDataSet?.put(it.controlKey, referenceData)
-                                        val relatedSpnData = referenceData?.convertToDataString()
+                                        screenDataSet.put(it.controlKey, referenceData)
+                                        val relatedSpnData = referenceData.convertToDataString()
                                         val relatedView: View =
                                             llParentBody!!.findViewWithTag("dd_" + it.controlKey)
                                         val relatedSpn: Spinner =
@@ -314,7 +318,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadNextScreen(objectList: List<ControlList>) {
         runOnUiThread {
             llParentBody?.removeAllViews()
-            if (btnNext?.text == "Next") {
+            if (btnNext?.text == next) {
                 mainScreenId += 1
                 loadScreen(objectList, mainScreenId)
             } else {
@@ -339,22 +343,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun getData(dataSet: String, value: String? = null): List<ControlTable> {
         var data: List<ControlTable>? = ArrayList()
-        if (value == null) {
-            data = DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+        data = if (value == null) {
+            DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
                 ?.getDataSet(dataSet)
         } else {
-            data = DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+            DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
                 ?.getDataSetWithReferenceData(dataSet, value)
         }
 
         return data!!
     }
 
-    fun loadJSONFromAsset(): String? {
+    private fun loadJSONFromAsset(): String? {
         val charset: Charset = Charsets.UTF_8
         var json: String? = null
         json = try {
-            val `is`: InputStream = getAssets().open("controls.json")
+            val `is`: InputStream = assets.open("controls.json")
             val size: Int = `is`.available()
             val buffer = ByteArray(size)
             `is`.read(buffer)
@@ -370,11 +374,11 @@ class MainActivity : AppCompatActivity() {
         return jsonArray.toString()
     }
 
-    fun loadTableJSONFromAsset(): String? {
+    private fun loadTableJSONFromAsset(): String? {
         val charset: Charset = Charsets.UTF_8
         var json: String? = null
         json = try {
-            val `is`: InputStream = getAssets().open("control_table_data.json")
+            val `is`: InputStream = assets.open("control_table_data.json")
             val size: Int = `is`.available()
             val buffer = ByteArray(size)
             `is`.read(buffer)
