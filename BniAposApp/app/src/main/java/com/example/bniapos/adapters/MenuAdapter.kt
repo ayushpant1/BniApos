@@ -72,10 +72,7 @@ internal class MenuAdapter(
                     it.setColorFilter(defaultColor)
                 }
             }
-            itemView.findViewById<View>(R.id.line)?.let {
-                it.setBackgroundColor(defaultColor)
-                it.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
-            }
+
             itemView.findViewById<TextView>(R.id.txt_name)?.let {
                 it.text =
                     transactionType.displayText

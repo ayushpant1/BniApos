@@ -1,53 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/containerView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="5dp"
-    android:background="@color/white"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="5dp">
+    android:gravity="center"
+    android:minWidth="80dp"
+    android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:adjustViewBounds="true"
+        tools:ignore="ContentDescription" />
 
-    <LinearLayout
-        android:id="@+id/containerView"
+    <TextView
+        android:id="@+id/txt_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:minWidth="80dp"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/img_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_sale_transaction"
-            app:tint="@color/red"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/txt_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="center_horizontal"
-            android:text="Sale"
-            android:textColor="@color/red" />
-
-        <RelativeLayout
-            android:id="@+id/line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/red" />
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="5dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:text="Sale"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dimen_13dp" />
 
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

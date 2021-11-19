@@ -12,6 +12,7 @@ import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.ControlType
+import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.ControlList
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.Common.ISuccessResponse_Card
@@ -19,6 +20,9 @@ import com.example.paymentsdk.Common.TerminalCardApiHelper
 import com.example.paymentsdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -27,7 +31,7 @@ import java.nio.charset.Charset
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity().localClassName
+   // private val TAG = MainActivity().localClassName
 
     private var mainScreenId = 1
     private var llParentBody: LinearLayout? = null
@@ -104,6 +108,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun submitData() {
         setValues()
+        val hostRepository = HostRepository()
+        MainScope().launch {
+            hostRepository.postData(JSONObject(output?.toMap()), "824682378623784")
+            hostRepository.postData(JSONObject(output?.toMap()), "0873289732")
+        }
         Toast.makeText(this@MainActivity, output.toString(), Toast.LENGTH_LONG).show()
     }
 
@@ -173,31 +182,31 @@ class MainActivity : AppCompatActivity() {
                                     }
 
                                     override fun PinProcessConfirm(output: CardReadOutput?) {
-                                        Log.d(TAG, output.toString())
+                                        Log.d("TAG", output.toString())
                                     }
 
                                     override fun PinProcessFailed(Exception: String?) {
-                                        Log.d(TAG, Exception.toString())
+                                        Log.d("TAG", Exception.toString())
                                     }
 
                                     override fun processFailed(Exception: String?) {
-                                        Log.d(TAG, Exception.toString())
+                                        Log.d("TAG", Exception.toString())
                                     }
 
                                     override fun Communication(breakEMVConnection: Boolean) {
-                                        Log.d(TAG, "communication")
+                                        Log.d("TAG", "communication")
                                     }
 
                                     override fun processTimeOut() {
-                                        Log.d(TAG, "timeout")
+                                        Log.d("TAG", "timeout")
                                     }
 
                                     override fun TransactionApproved() {
-                                        Log.d(TAG, "approved")
+                                        Log.d("TAG", "approved")
                                     }
 
                                     override fun TransactionDeclined() {
-                                        Log.d(TAG, "declined")
+                                        Log.d("TAG", "declined")
                                     }
 
                                 })
@@ -358,7 +367,7 @@ class MainActivity : AppCompatActivity() {
         val charset: Charset = Charsets.UTF_8
         var json: String? = null
         json = try {
-            val `is`: InputStream = assets.open("controls.json")
+            val `is`: InputStream = assets.open("control_list.json")
             val size: Int = `is`.available()
             val buffer = ByteArray(size)
             `is`.read(buffer)

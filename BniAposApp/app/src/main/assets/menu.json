@@ -7,6 +7,7 @@
         "DisplayText": "Payment",
         "SortOrder": 1,
         "Type": "BP",
+        "IconName": "Payment",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -19,6 +20,7 @@
         "DisplayText": "TELKOM",
         "SortOrder": 2,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -31,6 +33,7 @@
         "DisplayText": "Indovision",
         "SortOrder": 3,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -43,6 +46,7 @@
         "DisplayText": "Firstmedia",
         "SortOrder": 4,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -55,6 +59,7 @@
         "DisplayText": "BPJS KS VA",
         "SortOrder": 5,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -67,6 +72,7 @@
         "DisplayText": "PDAM",
         "SortOrder": 6,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -79,6 +85,7 @@
         "DisplayText": "Adira",
         "SortOrder": 7,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -91,6 +98,7 @@
         "DisplayText": "FIF",
         "SortOrder": 8,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -103,6 +111,7 @@
         "DisplayText": "OTO Kredit",
         "SortOrder": 9,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -115,6 +124,7 @@
         "DisplayText": "SMS Finance",
         "SortOrder": 10,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -127,6 +137,7 @@
         "DisplayText": "NSC Finance",
         "SortOrder": 11,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -139,6 +150,7 @@
         "DisplayText": "KreditPlus",
         "SortOrder": 12,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -151,6 +163,7 @@
         "DisplayText": "ACC Finance",
         "SortOrder": 13,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -163,6 +176,7 @@
         "DisplayText": "BNI Life",
         "SortOrder": 14,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -175,6 +189,7 @@
         "DisplayText": "PLN Postpaid",
         "SortOrder": 15,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -187,6 +202,7 @@
         "DisplayText": "PLN Nontaglis",
         "SortOrder": 16,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -199,6 +215,7 @@
         "DisplayText": "Prudential Initial Premium",
         "SortOrder": 17,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -211,6 +228,7 @@
         "DisplayText": "Prudential Continual Premium",
         "SortOrder": 18,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -223,6 +241,7 @@
         "DisplayText": "Prudential Premium TopUp",
         "SortOrder": 19,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -235,6 +254,7 @@
         "DisplayText": "Prudential Policy Re-print",
         "SortOrder": 20,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -247,6 +267,7 @@
         "DisplayText": "Prudential Policy Adjustment",
         "SortOrder": 21,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -259,6 +280,7 @@
         "DisplayText": "Prudential Card Printing",
         "SortOrder": 22,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -271,6 +293,7 @@
         "DisplayText": "Credit Card BNI",
         "SortOrder": 23,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -283,6 +306,7 @@
         "DisplayText": "Credit Card Non BNI",
         "SortOrder": 24,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -295,6 +319,7 @@
         "DisplayText": "Personal Loan",
         "SortOrder": 25,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -307,6 +332,7 @@
         "DisplayText": "Charity",
         "SortOrder": 26,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -319,6 +345,7 @@
         "DisplayText": "Mobile Postpaid",
         "SortOrder": 27,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -331,6 +358,7 @@
         "DisplayText": "BPJS TK BPU &amp; TKI",
         "SortOrder": 28,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -343,6 +371,7 @@
         "DisplayText": "Airline Ticketing",
         "SortOrder": 29,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -355,6 +384,7 @@
         "DisplayText": "Train Ticketing",
         "SortOrder": 30,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -367,6 +397,7 @@
         "DisplayText": "Bumiputera",
         "SortOrder": 31,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -379,6 +410,7 @@
         "DisplayText": "Internet Telkom",
         "SortOrder": 32,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -391,6 +423,7 @@
         "DisplayText": "Railink",
         "SortOrder": 33,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -403,6 +436,7 @@
         "DisplayText": "Jiwasraya",
         "SortOrder": 34,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -415,6 +449,7 @@
         "DisplayText": "Transvision",
         "SortOrder": 35,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -427,6 +462,7 @@
         "DisplayText": "Tax",
         "SortOrder": 36,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -439,6 +475,7 @@
         "DisplayText": "SBMPTN",
         "SortOrder": 37,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -451,6 +488,7 @@
         "DisplayText": "UM PTKIN",
         "SortOrder": 38,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -463,6 +501,7 @@
         "DisplayText": "PURCHASE",
         "SortOrder": 39,
         "Type": "BP",
+        "IconName": "PURCHASE",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -475,6 +514,7 @@
         "DisplayText": "PLN Prepaid",
         "SortOrder": 40,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -487,6 +527,7 @@
         "DisplayText": "PLN Manual Advice",
         "SortOrder": 41,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -499,6 +540,7 @@
         "DisplayText": "Top Up GSM",
         "SortOrder": 42,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -511,6 +553,7 @@
         "DisplayText": "Top Up Go Pay",
         "SortOrder": 43,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -523,6 +566,7 @@
         "DisplayText": "Top Up LinkAja",
         "SortOrder": 44,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -535,6 +579,7 @@
         "DisplayText": "Internet Package",
         "SortOrder": 45,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -547,6 +592,7 @@
         "DisplayText": "Top Up iSaku",
         "SortOrder": 46,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -558,6 +604,7 @@
         "ParentId": 0,
         "DisplayText": "TRANSFER",
         "SortOrder": 47,
+        "IconName": "TRANSFER",
         "Type": "BP",
         "LinkId": 1,
         "ReceiptTemplate": {
@@ -571,6 +618,7 @@
         "DisplayText": "BNI",
         "SortOrder": 48,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -583,6 +631,7 @@
         "DisplayText": "Non BNI",
         "SortOrder": 49,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -595,6 +644,7 @@
         "DisplayText": "DIGITAL FINANCE SERVICE",
         "SortOrder": 50,
         "Type": "BP",
+        "IconName": "DIGITAL_FINANCE_SERVICE",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -607,6 +657,7 @@
         "DisplayText": "Top Up BNI TapCash",
         "SortOrder": 51,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -619,6 +670,7 @@
         "DisplayText": "LAKUPANDAI",
         "SortOrder": 52,
         "Type": "BP",
+        "IconName": "LAKUPANDAI",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -631,6 +683,7 @@
         "DisplayText": "Account Opening",
         "SortOrder": 53,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -643,6 +696,7 @@
         "DisplayText": "Cash Deposit",
         "SortOrder": 54,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -655,6 +709,7 @@
         "DisplayText": "Cash Withdrawal",
         "SortOrder": 55,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -667,6 +722,7 @@
         "DisplayText": "Create OTP",
         "SortOrder": 56,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -679,6 +735,7 @@
         "DisplayText": "Check Account",
         "SortOrder": 57,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -691,6 +748,7 @@
         "DisplayText": "Check Account Details",
         "SortOrder": 58,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -703,6 +761,7 @@
         "DisplayText": "AGENT MANAGEMENT",
         "SortOrder": 59,
         "Type": "BP",
+        "IconName": "AGENT_MANAGEMENT",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -715,6 +774,7 @@
         "DisplayText": "Agent Registration",
         "SortOrder": 60,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -727,6 +787,7 @@
         "DisplayText": "Get Temporary Agent List",
         "SortOrder": 61,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -739,6 +800,7 @@
         "DisplayText": "Get Agent Approved",
         "SortOrder": 62,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -751,6 +813,7 @@
         "DisplayText": "Get Transaction List",
         "SortOrder": 63,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -763,6 +826,7 @@
         "DisplayText": "Get One Transaction",
         "SortOrder": 64,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -774,6 +838,7 @@
         "ParentId": 0,
         "DisplayText": "BNI LIFE MICRO INSURANCE",
         "SortOrder": 65,
+        "IconName": "BNI_LIFE_MICRO_INSURANCE",
         "Type": "BP",
         "LinkId": 1,
         "ReceiptTemplate": {
@@ -787,6 +852,7 @@
         "DisplayText": "Micro Insurance",
         "SortOrder": 66,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -799,6 +865,7 @@
         "DisplayText": "Micro Insurance Reprint",
         "SortOrder": 67,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -811,6 +878,7 @@
         "DisplayText": "CDN",
         "SortOrder": 68,
         "Type": "BP",
+        "IconName": "CDN",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -823,6 +891,7 @@
         "DisplayText": "REMMITANCE",
         "SortOrder": 69,
         "Type": "BP",
+        "IconName": "REMMITANCE",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -835,6 +904,7 @@
         "DisplayText": "Remittance Search",
         "SortOrder": 70,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -847,6 +917,7 @@
         "DisplayText": "Remittance Payment",
         "SortOrder": 71,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -859,6 +930,7 @@
         "DisplayText": "Additional Service",
         "SortOrder": 72,
         "Type": "BP",
+        "IconName": "Additional_Service",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -871,6 +943,7 @@
         "DisplayText": "Inquiry Transaction Status",
         "SortOrder": 73,
         "Type": "BP",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -883,6 +956,7 @@
         "DisplayText": "Cr/Dr",
         "SortOrder": 100,
         "Type": "CT",
+        "IconName": "CR_DR",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -895,6 +969,7 @@
         "DisplayText": "Sale",
         "SortOrder": 1,
         "Type": "CT",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -907,6 +982,7 @@
         "DisplayText": "Void",
         "SortOrder": 1,
         "Type": "CT",
+        "IconName": "",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1

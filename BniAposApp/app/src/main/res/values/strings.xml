@@ -1,7 +1,21 @@
 <resources>
     <string name="app_name">Bni app</string>
+    <string name="title_activity_home">MainActivity</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_notification">Informasi</string>
+    <string name="title_report">Laporan</string>
+    <string name="title_profile">Akun</string>
 
 
+    <!-- Home Strings-->
+    <string name="balance">Saldo Anda</string>
+    <string name="estimated_income">Perkiraan Pedapatan</string>
+    <string name="tap_to_view">Tap untuk lihat</string>
+    <string name="income_report">Laporan Pendapatan</string>
+    <string name="refresh">Refresh Saldo</string>
+    <string name="menus">Menu Utama</string>
+    <string name="toko_putra_nagra">Toko Putra Nagra</string>
 
 
 </resources>

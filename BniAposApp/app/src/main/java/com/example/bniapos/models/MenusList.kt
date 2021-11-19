@@ -14,6 +14,7 @@ data class MenuLink(
     @SerializedName("Id") val id: Int,
     @SerializedName("ParentId") val parentId: Int,
     @SerializedName("DisplayText") val displayText: String,
+    @SerializedName("IconName") val iconName: String,
     @SerializedName("SortOrder") val sortOrder: Int,
     @SerializedName("Type") val type: String,
     @SerializedName("LinkId") val linkId: Int,
