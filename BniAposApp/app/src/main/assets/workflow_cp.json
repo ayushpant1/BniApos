@@ -1,0 +1,83 @@
+{
+  "WORKFLOW": [
+    {
+      "ID": 1,
+      "NAME": "SALE",
+      "ENDPOINT": "PROCESSBANKSALE",
+      "TYPE": "CP",
+      "REVERSAL": 1,
+      "RETRY": 0,
+      "VOID": 1,
+      "CARDINPUTTYPE": 205070000,
+      "CTRLS": [
+        {
+          "KEY": "AMT",
+          "LABEL": "Enter Amount",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1"
+        },
+        {
+          "KEY": "CARDNO",
+          "LABEL": "DIP/SWIPE CARD",
+          "CTYPE": "C",
+          "MINSIZE": "1",
+          "MAXSIZE": "16",
+          "DVAL": "",
+          "SCN": "2",
+          "ORD": "2"
+        },
+        {
+          "KEY": "PIN",
+          "LABEL": "ENTER PIN",
+          "CTYPE": "C",
+          "MINSIZE": "4",
+          "MAXSIZE": "6",
+          "DVAL": "",
+          "SCN": "3",
+          "ORD": "2"
+        }
+      ],
+      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
+      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "NEXTWORKFLOWID": 0
+    },
+    {
+      "ID": 21,
+      "NAME": "BANKVOIDREQUEST",
+      "ENDPOINT": "BANKVOIDREQUEST/ENDPOINT>",
+      "TYPE": "CP",
+      "REVERSAL": 1,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+        {
+          "KEY": "TPIN",
+          "LABEL": "ENTER TERMINAL PIN",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1"
+        },
+        {
+          "KEY": "INV",
+          "LABEL": "ENTER INVOICE NUMBER",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "2",
+          "ORD": "1"
+        }
+      ],
+      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,DREF,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
+      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "NEXTWORKFLOWID": 0
+    }
+  ]
+}

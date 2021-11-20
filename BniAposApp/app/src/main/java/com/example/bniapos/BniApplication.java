@@ -15,7 +15,7 @@ public class BniApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CTIApplication.setContext(getApplicationContext());
-        // bindSdkDeviceService(getApplicationContext());
+        bindSdkDeviceService(getApplicationContext());
     }
 
 

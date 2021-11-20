@@ -12,11 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoActionBar">
+        <activity android:name=".activities.SubMenuActivity" />
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home" />
-        <activity android:name=".activities.MainActivity" />
-
+        <activity android:name=".activities.CpControlsActivity" />
+        <activity android:name=".activities.BpControlsActivity" />
         <activity android:name=".activities.MenusListActivity" />
         <activity
             android:name=".activities.SplashActivity"

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="6dp"
+        app:cardElevation="6dp">
+
+        <ImageView
+            android:id="@+id/img_sub_menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_transfer_bni_1" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_sub_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:minLines="2"
+        android:text="Text"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="13dp" />
+</LinearLayout>

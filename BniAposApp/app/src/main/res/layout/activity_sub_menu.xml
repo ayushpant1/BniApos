@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SubMenuActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_15dp"
+        android:layout_marginRight="@dimen/dimen_15dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20dp">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_back" />
+
+            <Spinner
+                android:id="@+id/spn_menu"
+                style="@style/spinner_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/img_back"
+                android:spinnerMode="dropdown" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_menu"
+
+            android:layout_marginTop="25dp">
+
+            <ImageView
+                android:id="@+id/img_menu"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/transfer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_15dp"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_toRightOf="@+id/img_menu"
+                android:gravity="start"
+                android:text="BNI Agen46 dapat memberikan kemudahan kepada masyarakat untuk melakukan transfer uang kemana saja."
+                android:textAlignment="textStart" />
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp"
+            android:numColumns="4" />
+    </LinearLayout>
+
+
+</RelativeLayout>

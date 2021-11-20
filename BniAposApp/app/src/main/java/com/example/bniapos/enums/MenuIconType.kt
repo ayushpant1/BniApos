@@ -1,6 +1,6 @@
 package com.example.bniapos.enums
 
-enum class MenuType {
+enum class MenuIconType {
     PAYMENT,
     PURCHASE,
     TRANSFER,
@@ -12,4 +12,9 @@ enum class MenuType {
     REMMITANCE,
     Additional_Service,
     CR_DR
+}
+
+enum class MenuType {
+    BP,
+    CP
 }

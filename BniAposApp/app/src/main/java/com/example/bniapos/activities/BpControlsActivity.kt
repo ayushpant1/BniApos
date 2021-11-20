@@ -1,5 +1,6 @@
 package com.example.bniapos.activities
 
+import MenuLink
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import com.example.bniapos.R
 import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
-import com.example.bniapos.enums.ControlType
+import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.ControlList
 import com.example.paymentsdk.CardReadOutput
@@ -29,22 +30,19 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 
-class MainActivity : AppCompatActivity() {
+class BpControlsActivity : AppCompatActivity() {
 
-   // private val TAG = MainActivity().localClassName
+    // private val TAG = MainActivity().localClassName
 
     private var mainScreenId = 1
     private var llParentBody: LinearLayout? = null
     private var btnNext: Button? = null
     private var output: MutableMap<String, Any>? = HashMap()
     private var filteredObjectList: MutableList<ControlList>? = ArrayList()
-    private var cardReadOutput: CardReadOutput? = null
-    private var emvProcessor: TerminalCardApiHelper? = null
-    private var transactionConfig: TransactionConfig? = null
+
+    private var menu: MenuLink? = null
 
 
-    private val menuName = "menuName"
-    private val menuId = "menuId"
     private val submit = "Submit"
     private val next = "Next"
 
@@ -55,9 +53,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         llParentBody = findViewById(R.id.ll_parent_body)
         btnNext = findViewById(R.id.btn_next)
+
+        menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
         Toast.makeText(
             this,
-            intent.getStringExtra(menuName) + intent.getIntExtra(menuId, 0),
+            menu?.displayText,
             Toast.LENGTH_LONG
         ).show()
 
@@ -77,7 +77,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 if (validateRequiredValues()) {
                     setValues()
-                    Toast.makeText(this@MainActivity, output.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG)
+                        .show()
                     loadNextScreen(objectList)
                 }
             }
@@ -89,12 +90,12 @@ class MainActivity : AppCompatActivity() {
     private fun validateRequiredValues(): Boolean {
         filteredObjectList?.forEach { controls ->
             when (controls.controlType.uppercase()) {
-                ControlType.TEXT.name -> {
+                BpControlType.TEXT.name -> {
                     if (controls.minLength != 0) {
                         val editText = controls.controlObject as EditText
                         if (editText.text.length !in controls.minLength..controls.maxLength) {
                             Toast.makeText(
-                                this@MainActivity,
+                                this@BpControlsActivity,
                                 controls.label + " is not valid", Toast.LENGTH_LONG
                             ).show()
                             return false
@@ -110,21 +111,18 @@ class MainActivity : AppCompatActivity() {
         setValues()
         val hostRepository = HostRepository()
         MainScope().launch {
-            hostRepository.postData(JSONObject(output?.toMap()), "824682378623784")
-            hostRepository.postData(JSONObject(output?.toMap()), "0873289732")
+            //hostRepository.postData(JSONObject(output?.toMap()), "824682378623784")
+            //hostRepository.postData(JSONObject(output?.toMap()), "0873289732")
         }
-        Toast.makeText(this@MainActivity, output.toString(), Toast.LENGTH_LONG).show()
+        Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG).show()
     }
 
     private fun setValues() {
         filteredObjectList?.forEach { controls ->
             when (controls.controlType.uppercase()) {
-                ControlType.TEXT.name -> {
+                BpControlType.TEXT.name -> {
                     val editText = controls.controlObject as EditText
                     output?.put(controls.controlKey, editText.text)
-                }
-                ControlType.CARD.name, ControlType.SECUREPIN.name -> {
-                    output?.put(controls.controlKey, cardReadOutput!!)
                 }
             }
         }
@@ -152,7 +150,7 @@ class MainActivity : AppCompatActivity() {
         filteredObjectList!!.forEach { controls ->
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             when (controls.controlType.uppercase()) {
-                ControlType.TEXT.name -> {
+                BpControlType.TEXT.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_edit_text, null)
                     val tilDynamic: TextInputLayout = view.findViewById(R.id.til_dynamic)
                     val edittext: EditText = view.findViewById(R.id.dynamic_edit_text)
@@ -166,74 +164,8 @@ class MainActivity : AppCompatActivity() {
                     llParentBody?.addView(view)
                 }
 
-                ControlType.CARD.name -> {
-                    val view: View = inflater.inflate(R.layout.dynamic_card_layout, null)
-                    llParentBody?.addView(view)
-                    btnNext?.visibility = GONE
-                    runOnUiThread {
-                        emvProcessor =
-                            TerminalCardApiHelper(
-                                this@MainActivity,
-                                object : ISuccessResponse_Card {
-                                    override fun processFinish(CardOutput: CardReadOutput?) {
-                                        cardReadOutput = CardReadOutput()
-                                        cardReadOutput = CardOutput
-                                        loadNextScreen(objectList)
-                                    }
 
-                                    override fun PinProcessConfirm(output: CardReadOutput?) {
-                                        Log.d("TAG", output.toString())
-                                    }
-
-                                    override fun PinProcessFailed(Exception: String?) {
-                                        Log.d("TAG", Exception.toString())
-                                    }
-
-                                    override fun processFailed(Exception: String?) {
-                                        Log.d("TAG", Exception.toString())
-                                    }
-
-                                    override fun Communication(breakEMVConnection: Boolean) {
-                                        Log.d("TAG", "communication")
-                                    }
-
-                                    override fun processTimeOut() {
-                                        Log.d("TAG", "timeout")
-                                    }
-
-                                    override fun TransactionApproved() {
-                                        Log.d("TAG", "approved")
-                                    }
-
-                                    override fun TransactionDeclined() {
-                                        Log.d("TAG", "declined")
-                                    }
-
-                                })
-                        transactionConfig = TransactionConfig()
-                        transactionConfig?.amount = 100
-                        transactionConfig?.isContactIcCardSupported = true
-                        emvProcessor!!.startCardScan(
-                            transactionConfig,
-                            "51263", false
-                        )
-                    }
-
-                }
-
-                ControlType.SECUREPIN.name -> {
-                    transactionConfig?.isPinInputNeeded = true
-                    emvProcessor?.publishEMVDataStep1(
-                        transactionConfig?.amount!!,
-                        0,
-                        cardReadOutput,
-                        false,
-                        true
-                    )
-                }
-
-
-                ControlType.RADIO.name -> {
+                BpControlType.RADIO.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_radio_buttons, null)
                     val radioGroup: RadioGroup = view.findViewById(R.id.rg_dynamic)
                     val rgText: TextView = view.findViewById(R.id.rg_text_dynamic)
@@ -257,7 +189,7 @@ class MainActivity : AppCompatActivity() {
                     controls.controlObject = radioGroup as Object
                     llParentBody?.addView(view)
                 }
-                ControlType.DROPDOWN.name -> {
+                BpControlType.DROPDOWN.name -> {
                     var data: List<ControlTable>? = ArrayList()
                     var spnData: List<String>? = ArrayList()
                     val view: View = inflater.inflate(R.layout.dynamic_spinner, null)

@@ -10,7 +10,7 @@
         android:layout_above="@+id/btn_next"
         android:fillViewport="true"
         android:orientation="vertical"
-        tools:context=".activities.MainActivity">
+        tools:context=".activities.CpControlsActivity">
 
 
         <LinearLayout
@@ -27,5 +27,7 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:text="aghsdhgasvdh"
+        android:textColor="@color/white" />
 </RelativeLayout>

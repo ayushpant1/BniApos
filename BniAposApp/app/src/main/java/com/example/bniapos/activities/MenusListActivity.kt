@@ -1,6 +1,5 @@
 package com.example.bniapos.activities
 
-import GridSpacingItemDecoration
 import MenuLink
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,13 +9,9 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bniapos.BniApplication
 import com.example.bniapos.R
-import com.example.bniapos.adapters.MenuAdapter
 import com.example.bniapos.adapters.MenuListAdapter
-import com.example.bniapos.callback.MenuAdapterListener
 import com.example.bniapos.callback.MenuListAdapterListener
-import com.example.bniapos.models.MenuList
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.IOException
@@ -169,7 +164,7 @@ class MenusListActivity : AppCompatActivity() {
                     }
                 } else {
                     stack!!.pop()
-                    var intent = Intent(this@MenusListActivity, MainActivity::class.java)
+                    var intent = Intent(this@MenusListActivity, CpControlsActivity::class.java)
                     intent.putExtra("menuName", menuName)
                     intent.putExtra("menuId", menuId)
                     startActivity(intent)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+
+            <item>
+                <shape>
+                    <solid android:color="@color/spn_bg" />
+
+                    <corners android:radius="5dp" />
+
+                    <padding android:bottom="3dp" android:left="3dp" android:right="15dp" android:top="6dp" />
+                </shape>
+            </item>
+
+            <item android:width="11dp" android:height="5dp" android:drawable="@drawable/ic_spn_dropdown" android:gravity="end|center_vertical" />
+
+
+        </layer-list>
+    </item>
+
+</selector>

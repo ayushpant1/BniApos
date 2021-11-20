@@ -1,9 +1,13 @@
 package com.example.bniapos.enums
 
-enum class ControlType {
+enum class BpControlType {
     TEXT,
-    CARD,
-    SECUREPIN,
     RADIO,
     DROPDOWN
+}
+
+enum class CpControlType {
+    AMT,
+    CARDNO,
+    PIN,
 }

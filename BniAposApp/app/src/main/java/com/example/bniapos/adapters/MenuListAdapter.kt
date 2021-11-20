@@ -9,13 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bniapos.R
-import com.example.bniapos.models.MenuList
-import com.example.bniapos.callback.MenuAdapterListener
+import com.example.bniapos.activities.extensions.menuTypeToDrawable
 import com.example.bniapos.callback.MenuListAdapterListener
-import com.example.bniapos.enums.MenuType
 
 
 internal class MenuListAdapter(
@@ -78,21 +75,7 @@ internal class MenuListAdapter(
 
 
         private fun getResourceIconByMenuName(txnType: MenuLink): Int? {
-            return when (txnType.iconName.uppercase()) {
-                MenuType.PAYMENT.name -> R.drawable.ic_ic___bayar_dan_beli
-                MenuType.PURCHASE.name -> R.drawable.ic_ic___e_wallet
-                MenuType.TRANSFER.name -> R.drawable.transfer
-                MenuType.DIGITAL_FINANCE_SERVICE.name -> R.drawable.ic_ic___layanan_jasa_mitra
-                MenuType.LAKUPANDAI.name -> R.drawable.ic_ic___layanan_keuangan
-                MenuType.AGENT_MANAGEMENT.name -> R.drawable.ic_ic___pemesanan_barang_mitra
-                MenuType.BNI_LIFE_MICRO_INSURANCE.name -> R.drawable.ic_ic___pencatatan_usaha
-                MenuType.CDN.name -> R.drawable.ic_ic___pengajuan_produk
-                MenuType.REMMITANCE.name -> R.drawable.ic_ic___program_pemerintah
-                MenuType.Additional_Service.name -> R.drawable.ic_ic___layanan_keuangan
-                MenuType.CR_DR.name -> R.drawable.ic_ic___layanan_jasa_mitra
-                else -> R.drawable.transfer
-            }
-
+            return txnType.iconName.uppercase().menuTypeToDrawable()
         }
     }
 }

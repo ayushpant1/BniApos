@@ -28,7 +28,8 @@
         android:layout_marginBottom="5dp"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:maxLines="1"
+        android:maxLines="2"
+        android:minLines="2"
         android:text="Sale"
         android:textColor="@color/black"
         android:textSize="@dimen/dimen_13dp" />

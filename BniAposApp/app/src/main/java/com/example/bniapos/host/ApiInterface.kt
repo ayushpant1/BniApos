@@ -11,13 +11,14 @@ import retrofit2.http.Path
 
 interface ApiInterface {
     @POST("{url}")
-    fun postToHost(@Path("url",encoded = true) url:String ) : Call<JSONObject>
+    fun postToHost(@Path("url", encoded = true) url: String): Call<JsonObject>
 
     companion object {
 
-        fun create() : ApiInterface {
+        fun create(): ApiInterface {
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://api.nuuneoi.com")
                 .build()
             return retrofit.create(ApiInterface::class.java)
 

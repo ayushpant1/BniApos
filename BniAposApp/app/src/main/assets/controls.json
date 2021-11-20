@@ -13,7 +13,7 @@
       "dataSet": null
     },
     {
-      "controlKey": "CRD",
+      "controlKey": "CARDNO",
       "controlType": "Card",
       "defaultValue": "10",
       "relatedControlKey": null,
@@ -25,7 +25,7 @@
       "dataSet": null
     },
     {
-      "controlKey": "SCRPN",
+      "controlKey": "PIN",
       "controlType": "SecurePin",
       "defaultValue": "10",
       "relatedControlKey": null,
