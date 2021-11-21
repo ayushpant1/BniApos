@@ -59,10 +59,6 @@ class HomeFragment : Fragment() {
 
         gridview?.layoutManager = GridLayoutManager(root.context, 3)
         setAdapter(menuFilterList!!, -1)
-
-
-
-
         return root
     }
 
@@ -71,7 +67,11 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    fun loadJSONFromAsset(): String? {
+    /**
+     * load menu from the assets
+     */
+
+    private fun loadJSONFromAsset(): String? {
         val charset: Charset = Charsets.UTF_8
         val json: String? = try {
             val `is`: InputStream = activity?.assets!!.open("menu.json")

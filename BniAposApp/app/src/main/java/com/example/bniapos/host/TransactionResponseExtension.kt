@@ -7,7 +7,10 @@ import com.example.bniapos.enums.TransactionResponseKeys
 import com.example.bniapos.models.WORKFLOW
 import com.google.gson.JsonObject
 
-fun JsonObject.saveToDatabase(context: Context, currentWORKFLOW: WORKFLOW) {
+fun JsonObject.saveToDatabase(
+    context: Context,
+    currentWORKFLOW: WORKFLOW
+): TransactionResponseTable {
     val splitRequest = currentWORKFLOW.rESP.split(",")
     val transactionResponseTable = TransactionResponseTable()
     splitRequest.forEach {
@@ -89,7 +92,7 @@ fun JsonObject.saveToDatabase(context: Context, currentWORKFLOW: WORKFLOW) {
     DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
         ?.insert(transactionResponseTable)
 
-
+    return transactionResponseTable
 }
 
 

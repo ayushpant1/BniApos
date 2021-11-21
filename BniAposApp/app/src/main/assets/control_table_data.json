@@ -41,6 +41,24 @@
       "name": "paris",
       "dataSetKey": "stateList",
       "referenceDataSetKey": "fr"
+    },
+    {
+      "value": "1",
+      "name": "Cr/Dr",
+      "dataSetKey": "TransactionTypeList",
+      "referenceDataSetKey": null
+    },
+    {
+      "value": "3",
+      "name": "QRIS",
+      "dataSetKey": "TransactionTypeList",
+      "referenceDataSetKey": null
+    },
+    {
+      "value": "4",
+      "name": "Tap Cash",
+      "dataSetKey": "TransactionTypeList",
+      "referenceDataSetKey": null
     }
   ]
 }

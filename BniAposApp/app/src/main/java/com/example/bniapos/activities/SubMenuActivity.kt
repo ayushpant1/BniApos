@@ -21,6 +21,7 @@ class SubMenuActivity : AppCompatActivity(), View.OnClickListener,
         const val MENU_LIST = "MENU_LIST"
         const val MENU_FILTER_LIST = "MENU_FILTER_LIST"
         const val MENU = "MENU"
+        const val WORKFLOW_ID = "WORKFLOW_ID"
     }
 
     private var subMenuList: List<MenuLink> = ArrayList()
@@ -70,6 +71,12 @@ class SubMenuActivity : AppCompatActivity(), View.OnClickListener,
         val spnMenuData = filterMenuList.map { it.displayText }
         setAdapter(spnMenuData, spnMenu!!)
     }
+
+    /**
+     * method responsible to set the spinner adapter
+     * @param spnData Spinner Data
+     * @param spn Spinner Object
+     */
 
     private fun setAdapter(spnData: List<String>?, spn: Spinner) {
         val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(
@@ -135,6 +142,7 @@ class SubMenuActivity : AppCompatActivity(), View.OnClickListener,
                 }
 
                 intent?.putExtra(MENU, list[position])
+                intent?.putExtra(WORKFLOW_ID, list[position].workflowId)
                 startActivity(intent)
             }
         }
@@ -146,6 +154,9 @@ class SubMenuActivity : AppCompatActivity(), View.OnClickListener,
 
     }
 
+    /**
+     * method responsible to set the gridView Adapter
+     */
     private fun setAdapter(menuFilterList: List<MenuLink>) {
         gridView?.adapter = GridViewAdapter(this@SubMenuActivity, menuFilterList, adapterListener)
     }

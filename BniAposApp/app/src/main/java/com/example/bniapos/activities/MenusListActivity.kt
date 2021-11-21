@@ -164,7 +164,7 @@ class MenusListActivity : AppCompatActivity() {
                     }
                 } else {
                     stack!!.pop()
-                    var intent = Intent(this@MenusListActivity, CpControlsActivity::class.java)
+                    val intent = Intent(this@MenusListActivity, CpControlsActivity::class.java)
                     intent.putExtra("menuName", menuName)
                     intent.putExtra("menuId", menuId)
                     startActivity(intent)

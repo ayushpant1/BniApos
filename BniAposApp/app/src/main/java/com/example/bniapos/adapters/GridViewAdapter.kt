@@ -14,8 +14,7 @@ internal class GridViewAdapter(
     private val context: Context,
     private val subMenuList: List<MenuLink>,
     private val itemListener: MenuListAdapterListener? = null,
-) :
-    BaseAdapter() {
+) : BaseAdapter() {
     private var layoutInflater: LayoutInflater? = null
     private lateinit var imageView: ImageView
     private lateinit var textView: TextView

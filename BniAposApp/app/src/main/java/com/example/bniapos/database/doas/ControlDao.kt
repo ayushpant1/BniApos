@@ -18,8 +18,8 @@ interface ControlDao {
     fun insert(controlTable: ControlTable)
 
 
-    @Delete
-    fun delete(controlTable: ControlTable)
+    @Query("DELETE FROM control_table")
+    fun delete()
 
     @Update
     fun update(controlTable: ControlTable)

@@ -11,7 +11,9 @@ interface HostRepositoryInterface {
         context: Activity,
         jsonObject: JsonObject,
         url: String,
-        currentWORKFLOW: WORKFLOW
+        currentWORKFLOW: WORKFLOW,
+        isBpWorkflow: Boolean,
+        bpWorkflowOutputData: String
     )
 
 }

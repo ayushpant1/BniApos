@@ -1,11 +1,12 @@
 package com.example.bniapos.activities
 
 import MenuLink
+import android.R.attr
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bniapos.R
@@ -15,13 +16,8 @@ import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.ControlList
-import com.example.paymentsdk.CardReadOutput
-import com.example.paymentsdk.Common.ISuccessResponse_Card
-import com.example.paymentsdk.Common.TerminalCardApiHelper
-import com.example.paymentsdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -40,12 +36,16 @@ class BpControlsActivity : AppCompatActivity() {
     private var output: MutableMap<String, Any>? = HashMap()
     private var filteredObjectList: MutableList<ControlList>? = ArrayList()
 
+    private var controlList: List<ControlList>? = null
     private var menu: MenuLink? = null
 
 
     private val submit = "Submit"
     private val next = "Next"
 
+    private val controlKeyTransactionType = "TXNTYPE"
+
+    private var continueBpWorkflow = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,28 +64,62 @@ class BpControlsActivity : AppCompatActivity() {
         val json = loadJSONFromAsset()
         val jsonTable = loadTableJSONFromAsset()
         val gson = Gson()
-        val objectList = gson.fromJson(json, Array<ControlList>::class.java).asList()
+        controlList = gson.fromJson(json, Array<ControlList>::class.java).asList()
         val objectListTable = gson.fromJson(jsonTable, Array<ControlTable>::class.java).asList()
         storeToDatabase(objectListTable)
-
-
-        loadScreen(objectList, mainScreenId)
-
+        loadScreen(controlList!!, mainScreenId)
         btnNext?.setOnClickListener {
-            if (btnNext?.text == submit) {
-                submitData()
-            } else {
-                if (validateRequiredValues()) {
+            if (validateRequiredValues()) {
+                if (!continueBpWorkflow && output!!.containsKey(controlKeyTransactionType)) {
                     setValues()
-                    Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG)
-                        .show()
-                    loadNextScreen(objectList)
+                    gotoCpControlScreen()
+                } else {
+                    if (btnNext?.text == submit) {
+                        submitData()
+                    } else {
+                        setValues()
+                        Toast.makeText(
+                            this@BpControlsActivity,
+                            output.toString(),
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        loadNextScreen(controlList!!)
+
+                    }
                 }
             }
         }
 
 
     }
+
+    /**
+     * method responsible to navigate to CpControlsActivity whenever there is a transactionType in the current screen
+     */
+
+    private fun gotoCpControlScreen() {
+        val intent = Intent(this@BpControlsActivity, CpControlsActivity::class.java)
+        intent.putExtra(
+            CpControlsActivity.CONTROL_DATA,
+            output?.get(controlKeyTransactionType).toString()
+        )
+        intent.putExtra(
+            CpControlsActivity.BP_WORKFLOW_OUTPUT_DATA,
+            Gson().toJsonTree(output)
+                .asJsonObject.toString()
+        )
+
+        intent.putExtra(
+            CpControlsActivity.BP_WORKFLOW,
+            true
+        )
+        startActivityForResult(intent, 1)
+    }
+
+    /**
+     * method responsible to validate the current screen values
+     */
 
     private fun validateRequiredValues(): Boolean {
         filteredObjectList?.forEach { controls ->
@@ -107,6 +141,10 @@ class BpControlsActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * method responsible to submit the data to the server
+     */
+
     private fun submitData() {
         setValues()
         val hostRepository = HostRepository()
@@ -115,7 +153,13 @@ class BpControlsActivity : AppCompatActivity() {
             //hostRepository.postData(JSONObject(output?.toMap()), "0873289732")
         }
         Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG).show()
+        finish()
     }
+
+
+    /**
+     * method responsible to set current screen controls value to hashMap
+     */
 
     private fun setValues() {
         filteredObjectList?.forEach { controls ->
@@ -128,21 +172,33 @@ class BpControlsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * method responsible to store dataset of the controls
+     * @param controlListTable List of Dataset of controls.
+     */
 
-    private fun storeToDatabase(objectListTable: List<ControlTable>) {
-        objectListTable.forEach { controlTable ->
+    private fun storeToDatabase(controlListTable: List<ControlTable>) {
+        DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+            ?.delete()
+        controlListTable.forEach { controlTable ->
             DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
                 ?.insert(controlTable)
         }
     }
 
-    private fun loadScreen(objectList: List<ControlList>, screenId: Int) {
+    /**
+     * method responsible to load  screen controls
+     * @param controlList List of Controls.
+     * @param screenId screenId to be loaded.
+     */
+
+    private fun loadScreen(controlList: List<ControlList>, screenId: Int) {
         val screenDataSet: MutableMap<String, List<ControlTable>> = HashMap()
         var btnText = submit
         filteredObjectList =
-            objectList.filter { controlList -> controlList.screenId == screenId }.sortedWith(
+            controlList.filter { controlList -> controlList.screenId == screenId }.sortedWith(
                 compareBy { it.sortOrder }).toMutableList()
-        objectList.forEach { controls ->
+        controlList.forEach { controls ->
             if (controls.screenId > screenId) {
                 btnText = next
             }
@@ -179,12 +235,20 @@ class BpControlsActivity : AppCompatActivity() {
                         radioGroup.addView(rb[i])
                     }
                     radioGroup.check(0)
-                    output?.put(controls.controlKey, data[0].value!!)
+                    if (controls.controlKey == controlKeyTransactionType)
+                        output?.put(controls.controlKey, data[0].name!! + "$" + data[0].value!!)
+                    else
+                        output?.put(controls.controlKey, data[0].value!!)
                     radioGroup.setOnCheckedChangeListener { p0, p1 ->
-                        output?.put(
-                            controls.controlKey,
-                            data[p1].value!!
-                        )
+                        if (controls.controlKey == controlKeyTransactionType)
+                            output?.put(
+                                controls.controlKey,
+                                data[p1].name!! + "$" + data[p1].value!!
+                            )
+                        else
+                            output?.put(
+                                controls.controlKey, data[p1].value!!
+                            )
                     }
                     controls.controlObject = radioGroup as Object
                     llParentBody?.addView(view)
@@ -247,26 +311,31 @@ class BpControlsActivity : AppCompatActivity() {
                 }
             }
         }
-
-        /*  val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-          val view: View = inflater.inflate(R.layout.dynamic_button, null)
-          btnNext = (view as Button)
-
-          llParentBody?.addView(view)*/
         btnNext?.text = btnText
     }
 
-    private fun loadNextScreen(objectList: List<ControlList>) {
+    /**
+     * method responsible to call load next screen controls
+     * @param controlList List of Controls.
+     */
+
+    private fun loadNextScreen(controlList: List<ControlList>) {
         runOnUiThread {
             llParentBody?.removeAllViews()
             if (btnNext?.text == next) {
                 mainScreenId += 1
-                loadScreen(objectList, mainScreenId)
+                loadScreen(controlList, mainScreenId)
             } else {
                 submitData()
             }
         }
     }
+
+    /**
+     * method responsible to set spinner adapter
+     * @param spnData Spinner Data.
+     * @param spn Spinner Object.
+     */
 
     private fun setAdapter(spnData: List<String>?, spn: Spinner) {
         val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(
@@ -282,6 +351,12 @@ class BpControlsActivity : AppCompatActivity() {
         spn.adapter = ad
     }
 
+    /**
+     * method responsible to get data of controls from the database
+     * @param dataSet The dataset which is required.
+     * @param value The reference value which is used to fetch the dataset with reference to the reference value.
+     */
+
     private fun getData(dataSet: String, value: String? = null): List<ControlTable> {
         var data: List<ControlTable>? = ArrayList()
         data = if (value == null) {
@@ -294,6 +369,23 @@ class BpControlsActivity : AppCompatActivity() {
 
         return data!!
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                var cpResponse = data?.getStringExtra("cpResponse")
+                var bpResponse = data?.getStringExtra("bpResponse")
+                continueBpWorkflow = true
+                loadNextScreen(controlList!!)
+            }
+        }
+    }
+
+    /**
+     * Load control list from assets
+     */
 
     private fun loadJSONFromAsset(): String? {
         val charset: Charset = Charsets.UTF_8
@@ -315,6 +407,10 @@ class BpControlsActivity : AppCompatActivity() {
         return jsonArray.toString()
     }
 
+
+    /**
+     * Load control list data from assets which will be responsible for data given to controls
+     */
     private fun loadTableJSONFromAsset(): String? {
         val charset: Charset = Charsets.UTF_8
         var json: String? = null

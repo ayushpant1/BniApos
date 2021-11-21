@@ -33,7 +33,11 @@ import java.nio.charset.Charset
 
 class CpControlsActivity : AppCompatActivity() {
 
-    // private val TAG = MainActivity().localClassName
+    companion object {
+        const val CONTROL_DATA = "CONTROL_DATA"
+        const val BP_WORKFLOW_OUTPUT_DATA = "BP_WORKFLOW_OUTPUT_DATA"
+        const val BP_WORKFLOW = "BP_WORKFLOW"
+    }
 
     private var mainScreenId = 1
     private var llParentBody: LinearLayout? = null
@@ -46,7 +50,12 @@ class CpControlsActivity : AppCompatActivity() {
     private var currentWorkflow: WORKFLOW? = null
 
 
-    private var menu: MenuLink? = null
+    private var workflowId: Int? = null
+
+    private var isBpWorkflow = false
+    private var bpTransactionTypeName = ""
+
+    private var bpWorkflowOutputData = ""
 
     private val submit = "Submit"
     private val next = "Next"
@@ -58,15 +67,25 @@ class CpControlsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         llParentBody = findViewById(R.id.ll_parent_body)
         btnNext = findViewById(R.id.btn_next)
-        menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
-
-
+        isBpWorkflow = intent.getBooleanExtra(BP_WORKFLOW, false)
+        if (isBpWorkflow) {
+            val controlData = intent.getStringExtra(CONTROL_DATA) as String
+            bpTransactionTypeName = controlData.split("$").first()
+            workflowId = controlData.split("$")[1].toInt()
+            bpWorkflowOutputData = intent.getStringExtra(BP_WORKFLOW_OUTPUT_DATA) as String
+        } else
+            workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
         val json = loadJSONFromAsset()
         val gson = Gson()
         val workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
-        currentWorkflow = workflowList.first { workflow -> workflow.iD == menu?.workflowId }
+        currentWorkflow = workflowList.firstOrNull { workflow -> workflow.iD == workflowId }
         val objectList = currentWorkflow?.cTRLS
-        loadScreen(objectList!!, mainScreenId)
+        if (objectList.isNullOrEmpty()) {
+            Toast.makeText(this, "Workflow not attached", Toast.LENGTH_LONG).show()
+            finish()
+        } else {
+            loadScreen(objectList, mainScreenId)
+        }
 
         btnNext?.setOnClickListener {
             if (btnNext?.text == submit) {
@@ -74,13 +93,17 @@ class CpControlsActivity : AppCompatActivity() {
             } else {
                 if (validateRequiredValues()) {
                     setValues()
-                    loadNextScreen(objectList)
+                    loadNextScreen(objectList!!)
                 }
             }
         }
 
 
     }
+
+    /**
+     * method responsible to validate the current screen values
+     */
 
     private fun validateRequiredValues(): Boolean {
         filteredObjectList?.forEach { controls ->
@@ -102,6 +125,10 @@ class CpControlsActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * method responsible to submit the data to the server
+     */
+
     private fun submitData() {
         setValues()
         val hostRepository = HostRepository()
@@ -109,11 +136,17 @@ class CpControlsActivity : AppCompatActivity() {
             hostRepository.postData(
                 this@CpControlsActivity,
                 Gson().toJsonTree(output)
-                    .asJsonObject, "http://google.nuuneoi.com", currentWorkflow!!
+                    .asJsonObject, "http://google.nuuneoi.com", currentWorkflow!!,
+                isBpWorkflow,
+                bpWorkflowOutputData
             )
 
         }
     }
+
+    /**
+     * method responsible to set current screen controls value to hashMap
+     */
 
     private fun setValues() {
         filteredObjectList?.forEach { controls ->
@@ -129,13 +162,18 @@ class CpControlsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * method responsible to load  screen controls
+     * @param controlList List of Controls.
+     * @param screenId screenId to be loaded.
+     */
 
-    private fun loadScreen(objectList: List<CTRLS>, screenId: Int) {
+    private fun loadScreen(controlList: List<CTRLS>, screenId: Int) {
         var btnText = submit
         filteredObjectList =
-            objectList.filter { controlList -> controlList.sCN == screenId }.sortedWith(
+            controlList.filter { controlList -> controlList.sCN == screenId }.sortedWith(
                 compareBy { it.oRD }).toMutableList()
-        objectList.forEach { controls ->
+        controlList.forEach { controls ->
             if (controls.sCN > screenId) {
                 btnText = next
             }
@@ -176,7 +214,7 @@ class CpControlsActivity : AppCompatActivity() {
                                     override fun processFinish(CardOutput: CardReadOutput?) {
                                         cardReadOutput = CardReadOutput()
                                         cardReadOutput = CardOutput
-                                        loadNextScreen(objectList)
+                                        loadNextScreen(controlList)
                                     }
 
                                     override fun PinProcessConfirm(output: CardReadOutput?) {
@@ -237,6 +275,11 @@ class CpControlsActivity : AppCompatActivity() {
         btnNext?.text = btnText
     }
 
+    /**
+     * method responsible to call load next screen controls
+     * @param controlList List of Controls.
+     */
+
     private fun loadNextScreen(objectList: List<CTRLS>) {
         runOnUiThread {
             llParentBody?.removeAllViews()
@@ -249,19 +292,9 @@ class CpControlsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAdapter(spnData: List<String>?, spn: Spinner) {
-        val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(
-            this,
-            android.R.layout.simple_spinner_item,
-            spnData!!
-        )
-
-
-        ad.setDropDownViewResource(
-            android.R.layout.simple_spinner_dropdown_item
-        )
-        spn.adapter = ad
-    }
+    /**
+     * load cp workflow from assets
+     */
 
     private fun loadJSONFromAsset(): String? {
         val charset: Charset = Charsets.UTF_8
@@ -281,6 +314,11 @@ class CpControlsActivity : AppCompatActivity() {
         val jsonArray = jsonObject.getJSONArray("WORKFLOW")
 
         return jsonArray.toString()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        emvProcessor?.closeEmvProcess()
     }
 
 

@@ -15,7 +15,7 @@
     {
       "controlKey": "DESC",
       "controlType": "Text",
-      "defaultValue": "This is good",
+      "defaultValue": "Lorem ipsom",
       "relatedControlKey": null,
       "label": "Description",
       "screenId": 1,
@@ -25,16 +25,28 @@
       "dataSet": null
     },
     {
-      "controlKey": "GNDR",
+      "controlKey": "CNTRY",
       "controlType": "RADIO",
       "defaultValue": "10",
       "relatedControlKey": null,
-      "label": "Gender",
+      "label": "Country",
       "screenId": 1,
       "sortOrder": 1,
       "maxLength": 10,
       "minLength": 1,
       "dataSet": "countryList"
+    },
+    {
+      "controlKey": "TXNTYPE",
+      "controlType": "RADIO",
+      "defaultValue": "10",
+      "relatedControlKey": null,
+      "label": "Transaction Type",
+      "screenId": 1,
+      "sortOrder": 1,
+      "maxLength": 10,
+      "minLength": 1,
+      "dataSet": "TransactionTypeList"
     },
     {
       "controlKey": "country",
@@ -75,7 +87,7 @@
     {
       "controlKey": "RMRK",
       "controlType": "Text",
-      "defaultValue": "Cool",
+      "defaultValue": "Lorem ipsom",
       "relatedControlKey": null,
       "label": "Remark",
       "screenId": 2,
@@ -87,7 +99,7 @@
     {
       "controlKey": "PHN",
       "controlType": "Text",
-      "defaultValue": "7827190823",
+      "defaultValue": "9782345167",
       "relatedControlKey": null,
       "label": "Phone Number",
       "screenId": 2,
@@ -99,7 +111,7 @@
     {
       "controlKey": "FRSTNM",
       "controlType": "Text",
-      "defaultValue": "Ayush",
+      "defaultValue": "Lorem ipsom",
       "relatedControlKey": null,
       "label": "FirstName",
       "screenId": 3,
@@ -111,7 +123,7 @@
     {
       "controlKey": "LSTNM",
       "controlType": "Text",
-      "defaultValue": "Pant",
+      "defaultValue": "Lorem ipsom",
       "relatedControlKey": null,
       "label": "Last Name",
       "screenId": 3,

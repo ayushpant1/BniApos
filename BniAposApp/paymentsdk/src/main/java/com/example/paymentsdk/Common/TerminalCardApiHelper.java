@@ -287,6 +287,16 @@ public class TerminalCardApiHelper implements AutoCloseable {
         }
     }
 
+
+    public void closeEmvProcess() throws RemoteException {
+        EMV.getInstance().stopSearch();
+        EMV.getInstance().halt();
+
+        if (isEMVProcess) {
+            EMV.getInstance().stopProcess();
+        }
+    }
+
     /**
      * Handle card holder verify.
      */
