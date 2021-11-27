@@ -293,7 +293,7 @@ class CpControlsActivity : AppCompatActivity() {
     }
 
     /**
-     * load cp workflow from assets
+     * load CP workflow from assets (CP=Card Present)
      */
 
     private fun loadJSONFromAsset(): String? {
