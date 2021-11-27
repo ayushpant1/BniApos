@@ -258,6 +258,16 @@ class CpControlsActivity : AppCompatActivity() {
                 }
 
                 CpControlType.PIN.name -> {
+                    val view: View = inflater.inflate(R.layout.dynamic_card_layout, null)
+                    val tvCardText: TextView = view.findViewById(R.id.tv_card_text)
+                    controls.lABEL.let {
+                        tvCardText.text = it
+                    }
+                    tvCardText.gravity = Gravity.CENTER
+                    llParentBody?.addView(view)
+
+
+                    btnNext?.visibility = GONE
                     transactionConfig?.isPinInputNeeded = true
                     emvProcessor?.publishEMVDataStep1(
                         transactionConfig?.amount!!,

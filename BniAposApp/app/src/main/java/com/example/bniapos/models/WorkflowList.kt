@@ -29,5 +29,7 @@ data class CTRLS(
     @SerializedName("DVAL") val dVAL: String,
     @SerializedName("SCN") val sCN: Int,
     @SerializedName("ORD") val oRD: Int,
+    @SerializedName("dataSet") val dataSet: String,
+    @SerializedName("relatedControlKey") val relatedControlKey: String,
     @SerializedName("object") var controlObject: Object,
 )

@@ -11,5 +11,7 @@
     <color name="orange">#f16d23</color>
     <color name="light_blue">#E7F5F5</color>
     <color name="light_blue_184">#2C7381</color>
+    <color name="blue_200">#EBF2F2</color>
+    <color name="orange_btn">#E55300</color>
     <color name="spn_bg">#EBF2F2</color>
 </resources>

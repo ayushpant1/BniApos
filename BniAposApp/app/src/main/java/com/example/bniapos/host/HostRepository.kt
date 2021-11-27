@@ -1,9 +1,11 @@
 package com.example.bniapos.host
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
+import com.example.bniapos.alerts.Alerts
+import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.models.WORKFLOW
 import com.google.gson.Gson
@@ -25,7 +27,7 @@ class HostRepository() : HostRepositoryInterface {
         url: String,
         currentWORKFLOW: WORKFLOW,
         isBpWorkflow: Boolean,
-        bpWorkflowOutputData: String
+        bpWorkflowOutputData: String?
     ) {
 
         val jsonRequest = jsonObject.toTransactionRequest(currentWORKFLOW)
@@ -38,18 +40,22 @@ class HostRepository() : HostRepositoryInterface {
                 Log.d("failure", t?.message!!)
                 val transactionResponse = jsonRequest.saveToDatabase(context, currentWORKFLOW)
 
-                val tranasactionList =
-                    DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
-                        ?.getAll()
-                Toast.makeText(context, "Transaction saved to database", Toast.LENGTH_LONG).show()
+                DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
+                    ?.getAll()
 
-                if (isBpWorkflow) {
-                    val returnIntent = Intent()
-                    returnIntent.putExtra("cpResponse", Gson().toJson(transactionResponse))
-                    returnIntent.putExtra("bpResponse", bpWorkflowOutputData)
-                    context.setResult(Activity.RESULT_OK, returnIntent)
+                val buttonInterface: ButtonInterface = object : ButtonInterface {
+                    override fun onClicked(alertDialogBuilder: AlertDialog) {
+                        if (isBpWorkflow) {
+                            val returnIntent = Intent()
+                            returnIntent.putExtra("cpResponse", Gson().toJson(transactionResponse))
+                            returnIntent.putExtra("bpResponse", bpWorkflowOutputData)
+                            context.setResult(Activity.RESULT_OK, returnIntent)
+                        }
+                        context.finish()
+                    }
                 }
-                context.finish()
+                Alerts.successAlert(context, "Transaction saved to database", buttonInterface)
+
 
             }
 

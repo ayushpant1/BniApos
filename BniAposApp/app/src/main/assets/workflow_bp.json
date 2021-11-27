@@ -1,0 +1,150 @@
+{
+  "WORKFLOW": [
+    {
+      "ID": 2,
+      "NAME": "INSURANCE BNI LIFE ENQUIRY",
+      "ENDPOINT": "PROCESSINSBNILIFEENQUIRY",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 1,
+      "RETRY": 1,
+      "CTRLS": [
+        {
+          "KEY": "AMT",
+          "CTYPE": "Text",
+          "DVAL": "10",
+          "SCN": "1",
+          "LABEL": "Amount",
+          "MINSIZE": "1",
+          "MAXSIZE": "10",
+          "ORD": "3",
+          "relatedControlKey": null,
+          "dataSet": null
+        },
+        {
+          "KEY": "DESC",
+          "CTYPE": "Text",
+          "DVAL": "Lorem ipsom",
+          "LABEL": "Description",
+          "SCN": 1,
+          "ORD": 2,
+          "MAXSIZE": 20,
+          "MINSIZE": 1,
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "CNTRY",
+          "CTYPE": "RADIO",
+          "DVAL": "10",
+          "LABEL": "Country",
+          "SCN": 1,
+          "ORD": 1,
+          "MAXSIZE": 10,
+          "MINSIZE": 1,
+          "dataSet": "countryList",
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "TXNTYPE",
+          "CTYPE": "RADIO",
+          "DVAL": "10",
+          "LABEL": "Transaction Type",
+          "SCN": 1,
+          "ORD": 1,
+          "MAXSIZE": 10,
+          "MINSIZE": 1,
+          "dataSet": "TransactionTypeList",
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "country",
+          "CTYPE": "DropDown",
+          "DVAL": "10",
+          "LABEL": "Country",
+          "SCN": 1,
+          "ORD": 4,
+          "MAXSIZE": 0,
+          "MINSIZE": 0,
+          "dataSet": "countryList",
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "state",
+          "CTYPE": "DropDown",
+          "DVAL": "10",
+          "LABEL": "State",
+          "SCN": 1,
+          "ORD": 5,
+          "MAXSIZE": 0,
+          "MINSIZE": 0,
+          "dataSet": "stateList",
+          "relatedControlKey": "country"
+        },
+        {
+          "KEY": "city",
+          "CTYPE": "DropDown",
+          "DVAL": "10",
+          "LABEL": "City",
+          "SCN": 1,
+          "ORD": 6,
+          "MAXSIZE": 0,
+          "MINSIZE": 0,
+          "dataSet": "cityList",
+          "relatedControlKey": "state"
+        },
+        {
+          "KEY": "RMRK",
+          "CTYPE": "Text",
+          "DVAL": "Lorem ipsom",
+          "LABEL": "Remark",
+          "SCN": 2,
+          "ORD": 2,
+          "MAXSIZE": 10,
+          "MINSIZE": 1,
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "PHN",
+          "CTYPE": "Text",
+          "DVAL": "9782345167",
+          "LABEL": "Phone Number",
+          "SCN": 2,
+          "ORD": 1,
+          "MAXSIZE": 10,
+          "MINSIZE": 1,
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "FRSTNM",
+          "CTYPE": "Text",
+          "DVAL": "Lorem ipsom",
+          "LABEL": "FirstName",
+          "SCN": 3,
+          "ORD": 1,
+          "MAXSIZE": 20,
+          "MINSIZE": 1,
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "LSTNM",
+          "CTYPE": "Text",
+          "DVAL": "Lorem ipsom",
+          "LABEL": "Last Name",
+          "SCN": 3,
+          "ORD": 2,
+          "MAXSIZE": 20,
+          "MINSIZE": 1,
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,TBID,AMT,DESC,CNTRY,TXNTYPE,country,state,city,RMRK,PHN,FRSTNM,LSTNM",
+      "RESP": "MTID,MMID,TBID,AMT",
+      "NEXTWORKFLOWID": 32
+    }
+  ]
+}

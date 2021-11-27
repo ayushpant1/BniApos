@@ -1,6 +1,5 @@
 package com.example.bniapos.host
 
-import com.example.bniapos.database.entities.TransactionResponseTable
 import com.example.bniapos.enums.TransactionRequestKeys
 import com.example.bniapos.models.WORKFLOW
 import com.example.paymentsdk.CardReadOutput
@@ -56,7 +55,10 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
                 )
             }
             TransactionRequestKeys.AMT.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.AMT.name, getAmt(cardReadOutput))
+                jsonObject.addProperty(
+                    TransactionRequestKeys.AMT.name,
+                    getAmt(cardReadOutput, this)
+                )
             }
             TransactionRequestKeys.EMV.name -> {
                 jsonObject.addProperty(TransactionRequestKeys.EMV.name, getEmv(cardReadOutput))
@@ -74,6 +76,73 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
                 jsonObject.addProperty(
                     TransactionRequestKeys.CARDNO.name,
                     getCardNo(cardReadOutput)
+                )
+            }
+            TransactionRequestKeys.DESC.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.DESC.name,
+                    this.get(TransactionRequestKeys.DESC.name).toString()
+                )
+            }
+            TransactionRequestKeys.CNTRY.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.CNTRY.name,
+                    this.get(TransactionRequestKeys.CNTRY.name).toString()
+                )
+            }
+
+            TransactionRequestKeys.TXNTYPE.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.TXNTYPE.name,
+                    this.get(TransactionRequestKeys.TXNTYPE.name).toString()
+                )
+            }
+            TransactionRequestKeys.country.name -> {
+                if (jsonObject.has(TransactionRequestKeys.country.name)) {
+                    jsonObject.addProperty(
+                        TransactionRequestKeys.country.name,
+                        this.get(TransactionRequestKeys.country.name).toString()
+                    )
+                }
+            }
+            TransactionRequestKeys.state.name -> {
+                if (jsonObject.has(TransactionRequestKeys.state.name)) {
+                    jsonObject.addProperty(
+                        TransactionRequestKeys.state.name,
+                        this.get(TransactionRequestKeys.state.name).toString()
+                    )
+                }
+            }
+            TransactionRequestKeys.city.name -> {
+                if (jsonObject.has(TransactionRequestKeys.city.name)) {
+                    jsonObject.addProperty(
+                        TransactionRequestKeys.city.name,
+                        this.get(TransactionRequestKeys.city.name).toString()
+                    )
+                }
+            }
+            TransactionRequestKeys.RMRK.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.RMRK.name,
+                    this.get(TransactionRequestKeys.RMRK.name).toString()
+                )
+            }
+            TransactionRequestKeys.PHN.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.PHN.name,
+                    this.get(TransactionRequestKeys.PHN.name).toString()
+                )
+            }
+            TransactionRequestKeys.FRSTNM.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.FRSTNM.name,
+                    this.get(TransactionRequestKeys.FRSTNM.name).toString()
+                )
+            }
+            TransactionRequestKeys.LSTNM.name -> {
+                jsonObject.addProperty(
+                    TransactionRequestKeys.LSTNM.name,
+                    this.get(TransactionRequestKeys.LSTNM.name).toString()
                 )
             }
         }
@@ -124,8 +193,11 @@ fun getPanSeq(cardReadOutput: CardReadOutput): String {
     return cardReadOutput.panseq
 }
 
-fun getAmt(cardReadOutput: CardReadOutput): String {
-    return cardReadOutput.txnAmount
+fun getAmt(cardReadOutput: CardReadOutput, jsonObject: JsonObject): String {
+    return if (cardReadOutput.txnAmount == null) {
+        jsonObject.get(TransactionRequestKeys.AMT.name).toString()
+    } else
+        cardReadOutput.txnAmount
 }
 
 fun getEmv(cardReadOutput: CardReadOutput): String {
@@ -146,7 +218,10 @@ fun getCardNo(cardReadOutput: CardReadOutput): String {
 
 
 fun getCardInfo(jsonObject: JsonObject): CardReadOutput {
-    return Gson().fromJson(jsonObject.get("PIN"), CardReadOutput::class.java)
+    return if (jsonObject.has("PIN"))
+        Gson().fromJson(jsonObject.get("PIN"), CardReadOutput::class.java)
+    else
+        CardReadOutput()
 }
 
 

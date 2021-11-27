@@ -16,7 +16,16 @@ enum class TransactionRequestKeys {
     AMT,
     EMV,
     EXPDATE,
-    CARDNO
+    CARDNO,
+    DESC,
+    CNTRY,
+    country,
+    state,
+    city,
+    RMRK,
+    PHN,
+    FRSTNM,
+    LSTNM
 }
 
 
@@ -35,5 +44,14 @@ enum class TransactionResponseKeys {
     AMT,
     EMV,
     EXPDATE,
-    CARDNO
+    CARDNO,
+    DESC,
+    CNTRY,
+    country,
+    state,
+    city,
+    RMRK,
+    PHN,
+    FRSTNM,
+    LSTNM
 }

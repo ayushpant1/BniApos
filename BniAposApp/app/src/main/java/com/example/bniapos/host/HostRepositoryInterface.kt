@@ -22,8 +22,8 @@ interface HostRepositoryInterface {
         jsonObject: JsonObject,
         url: String,
         currentWORKFLOW: WORKFLOW,
-        isBpWorkflow: Boolean,
-        bpWorkflowOutputData: String
+        isBpWorkflow: Boolean = false,
+        bpWorkflowOutputData: String? = null
     )
 
 }

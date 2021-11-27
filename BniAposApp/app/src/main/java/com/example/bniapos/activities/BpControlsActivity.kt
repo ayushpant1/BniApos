@@ -15,7 +15,9 @@ import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.host.HostRepository
+import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.ControlList
+import com.example.bniapos.models.WORKFLOW
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
@@ -34,9 +36,9 @@ class BpControlsActivity : AppCompatActivity() {
     private var llParentBody: LinearLayout? = null
     private var btnNext: Button? = null
     private var output: MutableMap<String, Any>? = HashMap()
-    private var filteredObjectList: MutableList<ControlList>? = ArrayList()
+    private var filteredObjectList: MutableList<CTRLS>? = ArrayList()
 
-    private var controlList: List<ControlList>? = null
+    private var controlList: List<CTRLS>? = null
     private var menu: MenuLink? = null
 
 
@@ -46,6 +48,9 @@ class BpControlsActivity : AppCompatActivity() {
     private val controlKeyTransactionType = "TXNTYPE"
 
     private var continueBpWorkflow = false
+
+    private var currentWorkflow: WORKFLOW? = null
+    private var workflowId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +69,10 @@ class BpControlsActivity : AppCompatActivity() {
         val json = loadJSONFromAsset()
         val jsonTable = loadTableJSONFromAsset()
         val gson = Gson()
-        controlList = gson.fromJson(json, Array<ControlList>::class.java).asList()
+        workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
+        val workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
+        currentWorkflow = workflowList.firstOrNull { workflow -> workflow.iD == workflowId }
+        controlList = currentWorkflow?.cTRLS
         val objectListTable = gson.fromJson(jsonTable, Array<ControlTable>::class.java).asList()
         storeToDatabase(objectListTable)
         loadScreen(controlList!!, mainScreenId)
@@ -123,14 +131,14 @@ class BpControlsActivity : AppCompatActivity() {
 
     private fun validateRequiredValues(): Boolean {
         filteredObjectList?.forEach { controls ->
-            when (controls.controlType.uppercase()) {
+            when (controls.cTYPE.uppercase()) {
                 BpControlType.TEXT.name -> {
-                    if (controls.minLength != 0) {
+                    if (controls.mINSIZE != 0) {
                         val editText = controls.controlObject as EditText
-                        if (editText.text.length !in controls.minLength..controls.maxLength) {
+                        if (editText.text.length !in controls.mINSIZE..controls.mAXSIZE) {
                             Toast.makeText(
                                 this@BpControlsActivity,
-                                controls.label + " is not valid", Toast.LENGTH_LONG
+                                controls.lABEL + " is not valid", Toast.LENGTH_LONG
                             ).show()
                             return false
                         }
@@ -149,11 +157,14 @@ class BpControlsActivity : AppCompatActivity() {
         setValues()
         val hostRepository = HostRepository()
         MainScope().launch {
-            //hostRepository.postData(JSONObject(output?.toMap()), "824682378623784")
-            //hostRepository.postData(JSONObject(output?.toMap()), "0873289732")
+            hostRepository.postData(
+                this@BpControlsActivity,
+                Gson().toJsonTree(output)
+                    .asJsonObject, "http://google.nuuneoi.com", currentWorkflow!!
+            )
+
         }
         Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG).show()
-        finish()
     }
 
 
@@ -163,10 +174,10 @@ class BpControlsActivity : AppCompatActivity() {
 
     private fun setValues() {
         filteredObjectList?.forEach { controls ->
-            when (controls.controlType.uppercase()) {
+            when (controls.cTYPE.uppercase()) {
                 BpControlType.TEXT.name -> {
                     val editText = controls.controlObject as EditText
-                    output?.put(controls.controlKey, editText.text)
+                    output?.put(controls.kEY, editText.text.toString())
                 }
             }
         }
@@ -192,29 +203,29 @@ class BpControlsActivity : AppCompatActivity() {
      * @param screenId screenId to be loaded.
      */
 
-    private fun loadScreen(controlList: List<ControlList>, screenId: Int) {
+    private fun loadScreen(controlList: List<CTRLS>, screenId: Int) {
         val screenDataSet: MutableMap<String, List<ControlTable>> = HashMap()
         var btnText = submit
         filteredObjectList =
-            controlList.filter { controlList -> controlList.screenId == screenId }.sortedWith(
-                compareBy { it.sortOrder }).toMutableList()
+            controlList.filter { controlList -> controlList.sCN == screenId }.sortedWith(
+                compareBy { it.oRD }).toMutableList()
         controlList.forEach { controls ->
-            if (controls.screenId > screenId) {
+            if (controls.sCN > screenId) {
                 btnText = next
             }
         }
         filteredObjectList!!.forEach { controls ->
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            when (controls.controlType.uppercase()) {
+            when (controls.cTYPE.uppercase()) {
                 BpControlType.TEXT.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_edit_text, null)
                     val tilDynamic: TextInputLayout = view.findViewById(R.id.til_dynamic)
                     val edittext: EditText = view.findViewById(R.id.dynamic_edit_text)
-                    controls.label.let {
-                        tilDynamic.hint = controls.label
+                    controls.lABEL.let {
+                        tilDynamic.hint = controls.lABEL
                     }
-                    controls.defaultValue.let {
-                        edittext.setText(controls.defaultValue)
+                    controls.dVAL.let {
+                        edittext.setText(controls.dVAL)
                     }
                     controls.controlObject = edittext as Object
                     llParentBody?.addView(view)
@@ -225,7 +236,7 @@ class BpControlsActivity : AppCompatActivity() {
                     val view: View = inflater.inflate(R.layout.dynamic_radio_buttons, null)
                     val radioGroup: RadioGroup = view.findViewById(R.id.rg_dynamic)
                     val rgText: TextView = view.findViewById(R.id.rg_text_dynamic)
-                    rgText.text = controls.label
+                    rgText.text = controls.lABEL
                     val data = getData(controls.dataSet)
                     val rb = arrayOfNulls<RadioButton>(data.size)
                     for (i in data.indices) {
@@ -235,19 +246,19 @@ class BpControlsActivity : AppCompatActivity() {
                         radioGroup.addView(rb[i])
                     }
                     radioGroup.check(0)
-                    if (controls.controlKey == controlKeyTransactionType)
-                        output?.put(controls.controlKey, data[0].name!! + "$" + data[0].value!!)
+                    if (controls.kEY == controlKeyTransactionType)
+                        output?.put(controls.kEY, data[0].name!! + "$" + data[0].value!!)
                     else
-                        output?.put(controls.controlKey, data[0].value!!)
+                        output?.put(controls.kEY, data[0].value!!)
                     radioGroup.setOnCheckedChangeListener { p0, p1 ->
-                        if (controls.controlKey == controlKeyTransactionType)
+                        if (controls.kEY == controlKeyTransactionType)
                             output?.put(
-                                controls.controlKey,
+                                controls.kEY,
                                 data[p1].name!! + "$" + data[p1].value!!
                             )
                         else
                             output?.put(
-                                controls.controlKey, data[p1].value!!
+                                controls.kEY, data[p1].value!!
                             )
                     }
                     controls.controlObject = radioGroup as Object
@@ -258,16 +269,16 @@ class BpControlsActivity : AppCompatActivity() {
                     var spnData: List<String>? = ArrayList()
                     val view: View = inflater.inflate(R.layout.dynamic_spinner, null)
                     val spn: Spinner = view.findViewById(R.id.spn_dynamic)
-                    view.tag = "dd_" + controls.controlKey
+                    view.tag = "dd_" + controls.kEY
                     val spnTextDynamic: TextView = view.findViewById(R.id.spn_text_dynamic)
-                    spnTextDynamic.text = controls.label
+                    spnTextDynamic.text = controls.lABEL
                     controls.controlObject = spn as Object
                     if (controls.relatedControlKey.isNullOrBlank()) {
                         data = getData(controls.dataSet)
                     } else {
                         spn.isEnabled = false
                     }
-                    screenDataSet.put(controls.controlKey, data!!)
+                    screenDataSet.put(controls.kEY, data!!)
                     spnData = data.convertToDataString()
                     spn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
@@ -278,17 +289,17 @@ class BpControlsActivity : AppCompatActivity() {
                         ) {
                             p0?.getItemAtPosition(p2)
                             if (p2 != 0) {
-                                data = screenDataSet.get(controls.controlKey)
+                                data = screenDataSet.get(controls.kEY)
                                 filteredObjectList!!.forEach {
-                                    if (it.relatedControlKey == controls.controlKey) {
+                                    if (it.relatedControlKey == controls.kEY) {
                                         val referenceData = getData(
                                             it.dataSet,
                                             data?.get(p2 - 1)!!.value!!
                                         )
-                                        screenDataSet.put(it.controlKey, referenceData)
+                                        screenDataSet.put(it.kEY, referenceData)
                                         val relatedSpnData = referenceData.convertToDataString()
                                         val relatedView: View =
-                                            llParentBody!!.findViewWithTag("dd_" + it.controlKey)
+                                            llParentBody!!.findViewWithTag("dd_" + it.kEY)
                                         val relatedSpn: Spinner =
                                             relatedView.findViewById(R.id.spn_dynamic)
                                         relatedSpn.isEnabled = true
@@ -296,7 +307,7 @@ class BpControlsActivity : AppCompatActivity() {
                                     }
                                 }
 
-                                output?.put(controls.controlKey, data?.get(p2 - 1)!!.value!!)
+                                output?.put(controls.kEY, data?.get(p2 - 1)!!.value!!)
                             }
                         }
 
@@ -319,7 +330,7 @@ class BpControlsActivity : AppCompatActivity() {
      * @param controlList List of Controls.
      */
 
-    private fun loadNextScreen(controlList: List<ControlList>) {
+    private fun loadNextScreen(controlList: List<CTRLS>) {
         runOnUiThread {
             llParentBody?.removeAllViews()
             if (btnNext?.text == next) {
@@ -391,7 +402,7 @@ class BpControlsActivity : AppCompatActivity() {
         val charset: Charset = Charsets.UTF_8
         var json: String? = null
         json = try {
-            val `is`: InputStream = assets.open("control_list.json")
+            val `is`: InputStream = assets.open("workflow_bp.json")
             val size: Int = `is`.available()
             val buffer = ByteArray(size)
             `is`.read(buffer)
@@ -402,7 +413,7 @@ class BpControlsActivity : AppCompatActivity() {
             return null
         }
         val jsonObject = JSONObject(json!!)
-        val jsonArray = jsonObject.getJSONArray("controlList")
+        val jsonArray = jsonObject.getJSONArray("WORKFLOW")
 
         return jsonArray.toString()
     }

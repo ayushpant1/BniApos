@@ -26,8 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dimen_15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@drawable/bg_btn"
         android:text="aghsdhgasvdh"
         android:textColor="@color/white" />
 </RelativeLayout>
