@@ -1,615 +1,93 @@
 {
   "WORKFLOW": [
     {
-      "ID": 41,
-      "NAME": "TVSUBS ENQUIRY",
-      "ENDPOINT": "PROCESSTVSUBSENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "BPJS KS VA",
-      "ID": 42,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSTVSUBSPAYMENT",
-      "TYPE": "BP",
+      "ID": 1,
+      "NAME": "SALE",
+      "ENDPOINT": "PROCESSBANKSALE",
+      "TYPE": "CP",
       "REVERSAL": 1,
+      "RETRY": 0,
       "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
+      "CARDINPUTTYPE": 205070000,
+      "CTRLS": [
+        {
+          "KEY": "AMT",
+          "LABEL": "Enter Amount",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "CARDNO",
+          "LABEL": "DIP/SWIPE CARD",
+          "CTYPE": "C",
+          "MINSIZE": "1",
+          "MAXSIZE": "16",
+          "DVAL": "",
+          "SCN": "2",
+          "ORD": "2",
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "PIN",
+          "LABEL": "ENTER PIN",
+          "CTYPE": "C",
+          "MINSIZE": "4",
+          "MAXSIZE": "6",
+          "DVAL": "",
+          "SCN": "3",
+          "ORD": "2",
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
+      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "NEXTWORKFLOWID": 0
     },
     {
-      "ID": 51,
-      "NAME": "BPJS KS ENQUIRY",
-      "ENDPOINT": "PROCESSBPJSKSENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": "",
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "PDAM",
-      "ID": 52,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSBPJSKSPAYMENT",
-      "TYPE": "BP",
+      "ID": 21,
+      "NAME": "BANKVOIDREQUEST",
+      "ENDPOINT": "BANKVOIDREQUEST/ENDPOINT>",
+      "TYPE": "CP",
       "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 61,
-      "NAME": "PDAM ENQUIRY",
-      "ENDPOINT": "PROCESSPDAMENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": "",
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "MULTIFINANCE (ADIRA, FIF, OTO KREDIT, SMS FINANCE, KREDIT PLUS, ACC FINANCE)",
-      "ID": 62,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSPDAMPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 71,
-      "NAME": "MULTIFINANCE ENQUIRY",
-      "ENDPOINT": "PROCESSENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "INSURANCE BNI LIFE",
-      "ID": 72,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSMULTIFINANCEPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 81,
-      "NAME": "INSURANCE BNI LIFE ENQUIRY",
-      "ENDPOINT": "PROCESSINSBNILIFEENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "PLN (POSTPAID, NONTAGLIS)",
-      "ID": 82,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSBNILIFEPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 91,
-      "NAME": "PLN POSTPAIN ENQUIRY",
-      "ENDPOINT": "PROCESSPLNENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "INSURANCE PRUDENTIAL INITIAL PREMIUM",
-      "ID": 92,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSPLNPPPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 101,
-      "NAME": "INSURANCE PRUDENTIAL INITIAL PREMIUM ENQUIRY",
-      "ENDPOINT": "PROCESSINSPRUDENTIALIPENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "INSURANCE PRUDENTIAL (CONTINUATION PREMIUM, PREMIUM TOP UP, POLICY RE PRINT, POLICY ADJUSMENT, CARD PRINTING)",
-      "ID": 102,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSINSPRUDENTIALIPPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 111,
-      "NAME": "INSURANCE PRUDENTIAL ENQUIRY",
-      "ENDPOINT": "PROCESSINSPRUDENTIALENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "CREDIT CARD NON BNI",
-      "ID": 122,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSCCBNIPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 131,
-      "NAME": "CREDIT CARD NON BNI ENQUIRY",
-      "ENDPOINT": "PROCESSCCNONBNIENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "MOBILE POSTPAID",
-      "ID": 152,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSCHARITYPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 161,
-      "NAME": "MOBILE POSTPAID ENQUIRY",
-      "ENDPOINT": "PROCESSMOBILEPPENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": "",
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "BPJS TK BPU AND TKI",
-      "ID": 162,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSMOBILEPPPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 171,
-      "NAME": "BPJS TK ENQUIRY",
-      "ENDPOINT": "PROCESSBPJSTKENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "AIRLINE TICKETING",
-      "ID": 172,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSBPJSTKPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 181,
-      "NAME": "AIRLINE TICKETING ENQUIRY",
-      "ENDPOINT": "PROCESSAIRLINEENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "INSURANCE BUMIPUTERA",
-      "ID": 192,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSTRAINPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 201,
-      "NAME": "INSURANCE BUMIPUTERA ENQUIRY",
-      "ENDPOINT": "PROCESSINSBUMIPUTERAENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "RAILINK",
-      "ID": 212,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSINTTELKOMPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 221,
-      "NAME": "RAILINK ENQUIRY",
-      "ENDPOINT": "PROCESSRAILINKENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": "",
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "TAX PBB",
-      "ID": 232,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSINSJIWASRAYAPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 241,
-      "NAME": "TAX PBB ENQUIRY",
-      "ENDPOINT": "PROCESSTAXPBBENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "LOCAL TAX",
-      "ID": 242,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSTAXPBBPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 251,
-      "NAME": "TAX ENQUIRY",
-      "ENDPOINT": "PROCESSLOCALTAXENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": "",
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "#text": "SBMPTN, UM PTKIN",
-      "ID": 252,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSLOCALTAXPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
-    },
-    {
-      "ID": 261,
-      "NAME": "SBMPTN ENQUIRY",
-      "ENDPOINT": "PROCESSSBMPTNENQUIRY",
-      "TYPE": "BP",
-      "REVERSAL": 0,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": "",
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 32
-      }
-    },
-    {
-      "ID": 272,
-      "NAME": "MOBILE BILL PAYMENT",
-      "ENDPOINT": "PROCESSUMPAYMENT",
-      "TYPE": "BP",
-      "REVERSAL": 1,
-      "VOID": 1,
-      "RETRY": 1,
-      "CTRLS": {
-        "CTRL": [
-          "",
-          ""
-        ],
-        "REQ": "",
-        "RESP": "",
-        "NEXTWORKFLOWID": 0
-      }
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+        {
+          "KEY": "TPIN",
+          "LABEL": "ENTER TERMINAL PIN",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+        {
+          "KEY": "INV",
+          "LABEL": "ENTER INVOICE NUMBER",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "2",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,DREF,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
+      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "NEXTWORKFLOWID": 0
     }
   ]
 }

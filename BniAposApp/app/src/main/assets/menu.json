@@ -18,11 +18,41 @@
       {
         "Id": 2,
         "ParentId": 1,
-        "WorkflowId": 0,
+        "WorkflowId": 116,
+        "TxnType":2500111,
         "DisplayText": "TELKOM",
         "SortOrder": 2,
         "Type": "BP",
         "IconName": "",
+        "LinkId": 1,
+        "ReceiptTemplate": {
+          "Id": 1
+        },
+        "FailedReceiptId": 1
+      },
+      {
+        "Id": 100,
+        "ParentId": 0,
+        "WorkflowId": 0,
+        "DisplayText": "Card Payment",
+        "SortOrder": 3,
+        "Type": "CP",
+        "IconName": "CardPayment",
+        "LinkId": 1,
+        "ReceiptTemplate": {
+          "Id": 1
+        },
+        "FailedReceiptId": 1
+      },
+      {
+        "Id": 101,
+        "ParentId": 100,
+        "WorkflowId": 1116,
+        "DisplayText": "Sale",
+        "SortOrder": 2,
+        "Type": "CP",
+        "IconName": "",
+        "TxnType":429,
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1

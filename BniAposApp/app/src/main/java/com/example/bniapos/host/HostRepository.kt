@@ -34,6 +34,7 @@ class HostRepository() : HostRepositoryInterface {
 
         apiInterface.postToHost(url).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
+                Log.d("success", "")
             }
 
             override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {

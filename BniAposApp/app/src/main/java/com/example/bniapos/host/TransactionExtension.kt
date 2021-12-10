@@ -1,10 +1,16 @@
 package com.example.bniapos.host
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.bniapos.enums.TransactionRequestKeys
 import com.example.bniapos.models.WORKFLOW
 import com.example.paymentsdk.CardReadOutput
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
     val jsonObject = JsonObject()
@@ -17,6 +23,27 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
             }
             TransactionRequestKeys.MMID.name -> {
                 jsonObject.addProperty(TransactionRequestKeys.MMID.name, getMmId())
+            }
+            TransactionRequestKeys.CKEY.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.CKEY.name, getTbId())
+            }
+            TransactionRequestKeys.AUTH.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.AUTH.name, getAuth())
+            }
+            TransactionRequestKeys.DID.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.DID.name, getDid())
+            }
+            TransactionRequestKeys.PTYPE.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.PTYPE.name, getPType())
+            }
+            TransactionRequestKeys.REFNO.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.REFNO.name, getRefNo())
+            }
+            TransactionRequestKeys.ACODE.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.ACODE.name, getACode())
+            }
+            TransactionRequestKeys.ACNO.name -> {
+                jsonObject.addProperty(TransactionRequestKeys.ACNO.name, getACNo(this))
             }
             TransactionRequestKeys.TBID.name -> {
                 jsonObject.addProperty(TransactionRequestKeys.TBID.name, getTbId())
@@ -154,15 +181,56 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
 
 
 fun getMmId(): String {
-    return "782367823648932"
+    return "1020000000002"
 }
 
 fun getMtId(): String {
-    return "983269832694"
+    return "1040000000001"
 }
 
 fun getTbId(): String {
     return "091820980129"
+}
+
+fun getCkey(): String {
+    return "RFVNTVINSzA2QjZKOjk5REE4OGZMR3hGVGFCYkk="
+}
+
+fun getAuth(): String {
+    return "THISISAUTHTOKEN"
+}
+
+fun getDid(): String {
+    return "2616272837430654"
+}
+
+fun getPType(): String {
+    return "2500116"
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getRefNo(): String {
+    val date: Date
+    val df = SimpleDateFormat("yyyyMMddHHmmsszzzzz")
+
+    date = try {
+        df.parse(java.lang.String.valueOf(LocalDateTime.now()))
+    } catch (e: ParseException) {
+        throw RuntimeException("Failed to parse date: ", e)
+    }
+
+    return date.time.toString()
+}
+
+fun getACode(): String {
+    return "0021"
+}
+
+fun getACNo(jsonObject: JsonObject): String {
+    return if (jsonObject.has("ACNO"))
+        jsonObject.get("ACNO").asString
+    else
+        ""
 }
 
 fun getTxnDate(cardReadOutput: CardReadOutput): String {
@@ -195,7 +263,7 @@ fun getPanSeq(cardReadOutput: CardReadOutput): String {
 
 fun getAmt(cardReadOutput: CardReadOutput, jsonObject: JsonObject): String {
     return if (cardReadOutput.txnAmount == null) {
-        jsonObject.get(TransactionRequestKeys.AMT.name).toString()
+        jsonObject.get(TransactionRequestKeys.AMT.name).asString
     } else
         cardReadOutput.txnAmount
 }

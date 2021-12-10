@@ -160,7 +160,7 @@ class BpControlsActivity : AppCompatActivity() {
             hostRepository.postData(
                 this@BpControlsActivity,
                 Gson().toJsonTree(output)
-                    .asJsonObject, "http://google.nuuneoi.com", currentWorkflow!!
+                    .asJsonObject, "https://bniapi.payment2go.co.id/AndroidApi/Payment", currentWorkflow!!
             )
 
         }

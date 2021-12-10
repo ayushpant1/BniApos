@@ -1,7 +1,7 @@
 {
   "WORKFLOW": [
     {
-      "ID": 1,
+      "ID": 1116,
       "NAME": "SALE",
       "ENDPOINT": "PROCESSBANKSALE",
       "TYPE": "CP",
@@ -18,7 +18,9 @@
           "MAXSIZE": "8",
           "DVAL": "",
           "SCN": "1",
-          "ORD": "1"
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
         },
         {
           "KEY": "CARDNO",
@@ -28,7 +30,9 @@
           "MAXSIZE": "16",
           "DVAL": "",
           "SCN": "2",
-          "ORD": "2"
+          "ORD": "2",
+          "dataSet": null,
+          "relatedControlKey": null
         },
         {
           "KEY": "PIN",
@@ -38,45 +42,13 @@
           "MAXSIZE": "6",
           "DVAL": "",
           "SCN": "3",
-          "ORD": "2"
+          "ORD": "2",
+          "dataSet": null,
+          "relatedControlKey": null
         }
       ],
-      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
-      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
-      "NEXTWORKFLOWID": 0
-    },
-    {
-      "ID": 21,
-      "NAME": "BANKVOIDREQUEST",
-      "ENDPOINT": "BANKVOIDREQUEST/ENDPOINT>",
-      "TYPE": "CP",
-      "REVERSAL": 1,
-      "VOID": 0,
-      "RETRY": 0,
-      "CTRLS": [
-        {
-          "KEY": "TPIN",
-          "LABEL": "ENTER TERMINAL PIN",
-          "CTYPE": "TN",
-          "MINSIZE": "1",
-          "MAXSIZE": "8",
-          "DVAL": "",
-          "SCN": "1",
-          "ORD": "1"
-        },
-        {
-          "KEY": "INV",
-          "LABEL": "ENTER INVOICE NUMBER",
-          "CTYPE": "TN",
-          "MINSIZE": "1",
-          "MAXSIZE": "8",
-          "DVAL": "",
-          "SCN": "2",
-          "ORD": "1"
-        }
-      ],
-      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,DREF,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
-      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "REQ": "IID,MTID,TBID,TXNDT,AMT,VoidRoc,INV,SCID,CardNo,TXNTYPE,T2D,POSENT,PINB,PANSEQ,STAN,EXPIRY,CSID,EMVD",
+      "RESP": "MMID,MTID,AMT,TAMT,TXNDT,PTYP,PAYID,TXNID,IAC,BCT,RSPC,RSPM,SCID,BTID,BMID",
       "NEXTWORKFLOWID": 0
     }
   ]
