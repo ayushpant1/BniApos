@@ -22,6 +22,7 @@ enum class TransactionRequestKeys {
     SEC,
     AMT,
     EMV,
+    EMVD,
     EXPDATE,
     CARDNO,
     DESC,

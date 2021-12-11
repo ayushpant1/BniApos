@@ -1,6 +1,5 @@
 package com.example.bniapos.activities
 
-import MenuLink
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -10,25 +9,22 @@ import android.view.View.GONE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bniapos.R
-import com.example.bniapos.database.DatabaseClient
-import com.example.bniapos.database.entities.ControlTable
+import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.enums.CpControlType
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
-import com.example.bniapos.models.ControlList
 import com.example.bniapos.models.WORKFLOW
+import com.example.bniapos.utils.AppConstants
+import com.example.bniapos.utils.Configuration
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.Common.ISuccessResponse_Card
 import com.example.paymentsdk.Common.TerminalCardApiHelper
 import com.example.paymentsdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.io.IOException
-import java.io.InputStream
-import java.nio.charset.Charset
 
 
 class CpControlsActivity : AppCompatActivity() {
@@ -48,6 +44,8 @@ class CpControlsActivity : AppCompatActivity() {
     private var emvProcessor: TerminalCardApiHelper? = null
     private var transactionConfig: TransactionConfig? = null
     private var currentWorkflow: WORKFLOW? = null
+    private var workflowList: List<WORKFLOW>? = ArrayList()
+    private var controlList: List<CTRLS>? = null
 
 
     private var workflowId: Int? = null
@@ -57,8 +55,29 @@ class CpControlsActivity : AppCompatActivity() {
 
     private var bpWorkflowOutputData = ""
 
+    private var bpWorkflowJsonObject: JsonObject? = JsonObject()
+
     private val submit = "Submit"
     private val next = "Next"
+
+    private val apiResult: ApiResult = object : ApiResult {
+        override fun onSuccess(jsonRequest: JsonObject) {
+            if (currentWorkflow?.nEXTWORKFLOWID == 0) {
+                finish()
+            } else {
+                currentWorkflow = workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
+                controlList = currentWorkflow?.cTRLS
+                mainScreenId = 1
+                loadScreen(controlList!!, mainScreenId)
+            }
+
+        }
+
+        override fun onFailure(message: String) {
+
+        }
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,18 +92,20 @@ class CpControlsActivity : AppCompatActivity() {
             bpTransactionTypeName = controlData.split("$").first()
             workflowId = controlData.split("$")[1].toInt()
             bpWorkflowOutputData = intent.getStringExtra(BP_WORKFLOW_OUTPUT_DATA) as String
+            bpWorkflowJsonObject = Gson().fromJson(bpWorkflowOutputData, JsonObject::class.java)
         } else
             workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
-        val json = loadJSONFromAsset()
+        val json = Configuration.getWorkflowConfig(this)
         val gson = Gson()
-        val workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
+        var workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
+        workflowList = workflowList.filter { it.tYPE == "CP" }
         currentWorkflow = workflowList.firstOrNull { workflow -> workflow.iD == workflowId }
-        val objectList = currentWorkflow?.cTRLS
-        if (objectList.isNullOrEmpty()) {
+        controlList = currentWorkflow?.cTRLS
+        if (controlList.isNullOrEmpty()) {
             Toast.makeText(this, "Workflow not attached", Toast.LENGTH_LONG).show()
             finish()
         } else {
-            loadScreen(objectList, mainScreenId)
+            loadScreen(controlList!!, mainScreenId)
         }
 
         btnNext?.setOnClickListener {
@@ -93,7 +114,7 @@ class CpControlsActivity : AppCompatActivity() {
             } else {
                 if (validateRequiredValues()) {
                     setValues()
-                    loadNextScreen(objectList!!)
+                    loadNextScreen(controlList!!)
                 }
             }
         }
@@ -136,9 +157,11 @@ class CpControlsActivity : AppCompatActivity() {
             hostRepository.postData(
                 this@CpControlsActivity,
                 Gson().toJsonTree(output)
-                    .asJsonObject, "http://google.nuuneoi.com", currentWorkflow!!,
+                    .asJsonObject,
+                AppConstants.CP_URL, currentWorkflow!!,
+                apiResult,
                 isBpWorkflow,
-                bpWorkflowOutputData
+                bpWorkflowOutputData,
             )
 
         }
@@ -179,6 +202,9 @@ class CpControlsActivity : AppCompatActivity() {
             }
         }
         filteredObjectList!!.forEach { controls ->
+            if (bpWorkflowJsonObject!!.has(controls.kEY)) {
+                controls.dVAL = bpWorkflowJsonObject!!.get(controls.kEY).asString
+            }
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             when (controls.kEY.uppercase()) {
                 CpControlType.AMT.name -> {
@@ -302,29 +328,6 @@ class CpControlsActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * load CP workflow from assets (CP=Card Present)
-     */
-
-    private fun loadJSONFromAsset(): String? {
-        val charset: Charset = Charsets.UTF_8
-        var json: String? = null
-        json = try {
-            val `is`: InputStream = assets.open("workflow_cp.json")
-            val size: Int = `is`.available()
-            val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
-            String(buffer, charset)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        val jsonObject = JSONObject(json!!)
-        val jsonArray = jsonObject.getJSONArray("WORKFLOW")
-
-        return jsonArray.toString()
-    }
 
     override fun onDestroy() {
         super.onDestroy()

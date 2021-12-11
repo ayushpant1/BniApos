@@ -25,7 +25,7 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
                 jsonObject.addProperty(TransactionRequestKeys.MMID.name, getMmId())
             }
             TransactionRequestKeys.CKEY.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.CKEY.name, getTbId())
+                jsonObject.addProperty(TransactionRequestKeys.CKEY.name, getCkey())
             }
             TransactionRequestKeys.AUTH.name -> {
                 jsonObject.addProperty(TransactionRequestKeys.AUTH.name, getAuth())
@@ -87,7 +87,8 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
                     getAmt(cardReadOutput, this)
                 )
             }
-            TransactionRequestKeys.EMV.name -> {
+            TransactionRequestKeys.EMV.name,
+            TransactionRequestKeys.EMVD.name -> {
                 jsonObject.addProperty(TransactionRequestKeys.EMV.name, getEmv(cardReadOutput))
             }
             TransactionRequestKeys.PINB.name -> {
@@ -210,16 +211,7 @@ fun getPType(): String {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun getRefNo(): String {
-    val date: Date
-    val df = SimpleDateFormat("yyyyMMddHHmmsszzzzz")
-
-    date = try {
-        df.parse(java.lang.String.valueOf(LocalDateTime.now()))
-    } catch (e: ParseException) {
-        throw RuntimeException("Failed to parse date: ", e)
-    }
-
-    return date.time.toString()
+    return "2021120917054000001"
 }
 
 fun getACode(): String {

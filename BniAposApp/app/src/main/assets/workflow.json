@@ -1,7 +1,7 @@
 {
   "WORKFLOW": [
     {
-      "ID": 1,
+      "ID": 1116,
       "NAME": "SALE",
       "ENDPOINT": "PROCESSBANKSALE",
       "TYPE": "CP",
@@ -47,23 +47,23 @@
           "relatedControlKey": null
         }
       ],
-      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
-      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "REQ": "IID,MTID,TBID,TXNDT,AMT,VoidRoc,INV,SCID,CardNo,TXNTYPE,T2D,POSENT,PINB,PANSEQ,STAN,EXPIRY,CSID,EMVD",
+      "RESP": "MMID,MTID,AMT,TAMT,TXNDT,PTYP,PAYID,TXNID,IAC,BCT,RSPC,RSPM,SCID,BTID,BMID",
       "NEXTWORKFLOWID": 0
     },
     {
-      "ID": 21,
-      "NAME": "BANKVOIDREQUEST",
-      "ENDPOINT": "BANKVOIDREQUEST/ENDPOINT>",
-      "TYPE": "CP",
-      "REVERSAL": 1,
+      "ID": 116,
+      "NAME": "BILL PAYMENT",
+      "ENDPOINT": "Payment/ProcessEnquiry",
+      "TYPE": "BP",
+      "REVERSAL": 0,
       "VOID": 0,
       "RETRY": 0,
       "CTRLS": [
         {
-          "KEY": "TPIN",
-          "LABEL": "ENTER TERMINAL PIN",
-          "CTYPE": "TN",
+          "KEY": "ACNO",
+          "LABEL": "ENTER MOBILE NO",
+          "CTYPE": "TEXT",
           "MINSIZE": "1",
           "MAXSIZE": "8",
           "DVAL": "",
@@ -71,22 +71,36 @@
           "ORD": "1",
           "dataSet": null,
           "relatedControlKey": null
-        },
+        }
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT",
+      "NEXTWORKFLOWID": 132
+    },
+    {
+      "ID": 132,
+      "NAME": "INSURANCE BNI LIFE ENQUIRY",
+      "ENDPOINT": "PROCESSINSBNILIFEENQUIRY",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 1,
+      "RETRY": 1,
+      "CTRLS": [
         {
-          "KEY": "INV",
-          "LABEL": "ENTER INVOICE NUMBER",
-          "CTYPE": "TN",
-          "MINSIZE": "1",
-          "MAXSIZE": "8",
-          "DVAL": "",
-          "SCN": "2",
-          "ORD": "1",
-          "dataSet": null,
+          "KEY": "TXNTYPE",
+          "CTYPE": "RADIO",
+          "DVAL": "10",
+          "LABEL": "Payment Methods",
+          "SCN": 1,
+          "ORD": 1,
+          "MAXSIZE": 10,
+          "MINSIZE": 1,
+          "dataSet": "TransactionTypeList",
           "relatedControlKey": null
         }
       ],
-      "REQ": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,DREF,SEC,PINB,AMT,EMV,EXPDATE,CARDNO",
-      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "REQ": "MTID,MMID,TBID,AMT,DESC,CNTRY,TXNTYPE",
+      "RESP": "MTID,MMID,TBID,AMT",
       "NEXTWORKFLOWID": 0
     }
   ]

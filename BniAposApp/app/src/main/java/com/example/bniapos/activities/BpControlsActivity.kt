@@ -1,7 +1,6 @@
 package com.example.bniapos.activities
 
 import MenuLink
-import android.R.attr
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -10,21 +9,26 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bniapos.R
+import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
-import com.example.bniapos.models.ControlList
 import com.example.bniapos.models.WORKFLOW
+import com.example.bniapos.utils.AppConstants
+import com.example.bniapos.utils.Configuration
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
+import java.lang.reflect.Type
 import java.nio.charset.Charset
 
 
@@ -35,11 +39,12 @@ class BpControlsActivity : AppCompatActivity() {
     private var mainScreenId = 1
     private var llParentBody: LinearLayout? = null
     private var btnNext: Button? = null
-    private var output: MutableMap<String, Any>? = HashMap()
+    private var output: MutableMap<String, Any> = HashMap()
     private var filteredObjectList: MutableList<CTRLS>? = ArrayList()
 
     private var controlList: List<CTRLS>? = null
     private var menu: MenuLink? = null
+    var workflowList: List<WORKFLOW>? = ArrayList()
 
 
     private val submit = "Submit"
@@ -51,6 +56,31 @@ class BpControlsActivity : AppCompatActivity() {
 
     private var currentWorkflow: WORKFLOW? = null
     private var workflowId: Int? = null
+
+    private val apiResult: ApiResult = object : ApiResult {
+        override fun onSuccess(jsonRequest: JsonObject) {
+            val jsonRequestString = Gson().toJson(jsonRequest)
+            val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
+            val myMap: Map<String, Any> = Gson().fromJson(jsonRequestString, type)
+            output = myMap.toMutableMap()
+            if (currentWorkflow?.nEXTWORKFLOWID == 0) {
+                finish()
+            } else {
+                currentWorkflow =
+                    workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
+                controlList = currentWorkflow?.cTRLS
+                mainScreenId = 1
+                llParentBody?.removeAllViews()
+                loadScreen(controlList!!, mainScreenId)
+            }
+
+        }
+
+        override fun onFailure(message: String) {
+
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,12 +96,13 @@ class BpControlsActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
 
-        val json = loadJSONFromAsset()
+        val json = Configuration.getWorkflowConfig(this)
         val jsonTable = loadTableJSONFromAsset()
         val gson = Gson()
         workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
-        val workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
-        currentWorkflow = workflowList.firstOrNull { workflow -> workflow.iD == workflowId }
+        workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
+        workflowList = workflowList!!.filter { it.tYPE == "BP" }
+        currentWorkflow = workflowList!!.firstOrNull { workflow -> workflow.iD == workflowId }
         controlList = currentWorkflow?.cTRLS
         val objectListTable = gson.fromJson(jsonTable, Array<ControlTable>::class.java).asList()
         storeToDatabase(objectListTable)
@@ -160,7 +191,10 @@ class BpControlsActivity : AppCompatActivity() {
             hostRepository.postData(
                 this@BpControlsActivity,
                 Gson().toJsonTree(output)
-                    .asJsonObject, "https://bniapi.payment2go.co.id/AndroidApi/Payment", currentWorkflow!!
+                    .asJsonObject,
+                AppConstants.BP_URL,
+                currentWorkflow!!,
+                apiResult
             )
 
         }
@@ -217,6 +251,7 @@ class BpControlsActivity : AppCompatActivity() {
         filteredObjectList!!.forEach { controls ->
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             when (controls.cTYPE.uppercase()) {
+                BpControlType.TN.name,
                 BpControlType.TEXT.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_edit_text, null)
                     val tilDynamic: TextInputLayout = view.findViewById(R.id.til_dynamic)
@@ -392,30 +427,6 @@ class BpControlsActivity : AppCompatActivity() {
                 loadNextScreen(controlList!!)
             }
         }
-    }
-
-    /**
-     * Load control list from assets
-     */
-
-    private fun loadJSONFromAsset(): String? {
-        val charset: Charset = Charsets.UTF_8
-        var json: String? = null
-        json = try {
-            val `is`: InputStream = assets.open("workflow_bp.json")
-            val size: Int = `is`.available()
-            val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
-            String(buffer, charset)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        val jsonObject = JSONObject(json!!)
-        val jsonArray = jsonObject.getJSONArray("WORKFLOW")
-
-        return jsonArray.toString()
     }
 
 

@@ -5,8 +5,10 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.util.Log
 import com.example.bniapos.alerts.Alerts
+import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.database.DatabaseClient
+import com.example.bniapos.enums.TransactionResponseKeys
 import com.example.bniapos.models.WORKFLOW
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -26,6 +28,7 @@ class HostRepository() : HostRepositoryInterface {
         jsonObject: JsonObject,
         url: String,
         currentWORKFLOW: WORKFLOW,
+        apiResult: ApiResult,
         isBpWorkflow: Boolean,
         bpWorkflowOutputData: String?
     ) {
@@ -35,15 +38,14 @@ class HostRepository() : HostRepositoryInterface {
         apiInterface.postToHost(url).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
                 Log.d("success", "")
-            }
-
-            override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
-                Log.d("failure", t?.message!!)
+                jsonRequest.addProperty(TransactionResponseKeys.TBID.name, "72378342")
+                jsonRequest.addProperty(TransactionResponseKeys.INV.name, "0239023")
+                jsonRequest.addProperty(TransactionResponseKeys.TXNTYPE.name, "")
+                jsonRequest.addProperty(TransactionResponseKeys.AMT.name, "112")
                 val transactionResponse = jsonRequest.saveToDatabase(context, currentWORKFLOW)
 
                 DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
                     ?.getAll()
-
                 val buttonInterface: ButtonInterface = object : ButtonInterface {
                     override fun onClicked(alertDialogBuilder: AlertDialog) {
                         if (isBpWorkflow) {
@@ -52,10 +54,16 @@ class HostRepository() : HostRepositoryInterface {
                             returnIntent.putExtra("bpResponse", bpWorkflowOutputData)
                             context.setResult(Activity.RESULT_OK, returnIntent)
                         }
-                        context.finish()
+                        apiResult.onSuccess(jsonRequest)
                     }
                 }
                 Alerts.successAlert(context, "Transaction saved to database", buttonInterface)
+
+            }
+
+            override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
+                Log.d("failure", t?.message!!)
+                apiResult.onFailure(t?.message!!)
 
 
             }

@@ -26,7 +26,7 @@ data class CTRLS(
     @SerializedName("CTYPE") val cTYPE: String,
     @SerializedName("MINSIZE") val mINSIZE: Int,
     @SerializedName("MAXSIZE") val mAXSIZE: Int,
-    @SerializedName("DVAL") val dVAL: String,
+    @SerializedName("DVAL") var dVAL: String,
     @SerializedName("SCN") val sCN: Int,
     @SerializedName("ORD") val oRD: Int,
     @SerializedName("dataSet") val dataSet: String,

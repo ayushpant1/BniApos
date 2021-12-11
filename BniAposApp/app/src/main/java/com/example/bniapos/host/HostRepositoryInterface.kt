@@ -2,6 +2,7 @@ package com.example.bniapos.host
 
 import android.app.Activity
 import android.content.Context
+import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.models.WORKFLOW
 import com.google.gson.JsonObject
 import org.json.JSONObject
@@ -22,6 +23,7 @@ interface HostRepositoryInterface {
         jsonObject: JsonObject,
         url: String,
         currentWORKFLOW: WORKFLOW,
+        apiResult: ApiResult,
         isBpWorkflow: Boolean = false,
         bpWorkflowOutputData: String? = null
     )

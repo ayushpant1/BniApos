@@ -14,6 +14,7 @@ import com.example.bniapos.activities.SubMenuActivity
 import com.example.bniapos.adapters.MenuListAdapter
 import com.example.bniapos.callback.MenuListAdapterListener
 import com.example.bniapos.databinding.FragmentHomeBinding
+import com.example.bniapos.utils.Configuration
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.IOException
@@ -50,7 +51,7 @@ class HomeFragment : Fragment() {
 
         gridview = binding.gridMenu
 
-        val json = loadJSONFromAsset()
+        val json = Configuration.getMenuConfig(root.context)
         menuList = Gson().fromJson(json, Array<MenuLink>::class.java).asList()
 
         menuFilterList = menuList!!.filter { s ->
