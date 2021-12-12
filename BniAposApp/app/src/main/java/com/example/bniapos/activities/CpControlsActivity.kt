@@ -1,5 +1,6 @@
 package com.example.bniapos.activities
 
+import MenuLink
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -23,8 +24,10 @@ import com.example.paymentsdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.lang.reflect.Type
 
 
 class CpControlsActivity : AppCompatActivity() {
@@ -54,8 +57,8 @@ class CpControlsActivity : AppCompatActivity() {
     private var bpTransactionTypeName = ""
 
     private var bpWorkflowOutputData = ""
+    private var menu: MenuLink? = null
 
-    private var bpWorkflowJsonObject: JsonObject? = JsonObject()
 
     private val submit = "Submit"
     private val next = "Next"
@@ -92,9 +95,14 @@ class CpControlsActivity : AppCompatActivity() {
             bpTransactionTypeName = controlData.split("$").first()
             workflowId = controlData.split("$")[1].toInt()
             bpWorkflowOutputData = intent.getStringExtra(BP_WORKFLOW_OUTPUT_DATA) as String
-            bpWorkflowJsonObject = Gson().fromJson(bpWorkflowOutputData, JsonObject::class.java)
-        } else
+            val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
+            val requestMap: Map<String, Any> = Gson().fromJson(bpWorkflowOutputData, type)
+            output = requestMap.toMutableMap()
+        } else {
             workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
+        }
+        menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
+
         val json = Configuration.getWorkflowConfig(this)
         val gson = Gson()
         var workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
@@ -158,11 +166,13 @@ class CpControlsActivity : AppCompatActivity() {
                 this@CpControlsActivity,
                 Gson().toJsonTree(output)
                     .asJsonObject,
-                AppConstants.CP_URL, currentWorkflow!!,
+                AppConstants.CP_URL + "/" + currentWorkflow?.eNDPOINT, currentWorkflow!!,
                 apiResult,
+                menu!!.txnType,
                 isBpWorkflow,
                 bpWorkflowOutputData,
-            )
+
+                )
 
         }
     }
@@ -202,8 +212,8 @@ class CpControlsActivity : AppCompatActivity() {
             }
         }
         filteredObjectList!!.forEach { controls ->
-            if (bpWorkflowJsonObject!!.has(controls.kEY)) {
-                controls.dVAL = bpWorkflowJsonObject!!.get(controls.kEY).asString
+            if (output!!.containsKey(controls.kEY)) {
+                controls.dVAL = output!![controls.kEY].toString()
             }
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             when (controls.kEY.uppercase()) {

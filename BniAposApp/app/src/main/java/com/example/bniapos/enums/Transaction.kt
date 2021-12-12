@@ -11,7 +11,7 @@ enum class TransactionRequestKeys {
     REFNO,
     ACODE,
     ACNO,
-    TXNDATE,
+    TXNDT,
     INV,
     SCID,
     TXNTYPE,
@@ -33,7 +33,13 @@ enum class TransactionRequestKeys {
     RMRK,
     PHN,
     FRSTNM,
-    LSTNM
+    LSTNM,
+    IID,
+    VOIDROC,
+    T2D,
+    EXPIRY,
+    CSID
+
 }
 
 

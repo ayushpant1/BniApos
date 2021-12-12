@@ -18,6 +18,7 @@ data class MenuLink(
     @SerializedName("IconName") val iconName: String,
     @SerializedName("SortOrder") val sortOrder: Int,
     @SerializedName("Type") val type: String,
+    @SerializedName("TxnType") val txnType: Int,
     @SerializedName("LinkId") val linkId: Int,
     @SerializedName("ReceiptTemplate") val receiptTemplate: ReceiptTemplate,
     @SerializedName("FailedReceiptId") val failedReceiptId: Int

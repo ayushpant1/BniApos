@@ -24,6 +24,7 @@ interface HostRepositoryInterface {
         url: String,
         currentWORKFLOW: WORKFLOW,
         apiResult: ApiResult,
+        transactionType: Int,
         isBpWorkflow: Boolean = false,
         bpWorkflowOutputData: String? = null
     )

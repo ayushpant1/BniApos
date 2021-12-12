@@ -61,8 +61,8 @@ class BpControlsActivity : AppCompatActivity() {
         override fun onSuccess(jsonRequest: JsonObject) {
             val jsonRequestString = Gson().toJson(jsonRequest)
             val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
-            val myMap: Map<String, Any> = Gson().fromJson(jsonRequestString, type)
-            output = myMap.toMutableMap()
+            val requestMap: Map<String, Any> = Gson().fromJson(jsonRequestString, type)
+            output = requestMap.toMutableMap()
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
                 finish()
             } else {
@@ -148,6 +148,10 @@ class BpControlsActivity : AppCompatActivity() {
             Gson().toJsonTree(output)
                 .asJsonObject.toString()
         )
+        intent.putExtra(
+            SubMenuActivity.MENU,
+            menu
+        )
 
         intent.putExtra(
             CpControlsActivity.BP_WORKFLOW,
@@ -194,7 +198,8 @@ class BpControlsActivity : AppCompatActivity() {
                     .asJsonObject,
                 AppConstants.BP_URL,
                 currentWorkflow!!,
-                apiResult
+                apiResult,
+                menu!!.txnType
             )
 
         }
@@ -421,8 +426,10 @@ class BpControlsActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                var cpResponse = data?.getStringExtra("cpResponse")
-                var bpResponse = data?.getStringExtra("bpResponse")
+                var response = data?.getStringExtra("response")
+                val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
+                val requestMap: Map<String, Any> = Gson().fromJson(response, type)
+                output = requestMap.toMutableMap()
                 continueBpWorkflow = true
                 loadNextScreen(controlList!!)
             }

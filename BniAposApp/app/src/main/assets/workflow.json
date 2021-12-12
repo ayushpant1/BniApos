@@ -3,7 +3,7 @@
     {
       "ID": 1116,
       "NAME": "SALE",
-      "ENDPOINT": "PROCESSBANKSALE",
+      "ENDPOINT": "BankPaymentRequest",
       "TYPE": "CP",
       "REVERSAL": 1,
       "RETRY": 0,
@@ -47,7 +47,7 @@
           "relatedControlKey": null
         }
       ],
-      "REQ": "IID,MTID,TBID,TXNDT,AMT,VoidRoc,INV,SCID,CardNo,TXNTYPE,T2D,POSENT,PINB,PANSEQ,STAN,EXPIRY,CSID,EMVD",
+      "REQ": "IID,MMID,MTID,TBID,REFNO,TXNDT,AMT,INV,SCID,CARDNO,TXNTYPE,T2D,POSENT,PINB,PANSEQ,STAN,EXPIRY,CSID,EMVD",
       "RESP": "MMID,MTID,AMT,TAMT,TXNDT,PTYP,PAYID,TXNID,IAC,BCT,RSPC,RSPM,SCID,BTID,BMID",
       "NEXTWORKFLOWID": 0
     },
@@ -99,7 +99,7 @@
           "relatedControlKey": null
         }
       ],
-      "REQ": "MTID,MMID,TBID,AMT,DESC,CNTRY,TXNTYPE",
+      "REQ": "MTID,MMID,TBID,AMT",
       "RESP": "MTID,MMID,TBID,AMT",
       "NEXTWORKFLOWID": 0
     }

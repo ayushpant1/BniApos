@@ -16,17 +16,17 @@ fun JsonObject.saveToDatabase(
     splitRequest.forEach {
         when (it) {
             TransactionResponseKeys.MTID.name -> {
-                this.get(TransactionResponseKeys.MTID.name).let { element ->
+                (this.get(TransactionResponseKeys.MTID.name)).let { element ->
                     transactionResponseTable.mtId == element.toString()
                 }
             }
             TransactionResponseKeys.MMID.name -> {
-                this.get(TransactionResponseKeys.MMID.name).let { element ->
+                (this.get(TransactionResponseKeys.MMID.name)).let { element ->
                     transactionResponseTable.mmId = element.toString()
                 }
             }
             TransactionResponseKeys.TBID.name -> {
-                this.get(TransactionResponseKeys.TBID.name).let { element ->
+                (this.get(TransactionResponseKeys.TBID.name)).let { element ->
                     transactionResponseTable.tbId = element.toString()
                 }
             }

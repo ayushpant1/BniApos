@@ -1,134 +1,132 @@
 package com.example.bniapos.host
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.app.Activity
 import com.example.bniapos.enums.TransactionRequestKeys
 import com.example.bniapos.models.WORKFLOW
+import com.example.bniapos.utils.DateTimeUtils
+import com.example.bniapos.utils.SharedPreferenceUtils
+import com.example.bniapos.utils.Util
 import com.example.paymentsdk.CardReadOutput
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.*
 
-fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
+fun JsonObject.toTransactionRequest(
+    currentWORKFLOW: WORKFLOW,
+    transactionType: Int,
+    context: Activity
+): JsonObject {
     val jsonObject = JsonObject()
     val cardReadOutput = getCardInfo(this)
     val splitRequest = currentWORKFLOW.rEQ.split(",")
     splitRequest.forEach {
         when (it) {
             TransactionRequestKeys.MTID.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.MTID.name, getMtId())
+                jsonObject.addProperty(it, getMtId(context))
             }
             TransactionRequestKeys.MMID.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.MMID.name, getMmId())
+                jsonObject.addProperty(it, getMmId(context))
             }
             TransactionRequestKeys.CKEY.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.CKEY.name, getCkey())
+                jsonObject.addProperty(it, getCkey())
             }
             TransactionRequestKeys.AUTH.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.AUTH.name, getAuth())
+                jsonObject.addProperty(it, getAuth())
             }
             TransactionRequestKeys.DID.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.DID.name, getDid())
+                jsonObject.addProperty(it, getDid())
             }
             TransactionRequestKeys.PTYPE.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.PTYPE.name, getPType())
+                jsonObject.addProperty(it, getPType())
             }
             TransactionRequestKeys.REFNO.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.REFNO.name, getRefNo())
+                jsonObject.addProperty(it, getRefNo(context))
             }
             TransactionRequestKeys.ACODE.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.ACODE.name, getACode())
+                jsonObject.addProperty(it, getACode())
             }
             TransactionRequestKeys.ACNO.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.ACNO.name, getACNo(this))
+                jsonObject.addProperty(it, getACNo(this))
             }
             TransactionRequestKeys.TBID.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.TBID.name, getTbId())
+                jsonObject.addProperty(it, getTbId(context))
             }
-            TransactionRequestKeys.TXNDATE.name -> {
+            TransactionRequestKeys.TXNDT.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.TXNDATE.name,
+                    it,
                     getTxnDate(cardReadOutput)
                 )
             }
             TransactionRequestKeys.INV.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.INV.name, getInv())
+                jsonObject.addProperty(it, getInv(context))
             }
             TransactionRequestKeys.SCID.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.SCID.name, getScId())
+                jsonObject.addProperty(it, getScId(currentWORKFLOW))
             }
             TransactionRequestKeys.TXNTYPE.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.TXNTYPE.name,
-                    getTxnType(currentWORKFLOW)
+                    it,
+                    transactionType.toString()
                 )
             }
             TransactionRequestKeys.STAN.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.STAN.name, getStan())
+                jsonObject.addProperty(it, getStan(context))
             }
             TransactionRequestKeys.POSENT.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.POSENT.name,
+                    it,
                     getPosent(cardReadOutput)
                 )
             }
             TransactionRequestKeys.PANSEQ.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.PANSEQ.name,
+                    it,
                     getPanSeq(cardReadOutput)
                 )
             }
             TransactionRequestKeys.AMT.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.AMT.name,
+                    it,
                     getAmt(cardReadOutput, this)
                 )
             }
             TransactionRequestKeys.EMV.name,
             TransactionRequestKeys.EMVD.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.EMV.name, getEmv(cardReadOutput))
+                jsonObject.addProperty(it, getEmv(cardReadOutput))
             }
             TransactionRequestKeys.PINB.name -> {
-                jsonObject.addProperty(TransactionRequestKeys.PINB.name, getPinB(cardReadOutput))
+                jsonObject.addProperty(it, getPinB(cardReadOutput))
             }
+            TransactionRequestKeys.EXPIRY.name,
             TransactionRequestKeys.EXPDATE.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.EXPDATE.name,
+                    it,
                     getExpDate(cardReadOutput)
                 )
             }
             TransactionRequestKeys.CARDNO.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.CARDNO.name,
+                    it,
                     getCardNo(cardReadOutput)
                 )
             }
             TransactionRequestKeys.DESC.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.DESC.name,
+                    it,
                     this.get(TransactionRequestKeys.DESC.name).toString()
                 )
             }
             TransactionRequestKeys.CNTRY.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.CNTRY.name,
+                    it,
                     this.get(TransactionRequestKeys.CNTRY.name).toString()
                 )
             }
 
-            TransactionRequestKeys.TXNTYPE.name -> {
-                jsonObject.addProperty(
-                    TransactionRequestKeys.TXNTYPE.name,
-                    this.get(TransactionRequestKeys.TXNTYPE.name).toString()
-                )
-            }
+
             TransactionRequestKeys.country.name -> {
                 if (jsonObject.has(TransactionRequestKeys.country.name)) {
                     jsonObject.addProperty(
-                        TransactionRequestKeys.country.name,
+                        it,
                         this.get(TransactionRequestKeys.country.name).toString()
                     )
                 }
@@ -136,7 +134,7 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
             TransactionRequestKeys.state.name -> {
                 if (jsonObject.has(TransactionRequestKeys.state.name)) {
                     jsonObject.addProperty(
-                        TransactionRequestKeys.state.name,
+                        it,
                         this.get(TransactionRequestKeys.state.name).toString()
                     )
                 }
@@ -144,35 +142,60 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
             TransactionRequestKeys.city.name -> {
                 if (jsonObject.has(TransactionRequestKeys.city.name)) {
                     jsonObject.addProperty(
-                        TransactionRequestKeys.city.name,
+                        it,
                         this.get(TransactionRequestKeys.city.name).toString()
                     )
                 }
             }
             TransactionRequestKeys.RMRK.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.RMRK.name,
+                    it,
                     this.get(TransactionRequestKeys.RMRK.name).toString()
                 )
             }
             TransactionRequestKeys.PHN.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.PHN.name,
+                    it,
                     this.get(TransactionRequestKeys.PHN.name).toString()
                 )
             }
             TransactionRequestKeys.FRSTNM.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.FRSTNM.name,
+                    it,
                     this.get(TransactionRequestKeys.FRSTNM.name).toString()
                 )
             }
             TransactionRequestKeys.LSTNM.name -> {
                 jsonObject.addProperty(
-                    TransactionRequestKeys.LSTNM.name,
+                    it,
                     this.get(TransactionRequestKeys.LSTNM.name).toString()
                 )
             }
+            /*  TransactionRequestKeys.IID.name -> {
+                  jsonObject.addProperty(
+                      it,
+                      geiId()
+                  )
+              }*/
+            TransactionRequestKeys.VOIDROC.name -> {
+                jsonObject.addProperty(
+                    it,
+                    getVoidRoc()
+                )
+            }
+            TransactionRequestKeys.T2D.name -> {
+                jsonObject.addProperty(
+                    it,
+                    getT2D(cardReadOutput)
+                )
+            }
+            /*    TransactionRequestKeys.CSID.name -> {
+                    jsonObject.addProperty(
+                        it,
+                        getCsId(cardReadOutput)
+                    )
+                }*/
+
         }
 
     }
@@ -180,17 +203,35 @@ fun JsonObject.toTransactionRequest(currentWORKFLOW: WORKFLOW): JsonObject {
 
 }
 
-
-fun getMmId(): String {
-    return "1020000000002"
+fun geiId(): String? {
+    return ""
 }
 
-fun getMtId(): String {
-    return "1040000000001"
+fun getVoidRoc(): String? {
+    return ""
+
 }
 
-fun getTbId(): String {
-    return "091820980129"
+fun getCsId(cardReadOutput: CardReadOutput): String? {
+    return ""
+}
+
+
+fun getT2D(cardReadOutput: CardReadOutput): String? {
+    return cardReadOutput.track2Data
+}
+
+
+fun getMmId(context: Activity): String {
+    return SharedPreferenceUtils.getInstance(context).getMmId()
+}
+
+fun getMtId(context: Activity): String {
+    return SharedPreferenceUtils.getInstance(context).getMtId()
+}
+
+fun getTbId(context: Activity): String {
+    return SharedPreferenceUtils.getInstance(context).getTbId()
 }
 
 fun getCkey(): String {
@@ -209,9 +250,8 @@ fun getPType(): String {
     return "2500116"
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getRefNo(): String {
-    return "2021120917054000001"
+fun getRefNo(context: Activity): String {
+    return Util.getReferenceNo(context)
 }
 
 fun getACode(): String {
@@ -226,27 +266,27 @@ fun getACNo(jsonObject: JsonObject): String {
 }
 
 fun getTxnDate(cardReadOutput: CardReadOutput): String {
-    return cardReadOutput.txnDate
+    return DateTimeUtils.getCurrentDateTimeYYMMDDHHMMSS()
 }
 
-fun getInv(): String {
-    return (0..1000).random().toString()
+fun getInv(context: Activity): String {
+    return SharedPreferenceUtils.getInstance(context).getInvoiceNo()
 }
 
-fun getScId(): String {
-    return (0..1000).random().toString()
+fun getScId(currentWORKFLOW: WORKFLOW): String {
+    return currentWORKFLOW.iD.toString()
 }
 
 fun getTxnType(currentWORKFLOW: WORKFLOW): String {
     return currentWORKFLOW.nAME
 }
 
-fun getStan(): String {
-    return (0..10).random().toString()
+fun getStan(context: Activity): String {
+    return SharedPreferenceUtils.getInstance(context).getStan()
 }
 
 fun getPosent(cardReadOutput: CardReadOutput): String {
-    return cardReadOutput.insertMode
+    return "05"//cardReadOutput.insertMode
 }
 
 fun getPanSeq(cardReadOutput: CardReadOutput): String {
@@ -269,7 +309,7 @@ fun getPinB(cardReadOutput: CardReadOutput): String? {
 }
 
 fun getExpDate(cardReadOutput: CardReadOutput): String {
-    return cardReadOutput.cardExpiry
+    return cardReadOutput.cardExpiry.replace("/", "")
 }
 
 fun getCardNo(cardReadOutput: CardReadOutput): String {
