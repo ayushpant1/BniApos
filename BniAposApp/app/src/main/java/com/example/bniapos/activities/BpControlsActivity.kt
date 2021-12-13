@@ -203,7 +203,7 @@ class BpControlsActivity : AppCompatActivity() {
             )
 
         }
-        Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG).show()
+        //Toast.makeText(this@BpControlsActivity, output.toString(), Toast.LENGTH_LONG).show()
     }
 
 
