@@ -4,10 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        layout="@layout/custom_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_15dp"
+        android:layout_marginTop="@dimen/dimen_20dp" />
+
     <ScrollView xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_next"
+        android:layout_below="@+id/custom_header"
+        android:layout_marginTop="@dimen/dimen_40dp"
         android:fillViewport="true"
         android:orientation="vertical"
         tools:context=".activities.CpControlsActivity">
@@ -26,9 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dimen_15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="@dimen/dimen_15dp"
         android:background="@drawable/bg_btn"
         android:text="aghsdhgasvdh"
         android:textColor="@color/white" />

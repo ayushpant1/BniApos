@@ -32,7 +32,7 @@ import java.lang.reflect.Type
 import java.nio.charset.Charset
 
 
-class BpControlsActivity : AppCompatActivity() {
+class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     // private val TAG = MainActivity().localClassName
 
@@ -56,6 +56,10 @@ class BpControlsActivity : AppCompatActivity() {
 
     private var currentWorkflow: WORKFLOW? = null
     private var workflowId: Int? = null
+
+    private var tvTitle: TextView? = null
+    private var imgBack: ImageView? = null
+
 
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonRequest: JsonObject) {
@@ -88,14 +92,11 @@ class BpControlsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         llParentBody = findViewById(R.id.ll_parent_body)
         btnNext = findViewById(R.id.btn_next)
+        tvTitle = findViewById(R.id.tv_title)
+        imgBack = findViewById(R.id.img_back)
 
         menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
-        Toast.makeText(
-            this,
-            menu?.displayText,
-            Toast.LENGTH_LONG
-        ).show()
-
+        tvTitle?.text = menu?.displayText
         val json = Configuration.getWorkflowConfig(this)
         val jsonTable = loadTableJSONFromAsset()
         val gson = Gson()
@@ -106,7 +107,11 @@ class BpControlsActivity : AppCompatActivity() {
         controlList = currentWorkflow?.cTRLS
         val objectListTable = gson.fromJson(jsonTable, Array<ControlTable>::class.java).asList()
         storeToDatabase(objectListTable)
-        loadScreen(controlList!!, mainScreenId)
+        if (controlList.isNullOrEmpty()) {
+            Toast.makeText(this, "Workflow not attached", Toast.LENGTH_LONG).show()
+            finish()
+        } else
+            loadScreen(controlList!!, mainScreenId)
         btnNext?.setOnClickListener {
             if (validateRequiredValues()) {
                 if (!continueBpWorkflow && output!!.containsKey(controlKeyTransactionType)) {
@@ -129,6 +134,7 @@ class BpControlsActivity : AppCompatActivity() {
                 }
             }
         }
+        imgBack?.setOnClickListener(this)
 
 
     }
@@ -214,6 +220,7 @@ class BpControlsActivity : AppCompatActivity() {
     private fun setValues() {
         filteredObjectList?.forEach { controls ->
             when (controls.cTYPE.uppercase()) {
+                BpControlType.TN.name,
                 BpControlType.TEXT.name -> {
                     val editText = controls.controlObject as EditText
                     output?.put(controls.kEY, editText.text.toString())
@@ -458,6 +465,14 @@ class BpControlsActivity : AppCompatActivity() {
         val jsonArray = jsonObject.getJSONArray("controlTableData")
 
         return jsonArray.toString()
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.img_back -> {
+                onBackPressed()
+            }
+        }
     }
 
 

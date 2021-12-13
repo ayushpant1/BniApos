@@ -11,6 +11,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bniapos.R
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.convertToDataString
+import com.example.bniapos.database.DatabaseClient
+import com.example.bniapos.database.entities.ControlTable
+import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.enums.CpControlType
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
@@ -27,10 +31,14 @@ import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.IOException
+import java.io.InputStream
 import java.lang.reflect.Type
+import java.nio.charset.Charset
 
 
-class CpControlsActivity : AppCompatActivity() {
+class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         const val CONTROL_DATA = "CONTROL_DATA"
@@ -49,6 +57,8 @@ class CpControlsActivity : AppCompatActivity() {
     private var currentWorkflow: WORKFLOW? = null
     private var workflowList: List<WORKFLOW>? = ArrayList()
     private var controlList: List<CTRLS>? = null
+    private var tvTitle: TextView? = null
+    private var imgBack: ImageView? = null
 
 
     private var workflowId: Int? = null
@@ -88,6 +98,11 @@ class CpControlsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         llParentBody = findViewById(R.id.ll_parent_body)
+        tvTitle = findViewById(R.id.tv_title)
+        imgBack = findViewById(R.id.img_back)
+
+
+
         btnNext = findViewById(R.id.btn_next)
         isBpWorkflow = intent.getBooleanExtra(BP_WORKFLOW, false)
         if (isBpWorkflow) {
@@ -102,13 +117,16 @@ class CpControlsActivity : AppCompatActivity() {
             workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
         }
         menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
-
+        tvTitle?.text = menu?.displayText
         val json = Configuration.getWorkflowConfig(this)
+        val jsonTable = loadTableJSONFromAsset()
         val gson = Gson()
         var workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
         workflowList = workflowList.filter { it.tYPE == "CP" }
         currentWorkflow = workflowList.firstOrNull { workflow -> workflow.iD == workflowId }
         controlList = currentWorkflow?.cTRLS
+        val objectListTable = gson.fromJson(jsonTable, Array<ControlTable>::class.java).asList()
+        storeToDatabase(objectListTable)
         if (controlList.isNullOrEmpty()) {
             Toast.makeText(this, "Workflow not attached", Toast.LENGTH_LONG).show()
             finish()
@@ -126,6 +144,8 @@ class CpControlsActivity : AppCompatActivity() {
                 }
             }
         }
+
+        imgBack?.setOnClickListener(this)
 
 
     }
@@ -202,6 +222,7 @@ class CpControlsActivity : AppCompatActivity() {
      */
 
     private fun loadScreen(controlList: List<CTRLS>, screenId: Int) {
+        val screenDataSet: MutableMap<String, List<ControlTable>> = HashMap()
         var btnText = submit
         filteredObjectList =
             controlList.filter { controlList -> controlList.sCN == screenId }.sortedWith(
@@ -217,6 +238,101 @@ class CpControlsActivity : AppCompatActivity() {
             }
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             when (controls.kEY.uppercase()) {
+                BpControlType.TN.name,
+                BpControlType.TEXT.name -> {
+                    val view: View = inflater.inflate(R.layout.dynamic_edit_text, null)
+                    val tilDynamic: TextInputLayout = view.findViewById(R.id.til_dynamic)
+                    val edittext: EditText = view.findViewById(R.id.dynamic_edit_text)
+                    controls.lABEL.let {
+                        tilDynamic.hint = controls.lABEL
+                    }
+                    controls.dVAL.let {
+                        edittext.setText(controls.dVAL)
+                    }
+                    controls.controlObject = edittext as Object
+                    llParentBody?.addView(view)
+                }
+
+
+                BpControlType.RADIO.name -> {
+                    val view: View = inflater.inflate(R.layout.dynamic_radio_buttons, null)
+                    val radioGroup: RadioGroup = view.findViewById(R.id.rg_dynamic)
+                    val rgText: TextView = view.findViewById(R.id.rg_text_dynamic)
+                    rgText.text = controls.lABEL
+                    val data = getData(controls.dataSet)
+                    val rb = arrayOfNulls<RadioButton>(data.size)
+                    for (i in data.indices) {
+                        rb[i] = RadioButton(this)
+                        rb[i]!!.text = data[i].name
+                        rb[i]!!.id = i
+                        radioGroup.addView(rb[i])
+                    }
+                    radioGroup.check(0)
+                    output?.put(controls.kEY, data[0].value!!)
+                    radioGroup.setOnCheckedChangeListener { p0, p1 ->
+                        output?.put(controls.kEY, data[p1].value!!)
+                    }
+                    controls.controlObject = radioGroup as Object
+                    llParentBody?.addView(view)
+                }
+                BpControlType.DROPDOWN.name -> {
+                    var data: List<ControlTable>? = ArrayList()
+                    var spnData: List<String>? = ArrayList()
+                    val view: View = inflater.inflate(R.layout.dynamic_spinner, null)
+                    val spn: Spinner = view.findViewById(R.id.spn_dynamic)
+                    view.tag = "dd_" + controls.kEY
+                    val spnTextDynamic: TextView = view.findViewById(R.id.spn_text_dynamic)
+                    spnTextDynamic.text = controls.lABEL
+                    controls.controlObject = spn as Object
+                    if (controls.relatedControlKey.isNullOrBlank()) {
+                        data = getData(controls.dataSet)
+                    } else {
+                        spn.isEnabled = false
+                    }
+                    screenDataSet.put(controls.kEY, data!!)
+                    spnData = data.convertToDataString()
+                    spn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            p2: Int,
+                            p3: Long
+                        ) {
+                            p0?.getItemAtPosition(p2)
+                            if (p2 != 0) {
+                                data = screenDataSet.get(controls.kEY)
+                                filteredObjectList!!.forEach {
+                                    if (it.relatedControlKey == controls.kEY) {
+                                        val referenceData = getData(
+                                            it.dataSet,
+                                            data?.get(p2 - 1)!!.value!!
+                                        )
+                                        screenDataSet.put(it.kEY, referenceData)
+                                        val relatedSpnData = referenceData.convertToDataString()
+                                        val relatedView: View =
+                                            llParentBody!!.findViewWithTag("dd_" + it.kEY)
+                                        val relatedSpn: Spinner =
+                                            relatedView.findViewById(R.id.spn_dynamic)
+                                        relatedSpn.isEnabled = true
+                                        setAdapter(relatedSpnData, relatedSpn)
+                                    }
+                                }
+
+                                output?.put(controls.kEY, data?.get(p2 - 1)!!.value!!)
+                            }
+                        }
+
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }
+                    setAdapter(spnData, spn)
+
+                    llParentBody?.addView(view)
+                }
+
+
                 CpControlType.AMT.name -> {
                     val view: View = inflater.inflate(R.layout.dynamic_edit_text, null)
                     val tilDynamic: TextInputLayout = view.findViewById(R.id.til_dynamic)
@@ -322,6 +438,47 @@ class CpControlsActivity : AppCompatActivity() {
     }
 
     /**
+     * method responsible to set spinner adapter
+     * @param spnData Spinner Data.
+     * @param spn Spinner Object.
+     */
+
+    private fun setAdapter(spnData: List<String>?, spn: Spinner) {
+        val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(
+            this,
+            android.R.layout.simple_spinner_item,
+            spnData!!
+        )
+
+
+        ad.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        spn.adapter = ad
+    }
+
+
+    /**
+     * method responsible to get data of controls from the database
+     * @param dataSet The dataset which is required.
+     * @param value The reference value which is used to fetch the dataset with reference to the reference value.
+     */
+
+    private fun getData(dataSet: String, value: String? = null): List<ControlTable> {
+        var data: List<ControlTable>? = ArrayList()
+        data = if (value == null) {
+            DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+                ?.getDataSet(dataSet)
+        } else {
+            DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+                ?.getDataSetWithReferenceData(dataSet, value)
+        }
+
+        return data!!
+    }
+
+
+    /**
      * method responsible to call load next screen controls
      * @param controlList List of Controls.
      */
@@ -342,6 +499,51 @@ class CpControlsActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         emvProcessor?.closeEmvProcess()
+    }
+
+    /**
+     * Load control list data from assets which will be responsible for data given to controls
+     */
+    private fun loadTableJSONFromAsset(): String? {
+        val charset: Charset = Charsets.UTF_8
+        var json: String? = null
+        json = try {
+            val `is`: InputStream = assets.open("control_table_data.json")
+            val size: Int = `is`.available()
+            val buffer = ByteArray(size)
+            `is`.read(buffer)
+            `is`.close()
+            String(buffer, charset)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            return null
+        }
+        val jsonObject = JSONObject(json!!)
+        val jsonArray = jsonObject.getJSONArray("controlTableData")
+
+        return jsonArray.toString()
+    }
+
+    /**
+     * method responsible to store dataset of the controls
+     * @param controlListTable List of Dataset of controls.
+     */
+
+    private fun storeToDatabase(controlListTable: List<ControlTable>) {
+        DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+            ?.delete()
+        controlListTable.forEach { controlTable ->
+            DatabaseClient.getInstance(applicationContext)?.appDatabase?.controlDao()
+                ?.insert(controlTable)
+        }
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.img_back -> {
+                onBackPressed()
+            }
+        }
     }
 
 

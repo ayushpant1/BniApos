@@ -18,6 +18,15 @@
     <string name="toko_putra_nagra">Toko Putra Nagra</string>
 
     <string name="please_wait">Please Wait...</string>
+    <string name="logon">Logon</string>
+    <string name="enter_client_id">Please Enter Client Id</string>
+    <string name="enter_client_secret">Please Enter Client Secret</string>
+    <string name="enter_username">Please Enter Username</string>
+    <string name="enter_password">Please Enter Password</string>
+    <string name="client_id">Client Id</string>
+    <string name="client_secret">Client Secret</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 
 
 </resources>

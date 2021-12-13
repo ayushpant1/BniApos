@@ -20,6 +20,14 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/img_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_settings" />
+
+            <ImageView
                 android:id="@+id/img_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

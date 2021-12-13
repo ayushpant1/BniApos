@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bniapos.R
 import com.example.bniapos.activities.SubMenuActivity
+import com.example.bniapos.activities.ui.SettingsActivity
 import com.example.bniapos.adapters.MenuListAdapter
 import com.example.bniapos.callback.MenuListAdapterListener
 import com.example.bniapos.databinding.FragmentHomeBinding
@@ -24,11 +27,12 @@ import java.nio.charset.Charset
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), View.OnClickListener {
     private var menuList: List<MenuLink>? = ArrayList()
     private var gridview: RecyclerView? = null
     private var menuFilterList: List<MenuLink>? = ArrayList()
     private var subMenuListImpl: List<MenuLink> = ArrayList()
+    private var imgSettings: ImageView? = null
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
@@ -48,7 +52,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        imgSettings = binding.imgSettings
         gridview = binding.gridMenu
 
         val json = Configuration.getMenuConfig(root.context)
@@ -60,6 +64,9 @@ class HomeFragment : Fragment() {
 
         gridview?.layoutManager = GridLayoutManager(root.context, 3)
         setAdapter(menuFilterList!!, -1)
+
+        imgSettings?.setOnClickListener(this)
+
         return root
     }
 
@@ -116,5 +123,19 @@ class HomeFragment : Fragment() {
         }
 
 
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.img_settings -> {
+                performSettingFunction()
+            }
+        }
+
+    }
+
+    private fun performSettingFunction() {
+        val intent = Intent(activity, SettingsActivity::class.java)
+        startActivity(intent)
     }
 }

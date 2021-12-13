@@ -4,5 +4,5 @@ import android.app.AlertDialog
 
 interface ButtonInterface {
 
-    fun onClicked(alertDialogBuilder: AlertDialog)
+    fun onClicked(alertDialogBuilder: AlertDialog? = null)
 }

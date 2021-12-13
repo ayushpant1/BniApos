@@ -11,6 +11,7 @@ import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.enums.TransactionResponseKeys
 import com.example.bniapos.models.WORKFLOW
+import com.example.bniapos.models.responsemodels.LogonResponse
 import com.example.bniapos.utils.Util
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -52,7 +53,7 @@ class HostRepository : HostRepositoryInterface {
                     DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
                         ?.getAll()
                     val buttonInterface: ButtonInterface = object : ButtonInterface {
-                        override fun onClicked(alertDialogBuilder: AlertDialog) {
+                        override fun onClicked(alertDialogBuilder: AlertDialog?) {
                             if (isBpWorkflow) {
                                 val returnIntent = Intent()
                                 returnIntent.putExtra("response", Gson().toJson(jsonObject))
@@ -61,7 +62,11 @@ class HostRepository : HostRepositoryInterface {
                             apiResult.onSuccess(jsonObject)
                         }
                     }
-                    Alerts.successAlert(context, "Transaction saved to database", buttonInterface)
+                    Alerts.customWebViewAlert(
+                        context,
+                        "Transaction saved to database",
+                        buttonInterface
+                    )
 
                 }
 
@@ -70,6 +75,33 @@ class HostRepository : HostRepositoryInterface {
                     apiResult.onFailure(t?.message!!)
 
 
+                }
+
+            })
+    }
+
+    override suspend fun performLogon(
+        context: Activity,
+        url: String,
+        authorization: String,
+        grantType: String,
+        apiResult: ApiResult
+    ) {
+
+        ProgressDialog.showDialog(context)
+        apiInterface.performLogon(url, grantType, authorization)
+            .enqueue(object : Callback<JsonObject> {
+                override fun onResponse(
+                    call: Call<JsonObject>?,
+                    response: Response<JsonObject>?
+                ) {
+                    ProgressDialog.dismissDialog()
+                    apiResult.onSuccess(response!!.body())
+                }
+
+                override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
+                    Log.d("failure", t?.message!!)
+                    apiResult.onFailure(t.message!!)
                 }
 
             })

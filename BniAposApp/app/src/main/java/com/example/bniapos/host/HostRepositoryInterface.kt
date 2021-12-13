@@ -29,4 +29,18 @@ interface HostRepositoryInterface {
         bpWorkflowOutputData: String? = null
     )
 
+
+    /**
+     * method responsible to perform Logon
+     * @param context
+     */
+
+    suspend fun performLogon(
+        context: Activity,
+        url: String,
+        authorization: String,
+        grantType: String,
+        apiResult: ApiResult
+    )
+
 }
