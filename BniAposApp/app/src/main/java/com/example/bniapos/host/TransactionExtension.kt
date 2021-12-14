@@ -27,7 +27,7 @@ fun JsonObject.toTransactionRequest(
         jsonObject.addProperty(it, value)
     }
 
-    val splitRequestEnc = currentWORKFLOW.rEQ.split(",")
+    val splitRequestEnc = currentWORKFLOW.encryptedRequest.split(",")
     splitRequestEnc.forEach {
         val value = getMasterValue(
             context, cardReadOutput,
@@ -35,10 +35,10 @@ fun JsonObject.toTransactionRequest(
         )
         jsonObject.addProperty(it, encrypt(value))
     }
-    if (currentWORKFLOW.rEQ != null && currentWORKFLOW.rEQ.length > 0) {
+    if (currentWORKFLOW.dataRequest != null && currentWORKFLOW.dataRequest.isNotEmpty()) {
 
         val jsonObjectData = JsonObject()
-        val splitRequestData = currentWORKFLOW.rEQ.split(",")
+        val splitRequestData = currentWORKFLOW.dataRequest.split(",")
 
         splitRequestData.forEach {
             val value = getMasterValue(
@@ -55,13 +55,15 @@ fun JsonObject.toTransactionRequest(
 
 }
 
-fun getMasterValue(context:Activity,
-                   cardReadOutput: CardReadOutput,
-                   jsonObject:JsonObject,
-                   transactionType:Int,
-                   currentWORKFLOW: WORKFLOW,
-                   key:String):String? {
-    return when(key) {
+fun getMasterValue(
+    context: Activity,
+    cardReadOutput: CardReadOutput,
+    jsonObject: JsonObject,
+    transactionType: Int,
+    currentWORKFLOW: WORKFLOW,
+    key: String
+): String? {
+    return when (key) {
         TransactionRequestKeys.MTID.name -> {
             getMtId(context)
         }
@@ -145,12 +147,10 @@ fun getMasterValue(context:Activity,
 
         }
         TransactionRequestKeys.DESC.name -> {
-
-            jsonObject?.get(TransactionRequestKeys.DESC.name).toString()
+            jsonObject.get(TransactionRequestKeys.DESC.name).toString()
 
         }
         TransactionRequestKeys.CNTRY.name -> {
-
             jsonObject.get(TransactionRequestKeys.CNTRY.name).toString()
 
         }
@@ -160,21 +160,27 @@ fun getMasterValue(context:Activity,
             if (jsonObject.has(TransactionRequestKeys.country.name)) {
                 jsonObject.get(TransactionRequestKeys.country.name).toString()
 
-            }else{""}
+            } else {
+                ""
+            }
         }
         TransactionRequestKeys.state.name -> {
             if (jsonObject.has(TransactionRequestKeys.state.name)) {
 
                 jsonObject.get(TransactionRequestKeys.state.name).toString()
 
-            }else{""}
+            } else {
+                ""
+            }
         }
         TransactionRequestKeys.city.name -> {
             if (jsonObject.has(TransactionRequestKeys.city.name)) {
 
                 jsonObject.get(TransactionRequestKeys.city.name).toString()
 
-            }else{""}
+            } else {
+                ""
+            }
         }
         TransactionRequestKeys.RMRK.name -> {
 
@@ -212,7 +218,9 @@ fun getMasterValue(context:Activity,
             getT2D(cardReadOutput)
 
         }
-        else->{""}
+        else -> {
+            ""
+        }
         /*    TransactionRequestKeys.CSID.name -> {
             jsonObject.addProperty(
                 it,
@@ -222,9 +230,11 @@ fun getMasterValue(context:Activity,
 
     }
 }
-fun encrypt(valueToEncrypt:String?):String?{
+
+fun encrypt(valueToEncrypt: String?): String? {
     return valueToEncrypt
 }
+
 fun geiId(): String? {
     return ""
 }
@@ -260,7 +270,7 @@ fun getCkey(): String {
     return "RFVNTVlNSzA2QjZKOjk5REE4OGZMR3hGVGFCYkk="
 }
 
-fun getAuth(context:Activity): String {
+fun getAuth(context: Activity): String {
     return SharedPreferenceUtils.getInstance(context).getAuthCode()
 }
 

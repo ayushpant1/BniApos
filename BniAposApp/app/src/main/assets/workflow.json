@@ -77,8 +77,8 @@
         }
       ],
       "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
-      "ENCREQ": "",
-      "DATAREQ": "",
+      "ENCREQ": "SCID",
+      "DATAREQ": "SCID",
       "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT",
       "DATARESP": "",
       "NEXTWORKFLOWID": 132
@@ -135,8 +135,8 @@
         }
       ],
       "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO,ACNO",
-      "ENCREQ": "",
-      "DATAREQ": "",
+      "ENCREQ": "SCID",
+      "DATAREQ": "SCID",
       "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
       "DATARESP": "",
       "NEXTWORKFLOWID": 0
@@ -171,5 +171,4 @@
       "NEXTWORKFLOWID": 0
     }
   ]
-
 }

@@ -16,6 +16,9 @@ data class WORKFLOW(
     @SerializedName("CTRLS") val cTRLS: List<CTRLS>,
     @SerializedName("REQ") val rEQ: String,
     @SerializedName("RESP") val rESP: String,
+    @SerializedName("ENCREQ") val encryptedRequest: String,
+    @SerializedName("DATAREQ") val dataRequest: String,
+    @SerializedName("DATARESP") val dataResponse: String,
     @SerializedName("NEXTWORKFLOWID") val nEXTWORKFLOWID: Int
 )
 

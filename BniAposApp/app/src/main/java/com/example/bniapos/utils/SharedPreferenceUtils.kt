@@ -20,6 +20,7 @@ class SharedPreferenceUtils {
         private var INSTANCE: SharedPreferenceUtils? = null
         private var sharedPref: SharedPreferences? = null
 
+
         fun getInstance(context: Context): SharedPreferenceUtils {
             val tempInstance =
                 INSTANCE
@@ -36,7 +37,7 @@ class SharedPreferenceUtils {
 
     fun setStan(stan: Int) {
         val editor = sharedPref?.edit()
-        editor?.putInt(PREF_STAN_KEY, stan)
+        editor?.putInt(PREF_STAN_KEY, stan)?.apply()
     }
 
     /**
@@ -47,16 +48,14 @@ class SharedPreferenceUtils {
     fun getStan(): Int {
         val stan = sharedPref?.getInt(
             PREF_STAN_KEY, AppConstants.DEFAULT_STAN
-        )?:1
+        ) ?: 1
         return stan
     }
 
 
-
-
     fun setInvoiceNo(invoiceNo: String?) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_INVOICE_KEY, invoiceNo)
+        editor?.putString(PREF_INVOICE_KEY, invoiceNo)?.apply()
     }
 
     /**
@@ -73,7 +72,7 @@ class SharedPreferenceUtils {
 
     fun setTbId(tbId: String?) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_TBID_KEY, tbId)
+        editor?.putString(PREF_TBID_KEY, tbId)?.apply()
     }
 
     /**
@@ -90,7 +89,7 @@ class SharedPreferenceUtils {
 
     fun setMmId(mmId: String?) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_MMID_KEY, mmId)
+        editor?.putString(PREF_MMID_KEY, mmId)?.apply()
     }
 
     /**
@@ -107,7 +106,7 @@ class SharedPreferenceUtils {
 
     fun setMtId(mtId: String?) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_MTID_KEY, mtId)
+        editor?.putString(PREF_MTID_KEY, mtId)?.apply()
     }
 
     /**
@@ -124,7 +123,7 @@ class SharedPreferenceUtils {
 
     fun setAgenCounterCode(agenCounterCode: Int) {
         val editor = sharedPref?.edit()
-        editor?.putInt(PREF_AGEN_COUNTER_CODE_KEY, agenCounterCode)
+        editor?.putInt(PREF_AGEN_COUNTER_CODE_KEY, agenCounterCode)?.apply()
     }
 
     /**
@@ -135,14 +134,14 @@ class SharedPreferenceUtils {
     fun getAgenCounterCode(): Int {
         val agentCounterCode = sharedPref?.getInt(
             PREF_AGEN_COUNTER_CODE_KEY, AppConstants.DEFAULT_AGEN_COUNTER_CODE
-        )?:1
+        ) ?: 1
         return agentCounterCode
 
     }
 
     fun setAuthCode(authCode: String?) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_AUTH_KEY, authCode)
+        editor?.putString(PREF_AUTH_KEY, authCode)?.apply()
     }
 
     /**

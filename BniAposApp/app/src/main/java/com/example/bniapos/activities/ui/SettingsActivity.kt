@@ -45,6 +45,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                     .getInstance(this@SettingsActivity)
                     .setAuthCode(logonResponse.accessToken)
 
+
                 val buttonInterface: ButtonInterface = object : ButtonInterface {
 
                     override fun onClicked(alertDialogBuilder: AlertDialog?) {
