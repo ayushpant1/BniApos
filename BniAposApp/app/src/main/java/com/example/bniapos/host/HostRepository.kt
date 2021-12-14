@@ -39,20 +39,18 @@ class HostRepository : HostRepositoryInterface {
 
         val jsonRequest = jsonObject.toTransactionRequest(currentWORKFLOW, transactionType, context)
         Util.deepMerge(jsonRequest, jsonObject)!!
+        Log.d("HTTP Request - ",jsonObject.toString())
         ProgressDialog.showDialog(context)
         apiInterface.postToHost(url, jsonRequest)
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
                     Log.d("success", "")
-                    jsonObject.addProperty(TransactionResponseKeys.TBID.name, "72378342")
-                    jsonObject.addProperty(TransactionResponseKeys.INV.name, "0239023")
-                    jsonObject.addProperty(TransactionResponseKeys.TXNTYPE.name, "")
-                    jsonObject.addProperty(TransactionResponseKeys.AMT.name, "112")
-                    jsonObject.saveToDatabase(context, currentWORKFLOW)
+
                     ProgressDialog.dismissDialog()
                     DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
                         ?.getAll()
-                    val buttonInterface: ButtonInterface = object : ButtonInterface {
+                    val buttonInterface: ButtonInterface = object : ButtonInterface {                       
+                     
                         override fun onClicked(alertDialogBuilder: AlertDialog?) {
                             if (isBpWorkflow) {
                                 val returnIntent = Intent()
@@ -62,9 +60,12 @@ class HostRepository : HostRepositoryInterface {
                             apiResult.onSuccess(jsonObject)
                         }
                     }
+
+                    Log.d("HTTP Response - ",response?.body().toString())
                     Alerts.customWebViewAlert(
                         context,
-                        "Transaction saved to database",
+                        "Transaction Response Recieved \n\n"+
+                        response?.body(),
                         buttonInterface
                     )
 

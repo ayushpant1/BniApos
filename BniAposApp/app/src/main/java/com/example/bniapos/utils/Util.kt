@@ -41,6 +41,8 @@ object Util {
         val transactionDate = DateTimeUtils.getCurrentDateTimeYYYYMMDDHHMMssSSSSS()
         val randomNo = (0..9).random().toString()
         val agenCounterCode = SharedPreferenceUtils.getInstance(context).getAgenCounterCode()
-        return "$transactionDate$randomNo$agenCounterCode"
+        SharedPreferenceUtils.getInstance(context).setAgenCounterCode(agenCounterCode + 1)
+        var agentCounterString = String.format("%05d", agenCounterCode)
+        return "$transactionDate$randomNo$agentCounterString"
     }
 }

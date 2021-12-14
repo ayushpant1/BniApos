@@ -39,7 +39,7 @@ object Alerts {
     }
 
 
-    fun customWebViewAlert(activity: Context, message: String?, btnInterface: ButtonInterface) {
+    fun customWebViewAlert(activity: Context, message: String, btnInterface: ButtonInterface) {
         //for testing
         val dummyData = "<Html>    \n" +
                 "<Head>  \n" +
@@ -84,7 +84,7 @@ object Alerts {
         val wvPrint = dialog.findViewById<View>(R.id.wv_print) as WebView
 
         //for testing data is dummyData,please replace with message
-        wvPrint.loadData(dummyData, "text/html", "UTF-8");
+        wvPrint.loadData(message, "text/html", "UTF-8");
         imgClose.setOnClickListener {
             dialog.dismiss()
             btnInterface.onClicked()

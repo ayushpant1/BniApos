@@ -184,9 +184,9 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         MainScope().launch {
             hostRepository.postData(
                 this@CpControlsActivity,
-                Gson().toJsonTree(output)
-                    .asJsonObject,
-                AppConstants.CP_URL + "/" + currentWorkflow?.eNDPOINT, currentWorkflow!!,
+                Gson().toJsonTree(output).asJsonObject,
+                AppConstants.CP_URL + "/" + currentWorkflow?.eNDPOINT,
+                currentWorkflow!!,
                 apiResult,
                 menu!!.txnType,
                 isBpWorkflow,

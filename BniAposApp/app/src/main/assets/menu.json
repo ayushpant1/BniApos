@@ -776,7 +776,7 @@
       {
         "Id": 54,
         "ParentId": 52,
-        "WorkflowId": 0,
+        "WorkflowId": 117,
         "DisplayText": "Cash Deposit",
         "SortOrder": 54,
         "Type": "BP",
@@ -790,7 +790,7 @@
       {
         "Id": 55,
         "ParentId": 52,
-        "WorkflowId": 0,
+        "WorkflowId": 118,
         "DisplayText": "Cash Withdrawal",
         "SortOrder": 55,
         "Type": "BP",

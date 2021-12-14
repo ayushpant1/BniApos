@@ -48,13 +48,16 @@
         }
       ],
       "REQ": "IID,MMID,MTID,TBID,REFNO,TXNDT,AMT,INV,SCID,CARDNO,TXNTYPE,T2D,POSENT,PINB,PANSEQ,STAN,EXPIRY,CSID,EMVD",
+      "ENCREQ": "",
+      "DATAREQ": "",
       "RESP": "MMID,MTID,AMT,TAMT,TXNDT,PTYP,PAYID,TXNID,IAC,BCT,RSPC,RSPM,SCID,BTID,BMID",
+      "DATARESP": "",
       "NEXTWORKFLOWID": 0
     },
     {
       "ID": 116,
       "NAME": "BILL PAYMENT",
-      "ENDPOINT": "Payment/ProcessEnquiry",
+      "ENDPOINT": "ProcessEnquiry",
       "TYPE": "BP",
       "REVERSAL": 0,
       "VOID": 0,
@@ -64,8 +67,8 @@
           "KEY": "ACNO",
           "LABEL": "ENTER MOBILE NO",
           "CTYPE": "TEXT",
-          "MINSIZE": "1",
-          "MAXSIZE": "8",
+          "MINSIZE": "8",
+          "MAXSIZE": "11",
           "DVAL": "",
           "SCN": "1",
           "ORD": "1",
@@ -74,7 +77,10 @@
         }
       ],
       "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
+      "ENCREQ": "",
+      "DATAREQ": "",
       "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT",
+      "DATARESP": "",
       "NEXTWORKFLOWID": 132
     },
     {
@@ -100,8 +106,70 @@
         }
       ],
       "REQ": "MTID,MMID,TBID,AMT",
+      "ENCREQ": "",
+      "DATAREQ": "",
       "RESP": "MTID,MMID,TBID,AMT",
+      "DATARESP": "",
+      "NEXTWORKFLOWID": 0
+    },
+    {
+      "ID": 117,
+      "NAME": "CASH DEPOSIT ENQUIRY",
+      "ENDPOINT": "Payment/ProcessEnquiry",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+        {
+          "KEY": "ACNO",
+          "LABEL": "ENTER ACCOUNT NO.",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO,ACNO",
+      "ENCREQ": "",
+      "DATAREQ": "",
+      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "DATARESP": "",
+      "NEXTWORKFLOWID": 0
+    },
+    {
+      "ID": 118,
+      "NAME": "CASH DEPOSIT PAYMENT",
+      "ENDPOINT": "Payment/ProcessEnquiry",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+        {
+          "KEY": "ACNO",
+          "LABEL": "ACCOUNT NO.",
+          "CTYPE": "TN",
+          "MINSIZE": "1",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO,ACNO",
+      "ENCREQ": "",
+      "DATAREQ": "",
+      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "DATARESP": "",
       "NEXTWORKFLOWID": 0
     }
   ]
+
 }

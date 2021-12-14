@@ -1,15 +1,21 @@
 package com.example.bniapos.activities.ui
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import com.example.bniapos.R
+import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.models.responsemodels.LogonResponse
 import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.CommonUtility
+import com.example.bniapos.utils.SharedPreferenceUtils
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -34,8 +40,23 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         override fun onSuccess(jsonRequest: JsonObject) {
             val logonResponse = Gson().fromJson(jsonRequest.toString(), LogonResponse::class.java)
 
-            //save to sharedPreferences
+            if (logonResponse != null) {
+                SharedPreferenceUtils
+                    .getInstance(this@SettingsActivity)
+                    .setAuthCode(logonResponse.accessToken)
 
+                val buttonInterface: ButtonInterface = object : ButtonInterface {
+
+                    override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                        onBackPressed()
+                    }
+                }
+                Alerts.customWebViewAlert(
+                    this@SettingsActivity,
+                    "Authorization Response Received",
+                    buttonInterface
+                )
+            }
         }
 
         override fun onFailure(message: String) {
@@ -79,6 +100,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         etClientId?.setText(AppConstants.DEFAULT_CLIENT_ID)
         etClientSecret?.setText(AppConstants.DEFAULT_CLIENT_SECRET)
         etUsername?.setText(AppConstants.DEFAULT_USERNAME)
+        etPassword?.setText(AppConstants.DEFAULT_PASSWORD)
     }
 
 

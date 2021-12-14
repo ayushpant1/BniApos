@@ -30,7 +30,7 @@ fun JsonObject.toTransactionRequest(
                 jsonObject.addProperty(it, getCkey())
             }
             TransactionRequestKeys.AUTH.name -> {
-                jsonObject.addProperty(it, getAuth())
+                jsonObject.addProperty(it, getAuth(context))
             }
             TransactionRequestKeys.DID.name -> {
                 jsonObject.addProperty(it, getDid())
@@ -235,11 +235,11 @@ fun getTbId(context: Activity): String {
 }
 
 fun getCkey(): String {
-    return "RFVNTVINSzA2QjZKOjk5REE4OGZMR3hGVGFCYkk="
+    return "RFVNTVlNSzA2QjZKOjk5REE4OGZMR3hGVGFCYkk="
 }
 
-fun getAuth(): String {
-    return "THISISAUTHTOKEN"
+fun getAuth(context:Activity): String {
+    return SharedPreferenceUtils.getInstance(context).getAuthCode()
 }
 
 fun getDid(): String {
@@ -282,7 +282,15 @@ fun getTxnType(currentWORKFLOW: WORKFLOW): String {
 }
 
 fun getStan(context: Activity): String {
-    return SharedPreferenceUtils.getInstance(context).getStan()
+    var Stan = SharedPreferenceUtils.getInstance(context).getStan()
+    return String.format("%05d", Stan)
+    SharedPreferenceUtils.getInstance(context).setStan(Stan + 1)
+}
+
+fun getAgentCounterCode(context: Activity): String {
+    var Stan = SharedPreferenceUtils.getInstance(context).getStan()
+    return String.format("%05d", Stan)
+    SharedPreferenceUtils.getInstance(context).setStan(Stan + 1)
 }
 
 fun getPosent(cardReadOutput: CardReadOutput): String {
@@ -295,7 +303,11 @@ fun getPanSeq(cardReadOutput: CardReadOutput): String {
 
 fun getAmt(cardReadOutput: CardReadOutput, jsonObject: JsonObject): String {
     return if (cardReadOutput.txnAmount == null) {
-        jsonObject.get(TransactionRequestKeys.AMT.name).asString
+        if (jsonObject != null && jsonObject.has(TransactionRequestKeys.AMT.name)) {
+            jsonObject.get(TransactionRequestKeys.AMT.name).asString
+        } else {
+            "0000"
+        }
     } else
         cardReadOutput.txnAmount
 }

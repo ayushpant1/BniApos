@@ -12,6 +12,7 @@ class SharedPreferenceUtils {
         private const val PREF_TBID_KEY = "tbId"
         private const val PREF_MMID_KEY = "mmId"
         private const val PREF_MTID_KEY = "mtId"
+        private const val PREF_AUTH_KEY = "auth"
         private const val PREF_AGEN_COUNTER_CODE_KEY = "agenCounterCode"
 
         private const val INVALID_INDEX = -1
@@ -33,9 +34,9 @@ class SharedPreferenceUtils {
         }
     }
 
-    fun setStan(stan: String?) {
+    fun setStan(stan: Int) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_STAN_KEY, stan)
+        editor?.putInt(PREF_STAN_KEY, stan)
     }
 
     /**
@@ -43,12 +44,14 @@ class SharedPreferenceUtils {
      *
      * @return stan.
      */
-    fun getStan(): String {
-        val stan = sharedPref?.getString(
+    fun getStan(): Int {
+        val stan = sharedPref?.getInt(
             PREF_STAN_KEY, AppConstants.DEFAULT_STAN
-        )
-        return stan.toString()
+        )?:1
+        return stan
     }
+
+
 
 
     fun setInvoiceNo(invoiceNo: String?) {
@@ -119,9 +122,9 @@ class SharedPreferenceUtils {
         return mtId.toString()
     }
 
-    fun setAgenCounterCode(agenCounterCode: String?) {
+    fun setAgenCounterCode(agenCounterCode: Int) {
         val editor = sharedPref?.edit()
-        editor?.putString(PREF_AGEN_COUNTER_CODE_KEY, agenCounterCode)
+        editor?.putInt(PREF_AGEN_COUNTER_CODE_KEY, agenCounterCode)
     }
 
     /**
@@ -129,10 +132,28 @@ class SharedPreferenceUtils {
      *
      * @return mtId.
      */
-    fun getAgenCounterCode(): String {
-        val mtId = sharedPref?.getString(
+    fun getAgenCounterCode(): Int {
+        val agentCounterCode = sharedPref?.getInt(
             PREF_AGEN_COUNTER_CODE_KEY, AppConstants.DEFAULT_AGEN_COUNTER_CODE
+        )?:1
+        return agentCounterCode
+
+    }
+
+    fun setAuthCode(authCode: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_AUTH_KEY, authCode)
+    }
+
+    /**
+     * this function use to get mtId
+     *
+     * @return mtId.
+     */
+    fun getAuthCode(): String {
+        val authCode = sharedPref?.getString(
+            PREF_AUTH_KEY, "MYAUTHTOKEN"
         )
-        return mtId.toString()
+        return authCode.toString()
     }
 }

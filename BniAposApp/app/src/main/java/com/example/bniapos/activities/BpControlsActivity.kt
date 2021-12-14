@@ -202,7 +202,7 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 this@BpControlsActivity,
                 Gson().toJsonTree(output)
                     .asJsonObject,
-                AppConstants.BP_URL,
+                AppConstants.BP_URL+"/"+currentWorkflow!!.eNDPOINT,
                 currentWorkflow!!,
                 apiResult,
                 menu!!.txnType
