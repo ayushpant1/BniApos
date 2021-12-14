@@ -8,6 +8,7 @@ import com.example.bniapos.utils.SharedPreferenceUtils
 import com.example.bniapos.utils.Util
 import com.example.paymentsdk.CardReadOutput
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
 fun JsonObject.toTransactionRequest(
@@ -19,190 +20,211 @@ fun JsonObject.toTransactionRequest(
     val cardReadOutput = getCardInfo(this)
     val splitRequest = currentWORKFLOW.rEQ.split(",")
     splitRequest.forEach {
-        when (it) {
-            TransactionRequestKeys.MTID.name -> {
-                jsonObject.addProperty(it, getMtId(context))
-            }
-            TransactionRequestKeys.MMID.name -> {
-                jsonObject.addProperty(it, getMmId(context))
-            }
-            TransactionRequestKeys.CKEY.name -> {
-                jsonObject.addProperty(it, getCkey())
-            }
-            TransactionRequestKeys.AUTH.name -> {
-                jsonObject.addProperty(it, getAuth(context))
-            }
-            TransactionRequestKeys.DID.name -> {
-                jsonObject.addProperty(it, getDid())
-            }
-            TransactionRequestKeys.PTYPE.name -> {
-                jsonObject.addProperty(it, getPType())
-            }
-            TransactionRequestKeys.REFNO.name -> {
-                jsonObject.addProperty(it, getRefNo(context))
-            }
-            TransactionRequestKeys.ACODE.name -> {
-                jsonObject.addProperty(it, getACode())
-            }
-            TransactionRequestKeys.ACNO.name -> {
-                jsonObject.addProperty(it, getACNo(this))
-            }
-            TransactionRequestKeys.TBID.name -> {
-                jsonObject.addProperty(it, getTbId(context))
-            }
-            TransactionRequestKeys.TXNDT.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getTxnDate(cardReadOutput)
-                )
-            }
-            TransactionRequestKeys.INV.name -> {
-                jsonObject.addProperty(it, getInv(context))
-            }
-            TransactionRequestKeys.SCID.name -> {
-                jsonObject.addProperty(it, getScId(currentWORKFLOW))
-            }
-            TransactionRequestKeys.TXNTYPE.name -> {
-                jsonObject.addProperty(
-                    it,
-                    transactionType.toString()
-                )
-            }
-            TransactionRequestKeys.STAN.name -> {
-                jsonObject.addProperty(it, getStan(context))
-            }
-            TransactionRequestKeys.POSENT.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getPosent(cardReadOutput)
-                )
-            }
-            TransactionRequestKeys.PANSEQ.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getPanSeq(cardReadOutput)
-                )
-            }
-            TransactionRequestKeys.AMT.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getAmt(cardReadOutput, this)
-                )
-            }
-            TransactionRequestKeys.EMV.name,
-            TransactionRequestKeys.EMVD.name -> {
-                jsonObject.addProperty(it, getEmv(cardReadOutput))
-            }
-            TransactionRequestKeys.PINB.name -> {
-                jsonObject.addProperty(it, getPinB(cardReadOutput))
-            }
-            TransactionRequestKeys.EXPIRY.name,
-            TransactionRequestKeys.EXPDATE.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getExpDate(cardReadOutput)
-                )
-            }
-            TransactionRequestKeys.CARDNO.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getCardNo(cardReadOutput)
-                )
-            }
-            TransactionRequestKeys.DESC.name -> {
-                jsonObject.addProperty(
-                    it,
-                    this.get(TransactionRequestKeys.DESC.name).toString()
-                )
-            }
-            TransactionRequestKeys.CNTRY.name -> {
-                jsonObject.addProperty(
-                    it,
-                    this.get(TransactionRequestKeys.CNTRY.name).toString()
-                )
-            }
-
-
-            TransactionRequestKeys.country.name -> {
-                if (jsonObject.has(TransactionRequestKeys.country.name)) {
-                    jsonObject.addProperty(
-                        it,
-                        this.get(TransactionRequestKeys.country.name).toString()
-                    )
-                }
-            }
-            TransactionRequestKeys.state.name -> {
-                if (jsonObject.has(TransactionRequestKeys.state.name)) {
-                    jsonObject.addProperty(
-                        it,
-                        this.get(TransactionRequestKeys.state.name).toString()
-                    )
-                }
-            }
-            TransactionRequestKeys.city.name -> {
-                if (jsonObject.has(TransactionRequestKeys.city.name)) {
-                    jsonObject.addProperty(
-                        it,
-                        this.get(TransactionRequestKeys.city.name).toString()
-                    )
-                }
-            }
-            TransactionRequestKeys.RMRK.name -> {
-                jsonObject.addProperty(
-                    it,
-                    this.get(TransactionRequestKeys.RMRK.name).toString()
-                )
-            }
-            TransactionRequestKeys.PHN.name -> {
-                jsonObject.addProperty(
-                    it,
-                    this.get(TransactionRequestKeys.PHN.name).toString()
-                )
-            }
-            TransactionRequestKeys.FRSTNM.name -> {
-                jsonObject.addProperty(
-                    it,
-                    this.get(TransactionRequestKeys.FRSTNM.name).toString()
-                )
-            }
-            TransactionRequestKeys.LSTNM.name -> {
-                jsonObject.addProperty(
-                    it,
-                    this.get(TransactionRequestKeys.LSTNM.name).toString()
-                )
-            }
-            /*  TransactionRequestKeys.IID.name -> {
-                  jsonObject.addProperty(
-                      it,
-                      geiId()
-                  )
-              }*/
-            TransactionRequestKeys.VOIDROC.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getVoidRoc()
-                )
-            }
-            TransactionRequestKeys.T2D.name -> {
-                jsonObject.addProperty(
-                    it,
-                    getT2D(cardReadOutput)
-                )
-            }
-            /*    TransactionRequestKeys.CSID.name -> {
-                    jsonObject.addProperty(
-                        it,
-                        getCsId(cardReadOutput)
-                    )
-                }*/
-
-        }
-
+        val value = getMasterValue(
+            context, cardReadOutput,
+            this, transactionType, currentWORKFLOW, it
+        )
+        jsonObject.addProperty(it, value)
     }
+
+    val splitRequestEnc = currentWORKFLOW.rEQ.split(",")
+    splitRequestEnc.forEach {
+        val value = getMasterValue(
+            context, cardReadOutput,
+            this, transactionType, currentWORKFLOW, it
+        )
+        jsonObject.addProperty(it, encrypt(value))
+    }
+    if (currentWORKFLOW.rEQ != null && currentWORKFLOW.rEQ.length > 0) {
+
+        val jsonObjectData = JsonObject()
+        val splitRequestData = currentWORKFLOW.rEQ.split(",")
+
+        splitRequestData.forEach {
+            val value = getMasterValue(
+                context, cardReadOutput,
+                this, transactionType, currentWORKFLOW, it
+            )
+            jsonObjectData.addProperty(it, value)
+        }
+        jsonObject.add("data", jsonObjectData)
+    }
+
+
     return jsonObject
 
 }
 
+fun getMasterValue(context:Activity,
+                   cardReadOutput: CardReadOutput,
+                   jsonObject:JsonObject,
+                   transactionType:Int,
+                   currentWORKFLOW: WORKFLOW,
+                   key:String):String? {
+    return when(key) {
+        TransactionRequestKeys.MTID.name -> {
+            getMtId(context)
+        }
+        TransactionRequestKeys.MMID.name -> {
+            getMmId(context)
+        }
+        TransactionRequestKeys.CKEY.name -> {
+            getCkey()
+        }
+        TransactionRequestKeys.AUTH.name -> {
+            getAuth(context)
+        }
+        TransactionRequestKeys.DID.name -> {
+            getDid()
+        }
+        TransactionRequestKeys.PTYPE.name -> {
+            getPType()
+        }
+        TransactionRequestKeys.REFNO.name -> {
+            getRefNo(context)
+        }
+        TransactionRequestKeys.ACODE.name -> {
+            getACode()
+        }
+        TransactionRequestKeys.ACNO.name -> {
+            getACNo(jsonObject)
+        }
+        TransactionRequestKeys.TBID.name -> {
+            getTbId(context)
+        }
+        TransactionRequestKeys.TXNDT.name -> {
+
+            getTxnDate(cardReadOutput)
+
+        }
+        TransactionRequestKeys.INV.name -> {
+            getInv(context)
+        }
+        TransactionRequestKeys.SCID.name -> {
+            getScId(currentWORKFLOW)
+        }
+        TransactionRequestKeys.TXNTYPE.name -> {
+
+            transactionType.toString()
+
+        }
+        TransactionRequestKeys.STAN.name -> {
+            getStan(context)
+        }
+        TransactionRequestKeys.POSENT.name -> {
+
+            getPosent(cardReadOutput)
+
+        }
+        TransactionRequestKeys.PANSEQ.name -> {
+
+            getPanSeq(cardReadOutput)
+
+        }
+        TransactionRequestKeys.AMT.name -> {
+
+            getAmt(cardReadOutput, jsonObject)
+
+        }
+        TransactionRequestKeys.EMV.name,
+        TransactionRequestKeys.EMVD.name -> {
+            getEmv(cardReadOutput)
+        }
+        TransactionRequestKeys.PINB.name -> {
+            getPinB(cardReadOutput)
+        }
+        TransactionRequestKeys.EXPIRY.name,
+        TransactionRequestKeys.EXPDATE.name -> {
+
+            getExpDate(cardReadOutput)
+
+        }
+        TransactionRequestKeys.CARDNO.name -> {
+
+            getCardNo(cardReadOutput)
+
+        }
+        TransactionRequestKeys.DESC.name -> {
+
+            jsonObject?.get(TransactionRequestKeys.DESC.name).toString()
+
+        }
+        TransactionRequestKeys.CNTRY.name -> {
+
+            jsonObject.get(TransactionRequestKeys.CNTRY.name).toString()
+
+        }
+
+
+        TransactionRequestKeys.country.name -> {
+            if (jsonObject.has(TransactionRequestKeys.country.name)) {
+                jsonObject.get(TransactionRequestKeys.country.name).toString()
+
+            }else{""}
+        }
+        TransactionRequestKeys.state.name -> {
+            if (jsonObject.has(TransactionRequestKeys.state.name)) {
+
+                jsonObject.get(TransactionRequestKeys.state.name).toString()
+
+            }else{""}
+        }
+        TransactionRequestKeys.city.name -> {
+            if (jsonObject.has(TransactionRequestKeys.city.name)) {
+
+                jsonObject.get(TransactionRequestKeys.city.name).toString()
+
+            }else{""}
+        }
+        TransactionRequestKeys.RMRK.name -> {
+
+            jsonObject.get(TransactionRequestKeys.RMRK.name).toString()
+
+        }
+        TransactionRequestKeys.PHN.name -> {
+
+            jsonObject.get(TransactionRequestKeys.PHN.name).toString()
+
+        }
+        TransactionRequestKeys.FRSTNM.name -> {
+
+            jsonObject.get(TransactionRequestKeys.FRSTNM.name).toString()
+
+        }
+        TransactionRequestKeys.LSTNM.name -> {
+
+            jsonObject.get(TransactionRequestKeys.LSTNM.name).toString()
+
+        }
+        /*  TransactionRequestKeys.IID.name -> {
+          jsonObject.addProperty(
+              it,
+              geiId()
+          )
+      }*/
+        TransactionRequestKeys.VOIDROC.name -> {
+
+            getVoidRoc()
+
+        }
+        TransactionRequestKeys.T2D.name -> {
+
+            getT2D(cardReadOutput)
+
+        }
+        else->{""}
+        /*    TransactionRequestKeys.CSID.name -> {
+            jsonObject.addProperty(
+                it,
+                getCsId(cardReadOutput)
+            )
+        }*/
+
+    }
+}
+fun encrypt(valueToEncrypt:String?):String?{
+    return valueToEncrypt
+}
 fun geiId(): String? {
     return ""
 }
