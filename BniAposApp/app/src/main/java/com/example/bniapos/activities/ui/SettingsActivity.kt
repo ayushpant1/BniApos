@@ -52,9 +52,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                         onBackPressed()
                     }
                 }
-                Alerts.customWebViewAlert(
+                Alerts.customAlert(
                     this@SettingsActivity,
-                    "Authorization Response Received",
+                    "LOGON SUCCESSFUL!!!",
                     buttonInterface
                 )
             }

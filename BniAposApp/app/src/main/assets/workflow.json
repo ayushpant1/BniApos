@@ -56,7 +56,7 @@
     },
     {
       "ID": 116,
-      "NAME": "BILL PAYMENT",
+      "NAME": "TELKOM ENQUIRY",
       "ENDPOINT": "ProcessEnquiry",
       "TYPE": "BP",
       "REVERSAL": 0,
@@ -74,14 +74,44 @@
           "ORD": "1",
           "dataSet": null,
           "relatedControlKey": null
+        },
+		{
+          "KEY": "areaCode",
+          "LABEL": "SELECT AREA CODE",
+          "CTYPE": "DROPDOWN",
+          "MINSIZE": "3",
+          "MAXSIZE": "5",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "2",
+          "dataSet": "areaCode",
+          "relatedControlKey": null
         }
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE",
+      "ENCREQ": "SCID",
+      "DATAREQ": "error,ket,reffNum,amount,areaCode,phoneNum,divreCode,NPWP,customerName,paymentFlag,amountBill,datelCode,billAmount1,billRef1,billAmount2,billRef2,billAmount3,billRef3,biaya_adm",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "error,ket,reffNum,amount,areaCode,phoneNum,divreCode,NPWP,customerName,paymentFlag,amountBill,datelCode,billAmount1,billRef1,billAmount2,billRef2,billAmount3,billRef3,biaya_adm",
+      "NEXTWORKFLOWID": 117
+    },
+	{
+      "ID": 117,
+      "NAME": "TELCOM PAYMENT",
+      "ENDPOINT": "ProcessEnquiry",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+       
       ],
       "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
       "ENCREQ": "SCID",
-      "DATAREQ": "SCID",
-      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT",
-      "DATARESP": "",
-      "NEXTWORKFLOWID": 132
+      "DATAREQ": "ket,reffNum,amount,areaCode,phoneNum,divreCode,NPWP,customerName,paymentFlag,amountBill,datelCode,billAmount1,billRef1,billAmount2,billRef2,billAmount3,billRef3,biaya_adm",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "ket,journal,financialJournal,customerName,amountBill,amount,billAmount1,billAmount2,billAmount3,kode_loket,kd_lkt,nama,kode_cabang,kode_mitra,alamat,biaya_adm,no_tel,nominal,time",
+      "NEXTWORKFLOWID": 0
     },
     {
       "ID": 132,
@@ -105,24 +135,24 @@
           "relatedControlKey": null
         }
       ],
-      "REQ": "MTID,MMID,TBID,AMT",
+      "REQ": "MTID,MMID,TBID,AMT,RSPC,RSPM",
       "ENCREQ": "",
       "DATAREQ": "",
-      "RESP": "MTID,MMID,TBID,AMT",
-      "DATARESP": "",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "ket,journal,financialJournal,customerName,amountBill,amount,billAmount1,billAmount2,billAmount3,kode_loket,kd_lkt,nama,kode_cabang,kode_mitra,alamat,biaya_adm,no_tel,nominal,time",
       "NEXTWORKFLOWID": 0
     },
     {
-      "ID": 117,
+      "ID": 120,
       "NAME": "CASH DEPOSIT ENQUIRY",
-      "ENDPOINT": "Payment/ProcessEnquiry",
+      "ENDPOINT": "ProcessEnquiry",
       "TYPE": "BP",
       "REVERSAL": 0,
       "VOID": 0,
       "RETRY": 0,
       "CTRLS": [
         {
-          "KEY": "ACNO",
+          "KEY": "accountNum",
           "LABEL": "ENTER ACCOUNT NO.",
           "CTYPE": "TN",
           "MINSIZE": "1",
@@ -134,28 +164,69 @@
           "relatedControlKey": null
         }
       ],
-      "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO,ACNO",
-      "ENCREQ": "SCID",
-      "DATAREQ": "SCID",
-      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO",
+      "ENCREQ": "",
+      "DATAREQ": "reffNum,accountNum",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "",
+      "NEXTWORKFLOWID": 121
+    },
+    {
+      "ID": 121,
+      "NAME": "CASH DEPOSIT PAYMENT",
+      "ENDPOINT": "ProcessPayment",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE",
+      "ENCREQ": "",
+      "DATAREQ": "reffNum",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
       "DATARESP": "",
       "NEXTWORKFLOWID": 0
     },
-    {
+	{
       "ID": 118,
-      "NAME": "CASH DEPOSIT PAYMENT",
-      "ENDPOINT": "Payment/ProcessEnquiry",
+      "NAME": "BPJS KS VA - Inquiry",
+      "ENDPOINT": "ProcessEnquiry",
       "TYPE": "BP",
       "REVERSAL": 0,
       "VOID": 0,
       "RETRY": 0,
       "CTRLS": [
         {
-          "KEY": "ACNO",
-          "LABEL": "ACCOUNT NO.",
+          "KEY": "billingId",
+          "LABEL": "ENTER BILLING ID.",
+          "CTYPE": "TN",
+          "MINSIZE": "10",
+          "MAXSIZE": "16",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+		{
+          "KEY": "numberOfMonthsOfBills",
+          "LABEL": "NO OF MONTHS",
           "CTYPE": "TN",
           "MINSIZE": "1",
-          "MAXSIZE": "8",
+          "MAXSIZE": "2",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        },
+		 {
+          "KEY": "pin_transaksi",
+          "LABEL": "TRANSACTION PIN",
+          "CTYPE": "TN",
+          "MINSIZE": "4",
+          "MAXSIZE": "10",
           "DVAL": "",
           "SCN": "1",
           "ORD": "1",
@@ -163,11 +234,28 @@
           "relatedControlKey": null
         }
       ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO",
+      "ENCREQ": "SCID",
+      "DATAREQ": "billingId,numberOfMonthsOfBills,pin_transaksi",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "PAYMENT_TYPE,CHANNEL,MCP_ID,h_billingId,h_numberOfMonthsOfBills,h_customerName,h_branchCode,h_branchName,h_currency,h_totalBills,c_fee,h_memberNumber,h_totalMember,h_detailBillingId,h_detailPremi,h_detailName,h_inquiryTransId,h_transactionId,biaya_loket,errorNum,message",
+      "NEXTWORKFLOWID": 119
+    },
+    {
+      "ID": 119,
+      "NAME": "BPJS KS VA - Inquiry",
+      "ENDPOINT": "ProcessPayment",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+      ],
       "REQ": "MTID,MMID,CKEY,AUTH,MTID,AMT,MMID,DID,PTYPE,REFNO,ACNO",
       "ENCREQ": "",
-      "DATAREQ": "",
-      "RESP": "MTID,MMID,TBID,TXNDATE,INV,SCID,TXNTYPE,STAN,POSENT,PANSEQ,SEC,AMT,EMV,EXPDATE,CARDNO",
-      "DATARESP": "",
+      "DATAREQ": "h_billingId,h_numberOfMonthsOfBills,h_customerName,h_branchCode,h_branchName,h_currency,h_totalBills,c_fee,h_memberNumber,h_totalMember,h_amountPaid,c_payMethod,c_dbAccountNum,h_totalAmount,h_detailBillingId,h_detailPremi,h_detailName,h_inquiryTransId,h_transactionId,biaya_loket,c_description",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "h_totalBills,h_amountPaid,status,c_fee,h_totalAmount,c_payMethod,c_dbAccountNum,c_description,h_memberNumber,h_totalMember,trxNum,accountNumber,trxTime,journal,h_transactionId,footerMsg,errorNum,biaya_loket,kode_loket,kd_lkt,nama,kode_cabang,kode_mitra,alamat,biaya_adm,noRek,nominal,time",
       "NEXTWORKFLOWID": 0
     }
   ]

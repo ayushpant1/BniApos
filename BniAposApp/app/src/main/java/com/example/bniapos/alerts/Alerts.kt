@@ -19,7 +19,7 @@ import com.example.bniapos.callbacks.ButtonInterface
 
 object Alerts {
 
-    fun successAlert(activity: Context, message: String?, btnInterface: ButtonInterface) {
+    fun customAlert(activity: Context, message: String?, btnInterface: ButtonInterface) {
         val inflater =
             activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view: View = inflater.inflate(R.layout.success_alert, null)

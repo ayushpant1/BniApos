@@ -2,6 +2,7 @@ package com.example.bniapos.activities
 
 import MenuLink
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +10,9 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bniapos.R
+import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
@@ -75,13 +78,27 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 controlList = currentWorkflow?.cTRLS
                 mainScreenId = 1
                 llParentBody?.removeAllViews()
-                loadScreen(controlList!!, mainScreenId)
+                if(controlList!=null && controlList!!.count() > 0) {
+                    loadScreen(controlList!!, mainScreenId)
+                }
+                else{
+                    submitData()
+                }
             }
 
         }
 
         override fun onFailure(message: String) {
-
+            val buttonInterface: ButtonInterface = object : ButtonInterface {
+                override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                    finish()
+                }
+            }
+            Alerts.customAlert(
+                this@BpControlsActivity,
+                message,
+                buttonInterface
+            )
         }
 
     }
@@ -311,6 +328,7 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                     controls.controlObject = radioGroup as Object
                     llParentBody?.addView(view)
                 }
+                BpControlType.LIST.name,
                 BpControlType.DROPDOWN.name -> {
                     var data: List<ControlTable>? = ArrayList()
                     var spnData: List<String>? = ArrayList()

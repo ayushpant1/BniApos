@@ -1,6 +1,7 @@
 package com.example.bniapos.activities
 
 import MenuLink
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -10,7 +11,9 @@ import android.view.View.GONE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bniapos.R
+import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
@@ -81,13 +84,28 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 currentWorkflow = workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
                 controlList = currentWorkflow?.cTRLS
                 mainScreenId = 1
-                loadScreen(controlList!!, mainScreenId)
+                if(controlList!=null && controlList!!.count() > 0) {
+                    loadScreen(controlList!!, mainScreenId)
+                }
+                else{
+                    submitData()
+                }
+
             }
 
         }
 
         override fun onFailure(message: String) {
-
+            val buttonInterface: ButtonInterface = object : ButtonInterface {
+                override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                    finish()
+                }
+            }
+            Alerts.customAlert(
+                this@CpControlsActivity,
+                message,
+                buttonInterface
+            )
         }
 
     }

@@ -1,12 +1,16 @@
 package com.example.bniapos.host
 
 import com.example.bniapos.models.responsemodels.LogonResponse
+import com.example.bniapos.utils.AppConstants
 import com.google.gson.JsonObject
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
+
 
 interface ApiInterface {
     @POST("{url}")
@@ -26,10 +30,17 @@ interface ApiInterface {
     companion object {
 
         fun create(): ApiInterface {
+            val okHttpClient = OkHttpClient.Builder()
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build()
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://api.nuuneoi.com")
+                .baseUrl(AppConstants.BASE_URL+"/")
+                .client(okHttpClient)
                 .build()
+
             return retrofit.create(ApiInterface::class.java)
 
         }

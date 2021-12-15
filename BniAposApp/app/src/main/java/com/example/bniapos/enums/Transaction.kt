@@ -9,6 +9,7 @@ enum class TransactionRequestKeys {
     DID,
     PTYPE,
     REFNO,
+    reffNum,
     ACODE,
     ACNO,
     TXNDT,

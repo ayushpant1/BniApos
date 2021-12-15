@@ -1,46 +1,47 @@
 {
   "controlTableData": [
+
     {
-      "value": "ind",
-      "name": "india",
-      "dataSetKey": "countryList",
+      "value": "77",
+      "name": "Batam",
+      "dataSetKey": "areaCode",
       "referenceDataSetKey": null
     },
     {
-      "value": "fr",
-      "name": "france",
-      "dataSetKey": "countryList",
+      "value": "77",
+      "name": "Batang",
+      "dataSetKey": "areaCode",
       "referenceDataSetKey": null
     },
     {
-      "value": "hr",
-      "name": "haryana",
-      "dataSetKey": "stateList",
-      "referenceDataSetKey": "ind"
+      "value": "22",
+      "name": "Betung",
+      "dataSetKey": "areaCode",
+      "referenceDataSetKey": null
     },
     {
-      "value": "up",
-      "name": "uttarpradesh",
-      "dataSetKey": "stateList",
-      "referenceDataSetKey": "ind"
+      "value": "770",
+      "name": "Bintan",
+      "dataSetKey": "areaCode",
+      "referenceDataSetKey": null
     },
     {
-      "value": "nod",
-      "name": "noida",
-      "dataSetKey": "cityList",
-      "referenceDataSetKey": "up"
+      "value": "21",
+      "name": "Jakarta",
+      "dataSetKey": "areaCode",
+      "referenceDataSetKey": null
     },
     {
-      "value": "snp",
-      "name": "sonipath",
-      "dataSetKey": "cityList",
-      "referenceDataSetKey": "hr"
+      "value": "967",
+      "name": "Jayapura",
+      "dataSetKey": "areaCode",
+      "referenceDataSetKey": null
     },
     {
-      "value": "pr",
-      "name": "paris",
-      "dataSetKey": "stateList",
-      "referenceDataSetKey": "fr"
+      "value": "33",
+      "name": "Jember",
+      "dataSetKey": "areaCode",
+      "referenceDataSetKey": null
     },
     {
       "value": "1116",

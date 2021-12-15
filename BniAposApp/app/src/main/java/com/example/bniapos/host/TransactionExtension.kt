@@ -1,6 +1,7 @@
 package com.example.bniapos.host
 
 import android.app.Activity
+import android.view.SurfaceControl
 import com.example.bniapos.enums.TransactionRequestKeys
 import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.DateTimeUtils
@@ -67,6 +68,9 @@ fun getMasterValue(
         TransactionRequestKeys.MTID.name -> {
             getMtId(context)
         }
+        TransactionRequestKeys.IID.name -> {
+            getIId()
+        }
         TransactionRequestKeys.MMID.name -> {
             getMmId(context)
         }
@@ -82,6 +86,7 @@ fun getMasterValue(
         TransactionRequestKeys.PTYPE.name -> {
             getPType()
         }
+        TransactionRequestKeys.reffNum.name,
         TransactionRequestKeys.REFNO.name -> {
             getRefNo(context)
         }
@@ -146,68 +151,8 @@ fun getMasterValue(
             getCardNo(cardReadOutput)
 
         }
-        TransactionRequestKeys.DESC.name -> {
-            jsonObject.get(TransactionRequestKeys.DESC.name).toString()
-
-        }
-        TransactionRequestKeys.CNTRY.name -> {
-            jsonObject.get(TransactionRequestKeys.CNTRY.name).toString()
-
-        }
 
 
-        TransactionRequestKeys.country.name -> {
-            if (jsonObject.has(TransactionRequestKeys.country.name)) {
-                jsonObject.get(TransactionRequestKeys.country.name).toString()
-
-            } else {
-                ""
-            }
-        }
-        TransactionRequestKeys.state.name -> {
-            if (jsonObject.has(TransactionRequestKeys.state.name)) {
-
-                jsonObject.get(TransactionRequestKeys.state.name).toString()
-
-            } else {
-                ""
-            }
-        }
-        TransactionRequestKeys.city.name -> {
-            if (jsonObject.has(TransactionRequestKeys.city.name)) {
-
-                jsonObject.get(TransactionRequestKeys.city.name).toString()
-
-            } else {
-                ""
-            }
-        }
-        TransactionRequestKeys.RMRK.name -> {
-
-            jsonObject.get(TransactionRequestKeys.RMRK.name).toString()
-
-        }
-        TransactionRequestKeys.PHN.name -> {
-
-            jsonObject.get(TransactionRequestKeys.PHN.name).toString()
-
-        }
-        TransactionRequestKeys.FRSTNM.name -> {
-
-            jsonObject.get(TransactionRequestKeys.FRSTNM.name).toString()
-
-        }
-        TransactionRequestKeys.LSTNM.name -> {
-
-            jsonObject.get(TransactionRequestKeys.LSTNM.name).toString()
-
-        }
-        /*  TransactionRequestKeys.IID.name -> {
-          jsonObject.addProperty(
-              it,
-              geiId()
-          )
-      }*/
         TransactionRequestKeys.VOIDROC.name -> {
 
             getVoidRoc()
@@ -219,7 +164,9 @@ fun getMasterValue(
 
         }
         else -> {
-            ""
+            if (jsonObject.has(key)) {
+                jsonObject.get(key).asString
+            } else ""
         }
         /*    TransactionRequestKeys.CSID.name -> {
             jsonObject.addProperty(
@@ -235,8 +182,8 @@ fun encrypt(valueToEncrypt: String?): String? {
     return valueToEncrypt
 }
 
-fun geiId(): String? {
-    return ""
+fun getIId(): String? {
+    return "2"
 }
 
 fun getVoidRoc(): String? {

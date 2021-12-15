@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dimen_20dp"
+            android:visibility="gone"
             android:src="@drawable/ic_success" />
 
         <TextView

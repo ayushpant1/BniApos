@@ -4,6 +4,7 @@ enum class BpControlType {
     TN,
     TEXT,
     RADIO,
+    LIST,
     DROPDOWN
 }
 
