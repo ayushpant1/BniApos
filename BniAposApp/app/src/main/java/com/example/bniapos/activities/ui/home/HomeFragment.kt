@@ -79,11 +79,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
             )
         })
 
+        menuList = filterMenuList
         menuFilterList = filterMenuList!!.filter { s ->
             s.parentId == 0
         }.sortedWith(compareBy { it.sortOrder })
 
-        menuList = menuFilterList
 
         gridview?.layoutManager = GridLayoutManager(root.context, 3)
         setAdapter(menuFilterList!!, -1)
