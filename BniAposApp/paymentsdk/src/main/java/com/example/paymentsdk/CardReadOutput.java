@@ -2,7 +2,8 @@ package com.example.paymentsdk;
 
 
 
-import com.example.paymentsdk.util.AIDFile;
+
+import com.example.paymentsdk.sdk.Common.AIDFile;
 
 import java.io.Serializable;
 import java.util.List;

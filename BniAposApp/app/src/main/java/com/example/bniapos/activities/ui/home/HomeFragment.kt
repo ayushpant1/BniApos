@@ -37,6 +37,13 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
 
+
+    private var allowedPaymentType: String =
+        "2500116,2500111,2500117"//replace with allowedPaymentType
+
+
+    private var allowedTransactionType: String = "429,"//replaced with allowedTransactionType
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -57,10 +64,26 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
         val json = Configuration.getMenuConfig(root.context)
         menuList = Gson().fromJson(json, Array<MenuLink>::class.java).asList()
+        val filterMenuList: MutableList<MenuLink>? = ArrayList()
+        filterMenuList?.addAll(menuList!!.filter {
+            it.type.equals("BP", true) &&
+                    it.txnType.toString() in allowedPaymentType.split(
+                ","
+            )
+        })
 
-        menuFilterList = menuList!!.filter { s ->
+        filterMenuList?.addAll(menuList!!.filter {
+            it.type.equals("CP", true) &&
+                    it.txnType.toString() in allowedTransactionType.split(
+                ","
+            )
+        })
+
+        menuFilterList = filterMenuList!!.filter { s ->
             s.parentId == 0
         }.sortedWith(compareBy { it.sortOrder })
+
+        menuList = menuFilterList
 
         gridview?.layoutManager = GridLayoutManager(root.context, 3)
         setAdapter(menuFilterList!!, -1)

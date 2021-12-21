@@ -8,11 +8,14 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.example.paymentsdk.Common.Constant;
-import com.example.paymentsdk.Common.TerminalSecurity;
-import com.example.paymentsdk.api.DeviceService;
-import com.example.paymentsdk.util.data.BytesUtil;
+
+import com.example.paymentsdk.LandiSDK.api.DeviceService;
+
+import com.example.paymentsdk.LandiSDK.util.data.BytesUtil;
+import com.example.paymentsdk.sdk.Common.Constant;
+import com.example.paymentsdk.sdk.Common.TerminalSecurity;
 import com.usdk.apiservice.aidl.UDeviceService;
+import com.vfi.smartpos.deviceservice.aidl.IDeviceService;
 
 
 public class CTIApplication {
@@ -26,6 +29,8 @@ public class CTIApplication {
     private static final String VERIFONE_USDK_PACKAGE_NAME = "com.vfi.smartpos.deviceservice";
 
     private static Context context;
+
+    private static IDeviceService verfioneDeviceService;
 
 
     /**
@@ -80,6 +85,17 @@ public class CTIApplication {
         context.unbindService(serviceConnection);
     }
 
+    /**
+     * Get device service instance.
+     */
+    public static IDeviceService getVerifoneDeviceService() {
+        if (verfioneDeviceService == null) {
+            throw new RuntimeException("Verifone SDK service is still not connected.");
+        }
+
+        return verfioneDeviceService;
+    }
+
 
     /**
      * Service connection.
@@ -117,10 +133,11 @@ public class CTIApplication {
             }
         }
 
+
         private void loadMasterAndSessionKey() {
             TerminalSecurity.LoadMasterKey(BytesUtil.hexString2ByteArray(
                     Constant.PINBMasterKey), null);
-            TerminalSecurity.LoadSessionKey(context, BytesUtil.hexString2ByteArray(Constant.PINBSessionKey));
+            TerminalSecurity.LoadSessionKey(BytesUtil.hexString2ByteArray(Constant.PINBSessionKey));
         }
 
         private void linkToDeath(IBinder service) throws RemoteException {

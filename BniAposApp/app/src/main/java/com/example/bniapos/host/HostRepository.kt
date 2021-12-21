@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.alerts.ProgressDialog
 import com.example.bniapos.callback.ApiResult
@@ -40,80 +41,89 @@ class HostRepository : HostRepositoryInterface {
 
         val jsonRequest = jsonObject.toTransactionRequest(currentWORKFLOW, transactionType, context)
         Util.deepMerge(jsonRequest, jsonObject)!!
-        Log.d("HTTP Url - ",url)
-        Log.d("HTTP Request - ",jsonObject.toString())
+        Log.d("HTTP Url - ", url)
+        Log.d("HTTP Request - ", jsonObject.toString())
         ProgressDialog.showDialog(context)
         apiInterface.postToHost(url, jsonRequest)
             .enqueue(object : Callback<JsonObject> {
-                override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
+                override fun onResponse(
+                    call: Call<JsonObject>?,
+                    response: Response<JsonObject>?
+                ) {
                     Log.d("success", "")
 
-                    val splitResponse = currentWORKFLOW.rESP.split(",")
-                    val responseBody = response?.body() as JsonObject
-                    Log.d("HTTP Response - ",responseBody.toString())
-                    if (responseBody?.has("RSPC") && responseBody?.get("RSPC")?.asString.equals(
-                            "00",
-                            true
-                        )
-                    ) {
-                        var responseFormatter=""
-                        splitResponse.forEach {
-                            if (responseBody.has(it)) {
-                                val value = responseBody?.get(it)?.asString
-                                if(value !=null) {
-                                    jsonObject.addProperty(it, value)
-                                    responseFormatter += "<br/><b>$it</b>:$value"
-                                }
-                            }
-                        }
-
-                        val splitResponseData = currentWORKFLOW.dataResponse.split(",")
-                        if (!splitResponseData.isNullOrEmpty() && response?.body()
-                                ?.has("data") ?: false
+                    if (response!!.isSuccessful && response.body() != null) {
+                        val splitResponse = currentWORKFLOW.rESP.split(",")
+                        val responseBody = response?.body() as JsonObject
+                        Log.d("HTTP Response - ", responseBody.toString())
+                        if (responseBody?.has("RSPC") && responseBody?.get("RSPC")?.asString.equals(
+                                "00",
+                                true
+                            )
                         ) {
-                            val responseBodyData = response?.body()?.get("data") as JsonObject
-                            splitResponseData.forEach {
-
-                                if (responseBodyData.has(it)) {
-                                    val value = responseBodyData?.get(it)?.asString
-                                    if(value != null) {
+                            var responseFormatter = ""
+                            splitResponse.forEach {
+                                if (responseBody.has(it)) {
+                                    val value = responseBody?.get(it)?.asString
+                                    if (value != null) {
                                         jsonObject.addProperty(it, value)
                                         responseFormatter += "<br/><b>$it</b>:$value"
                                     }
                                 }
                             }
-                        }
 
-                        ProgressDialog.dismissDialog()
-                        DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
-                            ?.getAll()
-                        val buttonInterface: ButtonInterface = object : ButtonInterface {
+                            val splitResponseData = currentWORKFLOW.dataResponse.split(",")
+                            if (!splitResponseData.isNullOrEmpty() && response?.body()
+                                    ?.has("data") ?: false
+                            ) {
+                                val responseBodyData = response?.body()?.get("data") as JsonObject
+                                splitResponseData.forEach {
 
-                            override fun onClicked(alertDialogBuilder: AlertDialog?) {
-                                if (isBpWorkflow) {
-                                    val returnIntent = Intent()
-                                    returnIntent.putExtra("response", Gson().toJson(jsonObject))
-                                    context.setResult(Activity.RESULT_OK, returnIntent)
+                                    if (responseBodyData.has(it)) {
+                                        val value = responseBodyData?.get(it)?.asString
+                                        if (value != null) {
+                                            jsonObject.addProperty(it, value)
+                                            responseFormatter += "<br/><b>$it</b>:$value"
+                                        }
+                                    }
                                 }
-                                apiResult.onSuccess(jsonObject)
                             }
+
+                            ProgressDialog.dismissDialog()
+                            DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
+                                ?.getAll()
+                            val buttonInterface: ButtonInterface = object : ButtonInterface {
+
+                                override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                                    if (isBpWorkflow) {
+                                        val returnIntent = Intent()
+                                        returnIntent.putExtra(
+                                            "response",
+                                            Gson().toJson(jsonObject)
+                                        )
+                                        context.setResult(Activity.RESULT_OK, returnIntent)
+                                    }
+                                    apiResult.onSuccess(jsonObject)
+                                }
+                            }
+
+
+                            Alerts.customWebViewAlert(
+                                context,
+                                "Transaction Response Recieved \n\n" +
+                                        responseFormatter,
+                                buttonInterface
+                            )
+
+                        } else {
+                            ProgressDialog.dismissDialog()
+                            if (responseBody?.has("RSPM") && responseBody?.get("RSPM") != null) {
+                                apiResult.onFailure(responseBody?.get("RSPM").asString)
+                            } else apiResult.onFailure("Transaction Declined")
                         }
-
-
-                        Alerts.customWebViewAlert(
-                            context,
-                            "Transaction Response Recieved \n\n" +
-                                    responseFormatter,
-                            buttonInterface
-                        )
-
-                    }
-                    else
-                    {
+                    } else {
                         ProgressDialog.dismissDialog()
-                        if (responseBody?.has("RSPM") && responseBody?.get("RSPM")!=null) {
-                            apiResult.onFailure(responseBody?.get("RSPM").asString)
-                        }else  apiResult.onFailure("Transaction Declined")
+                        Toast.makeText(context, "Error Occured", Toast.LENGTH_LONG).show()
                     }
                 }
 

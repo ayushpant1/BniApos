@@ -75,14 +75,14 @@
           "dataSet": null,
           "relatedControlKey": null
         },
-		{
+        {
           "KEY": "areaCode",
           "LABEL": "SELECT AREA CODE",
           "CTYPE": "DROPDOWN",
           "MINSIZE": "3",
           "MAXSIZE": "5",
           "DVAL": "",
-          "SCN": "1",
+          "SCN": "2",
           "ORD": "2",
           "dataSet": "areaCode",
           "relatedControlKey": null
@@ -95,7 +95,7 @@
       "DATARESP": "error,ket,reffNum,amount,areaCode,phoneNum,divreCode,NPWP,customerName,paymentFlag,amountBill,datelCode,billAmount1,billRef1,billAmount2,billRef2,billAmount3,billRef3,biaya_adm",
       "NEXTWORKFLOWID": 117
     },
-	{
+    {
       "ID": 117,
       "NAME": "TELCOM PAYMENT",
       "ENDPOINT": "ProcessEnquiry",
@@ -104,7 +104,6 @@
       "VOID": 0,
       "RETRY": 0,
       "CTRLS": [
-       
       ],
       "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
       "ENCREQ": "SCID",
@@ -188,8 +187,8 @@
       "DATARESP": "",
       "NEXTWORKFLOWID": 0
     },
-	{
-      "ID": 118,
+    {
+      "ID": 122,
       "NAME": "BPJS KS VA - Inquiry",
       "ENDPOINT": "ProcessEnquiry",
       "TYPE": "BP",
@@ -209,7 +208,7 @@
           "dataSet": null,
           "relatedControlKey": null
         },
-		{
+        {
           "KEY": "numberOfMonthsOfBills",
           "LABEL": "NO OF MONTHS",
           "CTYPE": "TN",
@@ -221,7 +220,7 @@
           "dataSet": null,
           "relatedControlKey": null
         },
-		 {
+        {
           "KEY": "pin_transaksi",
           "LABEL": "TRANSACTION PIN",
           "CTYPE": "TN",
@@ -239,11 +238,11 @@
       "DATAREQ": "billingId,numberOfMonthsOfBills,pin_transaksi",
       "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
       "DATARESP": "PAYMENT_TYPE,CHANNEL,MCP_ID,h_billingId,h_numberOfMonthsOfBills,h_customerName,h_branchCode,h_branchName,h_currency,h_totalBills,c_fee,h_memberNumber,h_totalMember,h_detailBillingId,h_detailPremi,h_detailName,h_inquiryTransId,h_transactionId,biaya_loket,errorNum,message",
-      "NEXTWORKFLOWID": 119
+      "NEXTWORKFLOWID": 123
     },
     {
-      "ID": 119,
-      "NAME": "BPJS KS VA - Inquiry",
+      "ID": 123,
+      "NAME": "BPJS KS VA - Payment",
       "ENDPOINT": "ProcessPayment",
       "TYPE": "BP",
       "REVERSAL": 0,
@@ -256,6 +255,64 @@
       "DATAREQ": "h_billingId,h_numberOfMonthsOfBills,h_customerName,h_branchCode,h_branchName,h_currency,h_totalBills,c_fee,h_memberNumber,h_totalMember,h_amountPaid,c_payMethod,c_dbAccountNum,h_totalAmount,h_detailBillingId,h_detailPremi,h_detailName,h_inquiryTransId,h_transactionId,biaya_loket,c_description",
       "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
       "DATARESP": "h_totalBills,h_amountPaid,status,c_fee,h_totalAmount,c_payMethod,c_dbAccountNum,c_description,h_memberNumber,h_totalMember,trxNum,accountNumber,trxTime,journal,h_transactionId,footerMsg,errorNum,biaya_loket,kode_loket,kd_lkt,nama,kode_cabang,kode_mitra,alamat,biaya_adm,noRek,nominal,time",
+      "NEXTWORKFLOWID": 0
+    },
+    {
+      "ID": 124,
+      "NAME": "ADIRA ENQUIRY",
+      "ENDPOINT": "ProcessEnquiry",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+        {
+          "KEY": "billingId",
+          "LABEL": "ENTER BILLING ID",
+          "CTYPE": "TEXT",
+          "MINSIZE": "6",
+          "MAXSIZE": "16",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
+      "ENCREQ": "SCID",
+      "DATAREQ": "billingId",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "provider,billerCode,billingId,totalBill,installmentNo,dueDate,policeNo,installmentAmount,finedAmount,totalInstallment,amount,adminFee,collectionFee,langCode,transactionName,cutOffDate,billingInfo,customerName,customerType,mainDebt,interest,outstandingAmount,maxPayment,minPayment,billReffNum",
+      "NEXTWORKFLOWID": 125
+    },
+    {
+      "ID": 125,
+      "NAME": "ADIRA PAYMENT",
+      "ENDPOINT": "ProcessPayment",
+      "TYPE": "BP",
+      "REVERSAL": 0,
+      "VOID": 0,
+      "RETRY": 0,
+      "CTRLS": [
+        {
+          "KEY": "pin_transaksi",
+          "LABEL": "ENTER PIN ",
+          "CTYPE": "TEXT",
+          "MINSIZE": "2",
+          "MAXSIZE": "8",
+          "DVAL": "",
+          "SCN": "1",
+          "ORD": "1",
+          "dataSet": null,
+          "relatedControlKey": null
+        }
+      ],
+      "REQ": "MTID,MMID,CKEY,AUTH,MTID,MMID,DID,PTYPE,REFNO,ACODE,ACNO",
+      "ENCREQ": "SCID",
+      "DATAREQ": "kode_mitra,kode_cabang,kode_loket,clientId,reffNum,providerId,billingId,adminFee,collectionFee,langCode,transactionName,cutOffDate,billingInfo,totalBill,customerName,customerType,installmentNo,dueDate,policeNo,mainDebt,interest,installmentAmount,finedAmount,outstandingAmount,totalInstallment,maxPayment,minPayment,billReffNum,amount,accountNum,pin_transaksi",
+      "RESP": "MTID,MMID,TBID,TXNTYPE,INV,AMT,RSPC,RSPM",
+      "DATARESP": "provider,journal,financialJournal,amount,billingId,accountNum,reffNum,journal,financialJournal,amount,billingId,accountNum,reffNum,kd_lkt,nama,kode_cabang,kode_mitra,alamat,adminFee,providerId,nominal,finedAmount,dueDate,installmentAmount,totalInstallment,installmentNo,collectionFee,time,trxtime,policeNo,minPayment,maxPayment,financialJournal,amount,billingId,accountNum,reffNum,kd_lkt,nama,kode_cabang,kode_mitra,alamat,adminFee,providerId,nominal,finedAmount,dueDate,installmentAmount,totalInstallment,installmentNo,collectionFee,time,trxtime,policeNo,minPayment,maxPayment,maxPayment",
       "NEXTWORKFLOWID": 0
     }
   ]

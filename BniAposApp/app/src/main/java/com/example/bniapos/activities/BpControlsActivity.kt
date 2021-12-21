@@ -33,6 +33,9 @@ import java.io.IOException
 import java.io.InputStream
 import java.lang.reflect.Type
 import java.nio.charset.Charset
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
@@ -49,6 +52,8 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private var menu: MenuLink? = null
     var workflowList: List<WORKFLOW>? = ArrayList()
 
+
+    private var ctrlStackList: Stack<List<CTRLS>> = Stack()
 
     private val submit = "Submit"
     private val next = "Next"
@@ -78,10 +83,9 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 controlList = currentWorkflow?.cTRLS
                 mainScreenId = 1
                 llParentBody?.removeAllViews()
-                if(controlList!=null && controlList!!.count() > 0) {
+                if (controlList != null && controlList!!.count() > 0) {
                     loadScreen(controlList!!, mainScreenId)
-                }
-                else{
+                } else {
                     submitData()
                 }
             }
@@ -219,7 +223,7 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 this@BpControlsActivity,
                 Gson().toJsonTree(output)
                     .asJsonObject,
-                AppConstants.BP_URL+"/"+currentWorkflow!!.eNDPOINT,
+                AppConstants.BP_URL + "/" + currentWorkflow!!.eNDPOINT,
                 currentWorkflow!!,
                 apiResult,
                 menu!!.txnType
@@ -241,9 +245,11 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 BpControlType.TEXT.name -> {
                     val editText = controls.controlObject as EditText
                     output?.put(controls.kEY, editText.text.toString())
+                    controls.dVAL = (output?.get(controls.kEY) ?: "").toString()
                 }
             }
         }
+        ctrlStackList.push(controlList)
     }
 
     /**
@@ -490,6 +496,21 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.img_back -> {
                 onBackPressed()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!ctrlStackList.isNullOrEmpty()) {
+            controlList = ctrlStackList.pop()
+            mainScreenId--
+            if (controlList != null && controlList!!.count() > 0) {
+                llParentBody?.removeAllViews()
+                loadScreen(controlList!!, mainScreenId)
+            } else {
+                super.onBackPressed()
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 

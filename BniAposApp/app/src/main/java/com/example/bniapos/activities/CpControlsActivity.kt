@@ -25,9 +25,10 @@ import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.Configuration
 import com.example.paymentsdk.CardReadOutput
-import com.example.paymentsdk.Common.ISuccessResponse_Card
-import com.example.paymentsdk.Common.TerminalCardApiHelper
-import com.example.paymentsdk.util.transaction.TransactionConfig
+import com.example.paymentsdk.sdk.Common.ISuccessResponse_Card
+import com.example.paymentsdk.sdk.Common.TerminalCardApiHelper
+import com.example.paymentsdk.sdk.Common.TerminalFactory
+import com.example.paymentsdk.sdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -39,6 +40,9 @@ import java.io.IOException
 import java.io.InputStream
 import java.lang.reflect.Type
 import java.nio.charset.Charset
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
@@ -57,6 +61,9 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private var cardReadOutput: CardReadOutput? = null
     private var emvProcessor: TerminalCardApiHelper? = null
     private var transactionConfig: TransactionConfig? = null
+
+    private var ctrlStackList: Stack<List<CTRLS>>? = null
+
     private var currentWorkflow: WORKFLOW? = null
     private var workflowList: List<WORKFLOW>? = ArrayList()
     private var controlList: List<CTRLS>? = null
@@ -84,10 +91,9 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 currentWorkflow = workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
                 controlList = currentWorkflow?.cTRLS
                 mainScreenId = 1
-                if(controlList!=null && controlList!!.count() > 0) {
+                if (controlList != null && controlList!!.count() > 0) {
                     loadScreen(controlList!!, mainScreenId)
-                }
-                else{
+                } else {
                     submitData()
                 }
 
@@ -118,9 +124,6 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         llParentBody = findViewById(R.id.ll_parent_body)
         tvTitle = findViewById(R.id.tv_title)
         imgBack = findViewById(R.id.img_back)
-
-
-
         btnNext = findViewById(R.id.btn_next)
         isBpWorkflow = intent.getBooleanExtra(BP_WORKFLOW, false)
         if (isBpWorkflow) {
@@ -225,12 +228,15 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 CpControlType.AMT.name -> {
                     val editText = controls.controlObject as EditText
                     output?.put(controls.kEY, editText.text.toString())
+                    controls.dVAL = (output?.get(controls.kEY) ?: "").toString()
                 }
                 CpControlType.CARDNO.name, CpControlType.PIN.name -> {
                     output?.put(controls.kEY, cardReadOutput!!)
                 }
             }
         }
+
+        ctrlStackList?.push(filteredObjectList)
     }
 
     /**
@@ -378,7 +384,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                     btnNext?.visibility = GONE
                     runOnUiThread {
                         emvProcessor =
-                            TerminalCardApiHelper(
+                            TerminalFactory.GetCardAPIHelper(
                                 this@CpControlsActivity,
                                 object : ISuccessResponse_Card {
                                     override fun processFinish(CardOutput: CardReadOutput?) {
@@ -516,7 +522,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        emvProcessor?.closeEmvProcess()
+        emvProcessor?.close()
     }
 
     /**
@@ -561,6 +567,17 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.img_back -> {
                 onBackPressed()
             }
+        }
+    }
+
+
+    override fun onBackPressed() {
+        controlList = ctrlStackList?.pop()
+        mainScreenId--
+        if (controlList != null && controlList!!.count() > 0) {
+            loadScreen(controlList!!, mainScreenId)
+        } else {
+            super.onBackPressed()
         }
     }
 
