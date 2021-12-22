@@ -37,8 +37,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     private var etPassword: EditText? = null
 
     private val apiResult = object : ApiResult {
-        override fun onSuccess(jsonRequest: JsonObject) {
-            val logonResponse = Gson().fromJson(jsonRequest.toString(), LogonResponse::class.java)
+        override fun onSuccess(jsonResponse: Any) {
+            val logonResponse = Gson().fromJson(jsonResponse.toString(), LogonResponse::class.java)
 
             if (logonResponse != null) {
                 SharedPreferenceUtils

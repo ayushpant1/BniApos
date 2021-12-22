@@ -1,9 +1,13 @@
 package com.example.bniapos.utils
 
 import android.app.Activity
+import android.content.Context
 import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.host.HostRepository
+import com.example.bniapos.models.PrintFormat
+import com.example.bniapos.models.UpdateRequest
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -37,5 +41,45 @@ object CommonUtility {
             )
 
         }
+    }
+
+    fun performInitialization(
+        context: Activity,
+        url: String,
+        apiResult: ApiResult,
+        updateRequest: UpdateRequest
+    ) {
+        val hostRepository = HostRepository()
+        MainScope().launch {
+            hostRepository.performIntialization(
+                context,
+                url,
+                updateRequest,
+                apiResult
+            )
+
+        }
+    }
+
+    fun handleError(
+        context: Context?,
+        error: Exception,
+        errorLocation: String
+    ) {
+
+        //TODO
+
+    }
+
+    fun PrintFormatListToJson(formatList: ArrayList<PrintFormat>): String {
+        val gson = Gson()
+
+        return gson.toJson(formatList)
+    }
+
+    fun JsonToPrintFormatList(json: String?): ArrayList<PrintFormat?>? {
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<PrintFormat?>?>() {}.type
+        return gson.fromJson<Any>(json, type) as ArrayList<PrintFormat?>
     }
 }

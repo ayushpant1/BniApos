@@ -84,7 +84,7 @@ fun getMasterValue(
             getDid()
         }
         TransactionRequestKeys.PTYPE.name -> {
-            getPType()
+            transactionType.toString()
         }
         TransactionRequestKeys.reffNum.name,
         TransactionRequestKeys.REFNO.name -> {

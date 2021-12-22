@@ -24,7 +24,6 @@ import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.Configuration
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -70,8 +69,8 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private val apiResult: ApiResult = object : ApiResult {
-        override fun onSuccess(jsonRequest: JsonObject) {
-            val jsonRequestString = Gson().toJson(jsonRequest)
+        override fun onSuccess(jsonResponse: Any) {
+            val jsonRequestString = Gson().toJson(jsonResponse)
             val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
             val requestMap: Map<String, Any> = Gson().fromJson(jsonRequestString, type)
             output = requestMap.toMutableMap()

@@ -7,7 +7,7 @@
         "WorkflowId": 0,
         "DisplayText": "Payment",
         "SortOrder": 1,
-        "TxnType": 2500116,
+        "TxnType": 0,
         "Type": "BP",
         "IconName": "Payment",
         "LinkId": 1,

@@ -1,5 +1,7 @@
 package com.example.bniapos.host
 
+import com.example.bniapos.models.UpdateRequest
+import com.example.bniapos.models.UpdateResponse
 import com.example.bniapos.models.responsemodels.LogonResponse
 import com.example.bniapos.utils.AppConstants
 import com.google.gson.JsonObject
@@ -26,6 +28,14 @@ interface ApiInterface {
         @Field("grant_type") grantType: String,
         @Header("Authorization") authorization: String
     ): Call<JsonObject>
+
+    @POST("{url}")
+    fun performInit(
+        @Path("url", encoded = true) url: String,
+        @Body updateRequest: UpdateRequest
+    ): Call<UpdateResponse>
+
+
 
     companion object {
 

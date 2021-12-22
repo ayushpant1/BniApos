@@ -1,7 +1,9 @@
 package com.example.bniapos.activities
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +11,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bniapos.R
 import com.example.bniapos.adapters.MenuAdapter
+import com.example.bniapos.alerts.Alerts
+import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.callback.MenuAdapterListener
+import com.example.bniapos.callbacks.ButtonInterface
+import com.example.bniapos.helpers.InitializationHelper
 import com.example.bniapos.models.MenuList
+import com.example.bniapos.models.responsemodels.LogonResponse
+import com.example.bniapos.utils.SharedPreferenceUtils
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.IOException
@@ -31,10 +39,28 @@ class MenuActivity : AppCompatActivity() {
     private val actionType = "action"
     private val nonSelectedPosition = -1
 
+    private val apiResult = object : ApiResult {
+        override fun onSuccess(jsonResponse: Any) {
+
+        }
+
+        override fun onFailure(message: String) {
+            Log.d("Failure", message)
+            //handle failure
+        }
+
+    }
+    fun testInit()
+    {
+       var initHelper = InitializationHelper()
+        initHelper.init(this@MenuActivity,true,true,true,false,apiResult)
+        initHelper.PerformInitialization()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        testInit()
         gridview = findViewById(R.id.grid_menu)
         val json = loadJSONFromAsset()
         menuList = Gson().fromJson(json, Array<MenuList>::class.java).asList()
@@ -93,6 +119,7 @@ class MenuActivity : AppCompatActivity() {
          val includeEdge = false
          gridview?.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))*/
         setAdapter(menuFilterList!!, -1)
+
     }
 
     private fun setAdapter(menuFilterList: List<MenuList>, defaultPosition: Int) {

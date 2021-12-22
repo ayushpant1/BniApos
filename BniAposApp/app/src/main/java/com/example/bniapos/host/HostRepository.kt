@@ -11,6 +11,8 @@ import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.enums.TransactionResponseKeys
+import com.example.bniapos.models.UpdateRequest
+import com.example.bniapos.models.UpdateResponse
 import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.models.responsemodels.LogonResponse
 import com.example.bniapos.utils.Util
@@ -41,17 +43,20 @@ class HostRepository : HostRepositoryInterface {
 
         val jsonRequest = jsonObject.toTransactionRequest(currentWORKFLOW, transactionType, context)
         Util.deepMerge(jsonRequest, jsonObject)!!
+      
         Log.d("HTTP Url - ", url)
         Log.d("HTTP Request - ", jsonObject.toString())
         ProgressDialog.showDialog(context)
         apiInterface.postToHost(url, jsonRequest)
             .enqueue(object : Callback<JsonObject> {
+              
                 override fun onResponse(
                     call: Call<JsonObject>?,
                     response: Response<JsonObject>?
                 ) {
                     Log.d("success", "")
 
+                  
                     if (response!!.isSuccessful && response.body() != null) {
                         val splitResponse = currentWORKFLOW.rESP.split(",")
                         val responseBody = response?.body() as JsonObject
@@ -71,7 +76,7 @@ class HostRepository : HostRepositoryInterface {
                                     }
                                 }
                             }
-
+                  
                             val splitResponseData = currentWORKFLOW.dataResponse.split(",")
                             if (!splitResponseData.isNullOrEmpty() && response?.body()
                                     ?.has("data") ?: false
@@ -79,6 +84,7 @@ class HostRepository : HostRepositoryInterface {
                                 val responseBodyData = response?.body()?.get("data") as JsonObject
                                 splitResponseData.forEach {
 
+                              
                                     if (responseBodyData.has(it)) {
                                         val value = responseBodyData?.get(it)?.asString
                                         if (value != null) {
@@ -88,12 +94,13 @@ class HostRepository : HostRepositoryInterface {
                                     }
                                 }
                             }
-
+                     
                             ProgressDialog.dismissDialog()
                             DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
                                 ?.getAll()
                             val buttonInterface: ButtonInterface = object : ButtonInterface {
 
+                          
                                 override fun onClicked(alertDialogBuilder: AlertDialog?) {
                                     if (isBpWorkflow) {
                                         val returnIntent = Intent()
@@ -105,9 +112,9 @@ class HostRepository : HostRepositoryInterface {
                                     }
                                     apiResult.onSuccess(jsonObject)
                                 }
+                              
                             }
-
-
+                      
                             Alerts.customWebViewAlert(
                                 context,
                                 "Transaction Response Recieved \n\n" +
@@ -115,6 +122,7 @@ class HostRepository : HostRepositoryInterface {
                                 buttonInterface
                             )
 
+                  
                         } else {
                             ProgressDialog.dismissDialog()
                             if (responseBody?.has("RSPM") && responseBody?.get("RSPM") != null) {
@@ -123,6 +131,7 @@ class HostRepository : HostRepositoryInterface {
                         }
                     } else {
                         ProgressDialog.dismissDialog()
+                      
                         Toast.makeText(context, "Error Occured", Toast.LENGTH_LONG).show()
                     }
                 }
@@ -159,6 +168,34 @@ class HostRepository : HostRepositoryInterface {
 
                 override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
                     Log.d("failure", t?.message!!)
+                    ProgressDialog.dismissDialog()
+                    apiResult.onFailure(t.message!!)
+                }
+
+            })
+    }
+    override suspend fun performIntialization(
+        context: Activity,
+        url: String,
+        updateRequest: UpdateRequest,
+        apiResult: ApiResult
+
+    ) {
+
+        ProgressDialog.showDialog(context)
+        apiInterface.performInit(url, updateRequest)
+            .enqueue(object : Callback<UpdateResponse> {
+                override fun onResponse(
+                    call: Call<UpdateResponse>?,
+                    response: Response<UpdateResponse>?
+                ) {
+                    ProgressDialog.dismissDialog()
+                    apiResult.onSuccess(response!!.body())
+                }
+
+                override fun onFailure(call: Call<UpdateResponse>?, t: Throwable?) {
+                    Log.d("failure", t?.message!!)
+                    ProgressDialog.dismissDialog()
                     apiResult.onFailure(t.message!!)
                 }
 

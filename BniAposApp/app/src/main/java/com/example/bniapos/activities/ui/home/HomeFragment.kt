@@ -39,7 +39,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
 
     private var allowedPaymentType: String =
-        "2500116,2500111,2500117"//replace with allowedPaymentType
+        "2500116,2500111,2500117,2500121"//replace with allowedPaymentType
 
 
     private var allowedTransactionType: String = "429,"//replaced with allowedTransactionType
@@ -73,7 +73,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         })
 
         filterMenuList?.addAll(menuList!!.filter {
-            it.type.equals("CP", true) &&
+             it.type.equals("CP", true) &&
                     it.txnType.toString() in allowedTransactionType.split(
                 ","
             )

@@ -84,7 +84,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private val next = "Next"
 
     private val apiResult: ApiResult = object : ApiResult {
-        override fun onSuccess(jsonRequest: JsonObject) {
+        override fun onSuccess(jsonResponse: Any) {
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
                 finish()
             } else {

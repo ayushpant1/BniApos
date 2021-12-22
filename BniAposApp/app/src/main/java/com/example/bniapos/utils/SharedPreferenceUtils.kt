@@ -2,6 +2,7 @@ package com.example.bniapos.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.io.InvalidObjectException
 
 class SharedPreferenceUtils {
 
@@ -20,14 +21,15 @@ class SharedPreferenceUtils {
         private var INSTANCE: SharedPreferenceUtils? = null
         private var sharedPref: SharedPreferences? = null
 
-
-        fun getInstance(context: Context): SharedPreferenceUtils {
+        fun getInstance(context: Context?): SharedPreferenceUtils {
             val tempInstance =
                 INSTANCE
 
             if (tempInstance != null) return tempInstance
+            if (context != null) {
 
-            sharedPref = context.getSharedPreferences("app", Context.MODE_PRIVATE)
+                sharedPref = context!!.getSharedPreferences("app", Context.MODE_PRIVATE)
+            } else throw InvalidObjectException("Application Context is NULL")
             val instance =
                 SharedPreferenceUtils()
             INSTANCE = instance
