@@ -21,14 +21,14 @@ import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.enums.CpControlType
 import com.example.bniapos.enums.TransactionRequestKeys
+import com.example.bniapos.helpers.TransactionPrintingHelper
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.WORKFLOW
-import com.example.bniapos.utils.AppConstants
-import com.example.bniapos.utils.Configuration
-import com.example.bniapos.utils.SharedPreferenceUtils
+import com.example.bniapos.utils.*
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.sdk.Common.ISuccessResponse_Card
+import com.example.paymentsdk.sdk.Common.PrintFormat
 import com.example.paymentsdk.sdk.Common.TerminalCardApiHelper
 import com.example.paymentsdk.sdk.Common.TerminalFactory
 import com.example.paymentsdk.sdk.util.transaction.TransactionConfig
@@ -101,6 +101,17 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             }
+            val AllPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
+            AllPrintFormats.addAll(
+                TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
+                    TransactionPrintingHelper.ProcessPrintingTags(
+                        this@CpControlsActivity,
+                        CommonUtility.JsonToPrintFormatList(""),
+                        jsonResponse as JSONObject,
+                        jsonResponse as JSONObject
+                    )
+                )
+            )
 
         }
 
@@ -588,6 +599,8 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         } else {
             super.onBackPressed()
         }
+
+
     }
 
 

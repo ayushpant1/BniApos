@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.host.HostRepository
-import com.example.bniapos.models.PrintFormat
+import com.example.bniapos.models.MasterPrintFormat
 import com.example.bniapos.models.UpdateRequest
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -71,15 +71,15 @@ object CommonUtility {
 
     }
 
-    fun PrintFormatListToJson(formatList: ArrayList<PrintFormat>): String {
+    fun PrintFormatListToJson(formatList: ArrayList<MasterPrintFormat>): String {
         val gson = Gson()
 
         return gson.toJson(formatList)
     }
 
-    fun JsonToPrintFormatList(json: String?): ArrayList<PrintFormat?>? {
+    fun JsonToPrintFormatList(json: String?): ArrayList<MasterPrintFormat> {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<PrintFormat?>?>() {}.type
-        return gson.fromJson<Any>(json, type) as ArrayList<PrintFormat?>
+        val type = object : TypeToken<ArrayList<MasterPrintFormat>>() {}.type
+        return gson.fromJson<Any>(json, type) as ArrayList<MasterPrintFormat>
     }
 }

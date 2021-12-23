@@ -19,6 +19,12 @@ class SharedPreferenceUtils {
         private const val PREF_ALLOW_TXN_TYPE = "allowedTxntypes"
         private const val PREF_ALLOW_PAYMENT_TYPE = "allowedPaymentTypes"
 
+        private const val PREF_MERCHANT_NAME = "mrn"
+        private const val PREF_ADDRESS_LINE1="mal1"
+        private const val PREF_ADDRESS_LINE2="mal2"
+        private const val PREF_ADDRESS_CITY="city"
+        private const val PREF_ACQ_NAME="aqn"
+
         private const val INVALID_INDEX = -1
 
         private var INSTANCE: SharedPreferenceUtils? = null
@@ -186,5 +192,67 @@ class SharedPreferenceUtils {
             PREF_ALLOW_TXN_TYPE, ""
         )
         return transactionTypes.toString()
+    }
+
+
+    fun setMerchantName(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_MERCHANT_NAME, value)?.apply()
+    }
+    fun getMerchantName(): String {
+        val value = sharedPref?.getString(
+            PREF_MERCHANT_NAME, ""
+        )
+        return value.toString()
+    }
+
+
+    fun setAddressLine1(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_ADDRESS_LINE1, value)?.apply()
+    }
+    fun getAddressLine1(): String {
+        val value = sharedPref?.getString(
+            PREF_ADDRESS_LINE1, ""
+        )
+        return value.toString()
+    }
+
+
+
+    fun setAddressLine2(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_ADDRESS_LINE2, value)?.apply()
+    }
+    fun getAddressLine2(): String {
+        val value = sharedPref?.getString(
+            PREF_ADDRESS_LINE2, ""
+        )
+        return value.toString()
+    }
+
+
+
+    fun setMerchantCity(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_ADDRESS_CITY, value)?.apply()
+    }
+    fun getMerchantCity(): String {
+        val value = sharedPref?.getString(
+            PREF_ADDRESS_CITY, ""
+        )
+        return value.toString()
+    }
+
+
+    fun setAcquirerName(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_ACQ_NAME, value)?.apply()
+    }
+    fun getAcquirerName(): String {
+        val value = sharedPref?.getString(
+            PREF_ACQ_NAME, ""
+        )
+        return value.toString()
     }
 }

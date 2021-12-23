@@ -56,7 +56,6 @@ class HostRepository : HostRepositoryInterface {
                 ) {
                     Log.d("success", "")
 
-                  
                     if (response!!.isSuccessful && response.body() != null) {
                         val splitResponse = currentWORKFLOW.rESP.split(",")
                         val responseBody = response?.body() as JsonObject
@@ -83,9 +82,7 @@ class HostRepository : HostRepositoryInterface {
                             ) {
                                 val responseBodyData = response?.body()?.get("data") as JsonObject
                                 splitResponseData.forEach {
-
-                              
-                                    if (responseBodyData.has(it)) {
+                               if (responseBodyData.has(it)) {
                                         val value = responseBodyData?.get(it)?.asString
                                         if (value != null) {
                                             jsonObject.addProperty(it, value)
@@ -131,7 +128,6 @@ class HostRepository : HostRepositoryInterface {
                         }
                     } else {
                         ProgressDialog.dismissDialog()
-                      
                         Toast.makeText(context, "Error Occured", Toast.LENGTH_LONG).show()
                     }
                 }
@@ -140,10 +136,7 @@ class HostRepository : HostRepositoryInterface {
                     Log.d("http failure", t?.message!!)
                     ProgressDialog.dismissDialog()
                     apiResult.onFailure(t?.message!!)
-
-
                 }
-
             })
     }
 

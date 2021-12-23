@@ -1,7 +1,7 @@
 package com.example.bniapos.helpers
 
 import android.util.Xml
-import com.example.bniapos.models.PrintFormat
+import com.example.bniapos.models.MasterPrintFormat
 import com.example.bniapos.models.TerminalParams
 import com.example.bniapos.utils.CommonUtility
 import com.example.bniapos.utils.InputUtility
@@ -16,7 +16,7 @@ object XMLParserHelper {
     fun ParseXMLReceipt(XML: String): Map<Int, String>? {
         val parser = Xml.newPullParser()
         val _Output: MutableMap<Int, String> = HashMap()
-        val AllPrintTags: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
+        val AllPrintTags: ArrayList<MasterPrintFormat> = ArrayList<MasterPrintFormat>()
         var ReceiptID = 0
         try {
             // auto-detect the encoding from the stream
@@ -41,7 +41,7 @@ object XMLParserHelper {
                                 ) ReceiptID = ID.toInt()
                             }
                             "TAG" -> {
-                                val currentTAG: PrintFormat = PrintFormat()
+                                val currentTAG: MasterPrintFormat = MasterPrintFormat()
                                 val Text = parser.getAttributeValue(null, "TEXT")
                                 if (Text != null) currentTAG.Printheader = Text
                                 val Name = parser.getAttributeValue(null, "NAME")
@@ -75,7 +75,7 @@ object XMLParserHelper {
                                 var ReceiptFormat = ""
                                 if (AllPrintTags != null && AllPrintTags.size > 0) Collections.sort(
                                     AllPrintTags,
-                                    Comparator<PrintFormat?> { obj1, obj2 ->
+                                    Comparator<MasterPrintFormat?> { obj1, obj2 ->
                                         Integer.valueOf(obj1.Order)
                                             .compareTo(Integer.valueOf(obj2.Order)) // To compare integer values
                                     })
