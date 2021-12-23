@@ -11,6 +11,7 @@ import com.example.bniapos.models.UpdateRequest
 import com.example.bniapos.models.UpdateResponse
 import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.CommonUtility
+import com.example.bniapos.utils.SharedPreferenceUtils
 
 import java.lang.Exception
 
@@ -61,7 +62,7 @@ class InitializationHelper {
                 //For Full Initialization.
 
                 0
-            } else 0
+            } else SharedPreferenceUtils.getInstance(_context).getChangeNo()
             if (currentChangeNo == 0) {
                 isFirstTimeInit = true
             }
@@ -89,7 +90,7 @@ class InitializationHelper {
 
     private fun InitializationAction(request: UpdateRequest) {
         val url =
-            "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/TestConnection"//"https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
+            "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"//"https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
         val apiResult: ApiResult = object : ApiResult {
             override fun onSuccess(response: Any) {
                 InitializationSuccess(response as UpdateResponse)
@@ -143,7 +144,7 @@ class InitializationHelper {
                         }
                     } else if (_currentChangeNo > 0) {
                         currentChangeNo = _currentChangeNo
-                        //     SingletonActivity.getInstance().setChangeNo(currentChangeNo)
+                        SharedPreferenceUtils.getInstance(_context).setChangeNo(currentChangeNo)
                         if (ChangeType.equals(
                                 "TP",
                                 ignoreCase = true
@@ -191,6 +192,9 @@ class InitializationHelper {
                     if (Params != null) {
                         //UPDATE IN TERMINAL RECORD DB
                         //STORE VALUES IN SHARED PREFERENCES
+                        SharedPreferenceUtils.getInstance(_context).setAllowedPaymentTypes(Params.AllowedPayments)
+                        SharedPreferenceUtils.getInstance(_context).setAllowedTransactionTypes(Params.AllowedTransactions)
+
 //
 
                     }

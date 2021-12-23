@@ -18,6 +18,7 @@ import com.example.bniapos.adapters.MenuListAdapter
 import com.example.bniapos.callback.MenuListAdapterListener
 import com.example.bniapos.databinding.FragmentHomeBinding
 import com.example.bniapos.utils.Configuration
+import com.example.bniapos.utils.SharedPreferenceUtils
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.IOException
@@ -39,11 +40,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
 
     private var allowedPaymentType: String =
-        "2500116,2500111,2500117,2500121"//replace with allowedPaymentType
+        "2500116,2500111,2500117,2500121"
 
 
-    private var allowedTransactionType: String = "429,"//replaced with allowedTransactionType
-
+    private var allowedTransactionType: String = "429,"
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -61,6 +61,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
         imgSettings = binding.imgSettings
         gridview = binding.gridMenu
+
+        allowedPaymentType = SharedPreferenceUtils.getInstance(root.context).getAllowedPaymentTypes()
+        allowedTransactionType = SharedPreferenceUtils.getInstance(root.context).getAllowedTransactionTypes()
 
         val json = Configuration.getMenuConfig(root.context)
         menuList = Gson().fromJson(json, Array<MenuLink>::class.java).asList()

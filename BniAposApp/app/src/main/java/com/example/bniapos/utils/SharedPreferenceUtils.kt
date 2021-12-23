@@ -15,6 +15,9 @@ class SharedPreferenceUtils {
         private const val PREF_MTID_KEY = "mtId"
         private const val PREF_AUTH_KEY = "auth"
         private const val PREF_AGEN_COUNTER_CODE_KEY = "agenCounterCode"
+        private const val PREF_CHANGE_NO = "changeno"
+        private const val PREF_ALLOW_TXN_TYPE = "allowedTxntypes"
+        private const val PREF_ALLOW_PAYMENT_TYPE = "allowedPaymentTypes"
 
         private const val INVALID_INDEX = -1
 
@@ -146,15 +149,42 @@ class SharedPreferenceUtils {
         editor?.putString(PREF_AUTH_KEY, authCode)?.apply()
     }
 
-    /**
-     * this function use to get mtId
-     *
-     * @return mtId.
-     */
+
     fun getAuthCode(): String {
         val authCode = sharedPref?.getString(
             PREF_AUTH_KEY, "MYAUTHTOKEN"
         )
         return authCode.toString()
+    }
+
+    fun setChangeNo(changeNo: Int) {
+        val editor = sharedPref?.edit()
+        editor?.putInt(PREF_CHANGE_NO, changeNo)?.apply()
+    }
+    fun getChangeNo(): Int {
+        val changeNo = sharedPref?.getInt(
+            PREF_CHANGE_NO, 0
+        )?:0
+        return changeNo
+    }
+    fun setAllowedPaymentTypes(paymentTypes: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_ALLOW_PAYMENT_TYPE, paymentTypes)?.apply()
+    }
+    fun getAllowedPaymentTypes(): String {
+        val paymentTypes = sharedPref?.getString(
+            PREF_ALLOW_PAYMENT_TYPE, ""
+        )
+        return paymentTypes.toString()
+    }
+    fun setAllowedTransactionTypes(transactionTypes: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_ALLOW_TXN_TYPE, transactionTypes)?.apply()
+    }
+    fun getAllowedTransactionTypes(): String {
+        val transactionTypes = sharedPref?.getString(
+            PREF_ALLOW_TXN_TYPE, ""
+        )
+        return transactionTypes.toString()
     }
 }
