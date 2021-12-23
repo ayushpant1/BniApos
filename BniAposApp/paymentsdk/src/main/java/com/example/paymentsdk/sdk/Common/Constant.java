@@ -53,10 +53,10 @@ public class Constant {
                     }
                 }
 
-                return Terminal_Landi;
+                return Terminal_Verfione;
 
             } catch (Exception ex) {
-                return Terminal_Landi;
+                return Terminal_Verfione;
             }
     }
 

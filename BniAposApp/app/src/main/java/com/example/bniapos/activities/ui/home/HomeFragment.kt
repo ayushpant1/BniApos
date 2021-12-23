@@ -69,20 +69,17 @@ class HomeFragment : Fragment(), View.OnClickListener {
         menuList = Gson().fromJson(json, Array<MenuLink>::class.java).asList()
         val filterMenuList: MutableList<MenuLink>? = ArrayList()
         filterMenuList?.addAll(menuList!!.filter {
-            it.type.equals("BP", true) &&
-                    it.txnType.toString() in allowedPaymentType.split(
-                ","
-            )
-        })
+          
+         it.type.equals("CAT",true)
+                 ||   (it.type.equals("BP", true) && it.workflowId > 0 &&
+                 it.txnType.toString() in allowedPaymentType.split(","))
+                 ||   (it.type.equals("CP", true) && it.workflowId > 0 &&
+                 it.txnType.toString() in allowedTransactionType.split(","))
 
-        filterMenuList?.addAll(menuList!!.filter {
-            it.type.equals("CP", true) &&
-                    it.txnType.toString() in allowedTransactionType.split(
-                ","
-            )
         })
-        filterMenuList?.addAll(menuList?.filter { it.parentId == 0 }!!)
+      
         menuList = filterMenuList
+      
         menuFilterList = menuList!!.filter { s ->
             s.parentId == 0 && isChildAvailable(menuList, s)
         }.sortedWith(compareBy { it.sortOrder })

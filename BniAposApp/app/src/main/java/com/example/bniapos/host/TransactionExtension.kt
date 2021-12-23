@@ -21,20 +21,24 @@ fun JsonObject.toTransactionRequest(
     val cardReadOutput = getCardInfo(this)
     val splitRequest = currentWORKFLOW.rEQ.split(",")
     splitRequest.forEach {
-        val value = getMasterValue(
-            context, cardReadOutput,
-            this, transactionType, currentWORKFLOW, it
-        )
-        jsonObject.addProperty(it, value)
+        if(it.trim().length > 0) {
+            val value = getMasterValue(
+                context, cardReadOutput,
+                this, transactionType, currentWORKFLOW, it
+            )
+            jsonObject.addProperty(it, value)
+        }
     }
 
     val splitRequestEnc = currentWORKFLOW.encryptedRequest.split(",")
     splitRequestEnc.forEach {
-        val value = getMasterValue(
-            context, cardReadOutput,
-            this, transactionType, currentWORKFLOW, it
-        )
-        jsonObject.addProperty(it, encrypt(value))
+        if(it.trim().length > 0) {
+            val value = getMasterValue(
+                context, cardReadOutput,
+                this, transactionType, currentWORKFLOW, it
+            )
+            jsonObject.addProperty(it, encrypt(value))
+        }
     }
     if (currentWORKFLOW.dataRequest != null && currentWORKFLOW.dataRequest.isNotEmpty()) {
 
@@ -42,11 +46,13 @@ fun JsonObject.toTransactionRequest(
         val splitRequestData = currentWORKFLOW.dataRequest.split(",")
 
         splitRequestData.forEach {
-            val value = getMasterValue(
-                context, cardReadOutput,
-                this, transactionType, currentWORKFLOW, it
-            )
-            jsonObjectData.addProperty(it, value)
+            if(it.trim().length > 0) {
+                val value = getMasterValue(
+                    context, cardReadOutput,
+                    this, transactionType, currentWORKFLOW, it
+                )
+                jsonObjectData.addProperty(it, value)
+            }
         }
         jsonObject.add("data", jsonObjectData)
     }
@@ -88,7 +94,10 @@ fun getMasterValue(
         }
         TransactionRequestKeys.reffNum.name,
         TransactionRequestKeys.REFNO.name -> {
-            getRefNo(context)
+            if (jsonObject.has(key)) {
+                jsonObject.get(key).asString
+            } else  getRefNo(context)
+
         }
         TransactionRequestKeys.ACODE.name -> {
             getACode()

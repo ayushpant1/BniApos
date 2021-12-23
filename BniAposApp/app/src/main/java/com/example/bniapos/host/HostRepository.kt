@@ -45,7 +45,7 @@ class HostRepository : HostRepositoryInterface {
         Util.deepMerge(jsonRequest, jsonObject)!!
       
         Log.d("HTTP Url - ", url)
-        Log.d("HTTP Request - ", jsonObject.toString())
+        Log.d("HTTP Request - ", jsonRequest.toString())
         ProgressDialog.showDialog(context)
         apiInterface.postToHost(url, jsonRequest)
             .enqueue(object : Callback<JsonObject> {
@@ -182,20 +182,31 @@ class HostRepository : HostRepositoryInterface {
 
     ) {
 
-        ProgressDialog.showDialog(context)
+     
+
         apiInterface.performInit(url, updateRequest)
             .enqueue(object : Callback<UpdateResponse> {
                 override fun onResponse(
                     call: Call<UpdateResponse>?,
                     response: Response<UpdateResponse>?
                 ) {
+                   
 
+
+                    if(response?.body() !=null)
                     apiResult.onSuccess(response!!.body())
+                    else
+                    {
+                        Log.d("failure", "init failed!! No Response")
+
+                        apiResult.onFailure("init failed!! No Response - $url $updateRequest")
+                    }
                 }
 
                 override fun onFailure(call: Call<UpdateResponse>?, t: Throwable?) {
                     Log.d("failure", t?.message!!)
-                    ProgressDialog.dismissDialog()
+                  
+
                     apiResult.onFailure(t.message!!)
                 }
 

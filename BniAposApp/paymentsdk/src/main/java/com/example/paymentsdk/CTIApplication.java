@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 
 import com.example.paymentsdk.LandiSDK.api.DeviceService;
@@ -29,6 +30,7 @@ public class CTIApplication {
     private static final String VERIFONE_USDK_PACKAGE_NAME = "com.vfi.smartpos.deviceservice";
 
     private static Context context;
+    private static String TAG="service_connect:";
 
     private static IDeviceService verfioneDeviceService;
 
@@ -60,6 +62,20 @@ public class CTIApplication {
         return deviceService;
     }
 
+    public static void terminateService(Context context)
+    {
+        try {
+
+            if (Constant.CurrentTerminal().equalsIgnoreCase(Constant.Terminal_Landi)) {
+                if (deviceService != null)
+                    deviceService.unregister();
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        context.unbindService(serviceConnection);
+    }
+
 
     public static void bindSdkDeviceService(Context context) {
         Intent intent_L = new Intent();
@@ -69,8 +85,28 @@ public class CTIApplication {
         intent_V.setAction(VERIFONE_USDK_ACTION_NAME);
         intent_V.setPackage(VERIFONE_USDK_PACKAGE_NAME);
 
-        boolean flag = false;
-        flag = context.bindService(intent_L, serviceConnection, Context.BIND_AUTO_CREATE);
+        if (Constant.CurrentTerminal().equalsIgnoreCase(Constant.Terminal_Landi)) {
+            Log.d(TAG, "binding sdk device service...");
+            boolean flag = context.bindService(intent_L, serviceConnection, Context.BIND_AUTO_CREATE);
+            if (!flag) {
+                Log.d(TAG, "SDK service binding failed.");
+                return;
+            }
+            else
+                Log.d(TAG, "SDK service binding successfully.");
+
+        } else if (Constant.CurrentTerminal().equalsIgnoreCase(Constant.Terminal_Verfione)) {
+            Log.d(TAG, "binding sdk device service...");
+            boolean flag = context.bindService(intent_V, serviceConnection, Context.BIND_AUTO_CREATE);
+            if (!flag) {
+                Log.d(TAG, "SDK service binding failed.");
+                return;
+            }
+            else
+
+                Log.d(TAG, "SDK service binding successfully.");
+        }
+
     }
 
     public static void unregisterDeviceService() {
@@ -82,7 +118,8 @@ public class CTIApplication {
     }
 
     public static void unbindServiceConnection() {
-        context.unbindService(serviceConnection);
+        terminateService(context);
+
     }
 
     /**
@@ -97,6 +134,7 @@ public class CTIApplication {
     }
 
 
+
     /**
      * Service connection.
      */
@@ -104,24 +142,30 @@ public class CTIApplication {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //Log.d(TAG, "SDK service disconnected.");
+            Log.d(TAG, "SDK service disconnected.");
             deviceService = null;
-
+            verfioneDeviceService=null;
         }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            //Log.d(TAG, "SDK service connected.");
+            Log.d(TAG, "SDK service connected.");
 
             try {
-                deviceService = new DeviceService(UDeviceService.Stub.asInterface(service));
-                deviceService.register();
-                deviceService.debugLog(true, true);
-                 /*
-                 for now calling constant Master and Session Key ,load it from server
-                 */
+                if(Constant.CurrentTerminal().equalsIgnoreCase(Constant.Terminal_Landi)) {
+                    deviceService = new DeviceService(UDeviceService.Stub.asInterface(service));
+                    deviceService.register();
+                    deviceService.debugLog(true, true);
+                    Log.d(TAG, "SDK deviceService initiated version:" + deviceService.getVersion() + ".");
+                }
+                else if(Constant.CurrentTerminal().equalsIgnoreCase(Constant.Terminal_Verfione))
+                {
+                    verfioneDeviceService = IDeviceService.Stub.asInterface(service);
+
+                    Log.d(TAG, "SDK deviceService initiated");
+                }
+
                 loadMasterAndSessionKey();
-                //Log.d(TAG, "SDK deviceService initiated version:" + deviceService.getVersion() + ".");
             } catch (RemoteException e) {
                 throw new RuntimeException("SDK deviceService initiating failed.", e);
             }
@@ -132,8 +176,6 @@ public class CTIApplication {
                 throw new RuntimeException("SDK service link to death error.", e);
             }
         }
-
-
         private void loadMasterAndSessionKey() {
             TerminalSecurity.LoadMasterKey(BytesUtil.hexString2ByteArray(
                     Constant.PINBMasterKey), null);
@@ -142,7 +184,7 @@ public class CTIApplication {
 
         private void linkToDeath(IBinder service) throws RemoteException {
             service.linkToDeath(() -> {
-                //Log.d(TAG, "SDK service is dead. Reconnecting...");
+                Log.d(TAG, "SDK service is dead. Reconnecting...");
                 bindSdkDeviceService(context);
             }, 0);
         }

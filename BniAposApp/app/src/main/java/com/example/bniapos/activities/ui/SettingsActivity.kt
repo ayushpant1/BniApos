@@ -11,6 +11,7 @@ import android.widget.*
 import com.example.bniapos.R
 import com.example.bniapos.activities.HomeActivity
 import com.example.bniapos.alerts.Alerts
+import com.example.bniapos.alerts.ProgressDialog
 import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.helpers.InitializationHelper
@@ -76,13 +77,24 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val apiResultInit = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
+            ProgressDialog.dismissDialog()
             val intent = Intent(this@SettingsActivity, HomeActivity::class.java)
             startActivity(intent)
         }
 
         override fun onFailure(message: String) {
+            ProgressDialog.dismissDialog()
             Log.d("Failure", message)
-            //handle failure
+            val buttonInterface: ButtonInterface = object : ButtonInterface {
+                override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                    this@SettingsActivity.finish()
+                }
+            }
+            Alerts.customWebViewAlert(
+                this@SettingsActivity,
+                message,
+                buttonInterface
+            )
         }
 
     }
@@ -118,9 +130,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun showUI() {
         tvTitle?.text = AppConstants.SETTINGS_TITLE
-
         //set Default Values
-
         etClientId?.setText(AppConstants.DEFAULT_CLIENT_ID)
         etClientSecret?.setText(AppConstants.DEFAULT_CLIENT_SECRET)
         etUsername?.setText(AppConstants.DEFAULT_USERNAME)
@@ -131,10 +141,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     private fun setOnClickListener() {
         btnLogon?.setOnClickListener(this)
         imgBack?.setOnClickListener(this)
-
         btnFullInit?.setOnClickListener(this)
         btnPartialInit?.setOnClickListener(this)
-
     }
 
     override fun onClick(p0: View?) {
@@ -170,6 +178,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun fullInit() {
+        ProgressDialog.showDialog(this@SettingsActivity)
         val initHelper = InitializationHelper()
         initHelper.init(
             this@SettingsActivity,
@@ -183,6 +192,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun partialInit() {
+        ProgressDialog.showDialog(this@SettingsActivity)
         val initHelper = InitializationHelper()
         initHelper.init(
             this@SettingsActivity,

@@ -13,6 +13,7 @@ import com.example.bniapos.models.UpdateResponse
 import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.CommonUtility
 import com.example.bniapos.utils.SharedPreferenceUtils
+import okhttp3.Response
 
 import java.lang.Exception
 
@@ -117,6 +118,7 @@ class InitializationHelper {
                 val ActionType: String? = response.AT
                 val ChangeType: String? = response.CT
                 val ServerDateTime: String? = response.DT
+
                 if (ChangeNo != null && ChangeNo.length > 0) {
                     val _currentChangeNo = ChangeNo.toInt()
                     if (isFirstTimeInit) {
@@ -138,30 +140,47 @@ class InitializationHelper {
                             if (_isPrintSlipAfterSuccess) {
                                 //add function for printing action
                             }
-                            ProgressDialog.dismissDialog()
+                        
                             ShowDisplayDialog(
                                 true,
                                 "Initialization Success!!", "Success"
                             )
                         }
                     } else if (_currentChangeNo > 0) {
+                      
                         currentChangeNo = _currentChangeNo
                        
                         SharedPreferenceUtils.getInstance(_context).setChangeNo(currentChangeNo)
-                        if (ChangeType.equals(
-                                "TP",
-                                ignoreCase = true
+
+                        if (ResponseXML != null && ResponseXML != "") {
+                            currentChangeNo = _currentChangeNo
+                            SharedPreferenceUtils.getInstance(_context).setChangeNo(currentChangeNo)
+                            if (ChangeType.equals(
+                                    "TP",
+                                    ignoreCase = true
+                                )
+                            ) _isUpdateDisplayMenu = true
+                            if (ResponseXML != null && ResponseXML.length > 0)
+                                ParseResponse(
+                                    _context, ChangeType, ActionType,
+                                    ResponseXML
+                                )
+                            Initialization()
+                        }
+                        else
+                        {
+                            ShowDisplayDialog(
+                                false,
+                                "Initialization Failed...",
+                                "No data received : response @${response.CN} is ${response.CD}"
                             )
-                        ) _isUpdateDisplayMenu = true
-                        if (ResponseXML != null && ResponseXML.length > 0)
-                            ParseResponse(
-                                _context, ChangeType, ActionType,
-                                ResponseXML
-                            )
-                        Initialization()
+                       
+                       
+                        }
                     }
+
                 } else {
-                    ProgressDialog.dismissDialog()
+                  
                     ShowDisplayDialog(
                         false,
                         "Initialization Failed...",
@@ -197,6 +216,10 @@ class InitializationHelper {
                         //STORE VALUES IN SHARED PREFERENCES
                         SharedPreferenceUtils.getInstance(_context).setAllowedPaymentTypes(Params.AllowedPayments)
                         SharedPreferenceUtils.getInstance(_context).setAllowedTransactionTypes(Params.AllowedTransactions)
+                        SharedPreferenceUtils.getInstance(_context).setTbId(Params.BatchNo.toString())
+                        SharedPreferenceUtils.getInstance(_context).setMmId(Params.Merchant_Id.toString())
+                        SharedPreferenceUtils.getInstance(_context).setMtId(Params.Terminal_Id.toString())
+
 
 //
 
@@ -217,16 +240,18 @@ class InitializationHelper {
 
     private fun ShowDisplayDialog(isSuccess: Boolean, Title: String, Message: String) {
         val _ActivityResponse: ApiResult? = delegate
-        if (_isDisplayResultDialogs) {
-            //handle UI to display success message
-
-        } else {
+      
+//        if (_isDisplayResultDialogs) {
+//            //handle UI to display success message
+//
+//        } else {
             if (isSuccess) {
                 delegate?.onSuccess("Success")
             } else {
                 delegate?.onFailure(Message)
             }
-        }
+       
+       // }
     }
 }
 

@@ -2,6 +2,7 @@ package com.example.bniapos.activities
 
 import MenuLink
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -19,11 +20,13 @@ import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.BpControlType
 import com.example.bniapos.enums.CpControlType
+import com.example.bniapos.enums.TransactionRequestKeys
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.Configuration
+import com.example.bniapos.utils.SharedPreferenceUtils
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.sdk.Common.ISuccessResponse_Card
 import com.example.paymentsdk.sdk.Common.TerminalCardApiHelper
@@ -78,7 +81,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var bpWorkflowOutputData = ""
     private var menu: MenuLink? = null
-
+    private var txnType: Int =0
 
     private val submit = "Submit"
     private val next = "Next"
@@ -104,6 +107,9 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         override fun onFailure(message: String) {
             val buttonInterface: ButtonInterface = object : ButtonInterface {
                 override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                    val intent = Intent(this@CpControlsActivity,
+                        HomeActivity::class.java)
+                    startActivity(intent)
                     finish()
                 }
             }
@@ -130,14 +136,16 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
             val controlData = intent.getStringExtra(CONTROL_DATA) as String
             bpTransactionTypeName = controlData.split("$").first()
             workflowId = controlData.split("$")[1].toInt()
+            txnType = controlData.split("$")[2].toInt()
             bpWorkflowOutputData = intent.getStringExtra(BP_WORKFLOW_OUTPUT_DATA) as String
             val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
             val requestMap: Map<String, Any> = Gson().fromJson(bpWorkflowOutputData, type)
             output = requestMap.toMutableMap()
         } else {
             workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
+            menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
+            txnType = menu?.txnType ?: 0
         }
-        menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
         tvTitle?.text = menu?.displayText
         val json = Configuration.getWorkflowConfig(this)
         val jsonTable = loadTableJSONFromAsset()
@@ -209,12 +217,11 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 AppConstants.CP_URL + "/" + currentWorkflow?.eNDPOINT,
                 currentWorkflow!!,
                 apiResult,
-                menu!!.txnType,
+                txnType,
                 isBpWorkflow,
                 bpWorkflowOutputData,
 
                 )
-
         }
     }
 
@@ -423,11 +430,13 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
                                 })
                         transactionConfig = TransactionConfig()
-                        transactionConfig?.amount = 100
+                        transactionConfig?.amount = output?.get( TransactionRequestKeys.AMT.name).let{it.toString().toLong()}?:run{0}
                         transactionConfig?.isContactIcCardSupported = true
+                        transactionConfig?.isMagCardSupported=true
+                        transactionConfig?.isRfCardSupported=true
                         emvProcessor!!.startCardScan(
                             transactionConfig,
-                            "51263", false
+                            SharedPreferenceUtils.getInstance(this@CpControlsActivity).getStan().toString(), false
                         )
                     }
 
