@@ -89,8 +89,8 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                         TransactionPrintingHelper.ProcessPrintingTags(
                             this@BpControlsActivity,
                             CommonUtility.JsonToPrintFormatList(printValue),
-                            jsonResponse as JSONObject,
-                            jsonResponse as JSONObject
+                            JSONObject(jsonResponse.toString()),
+                            JSONObject(jsonResponse.toString())
                         )
                     )
                 )

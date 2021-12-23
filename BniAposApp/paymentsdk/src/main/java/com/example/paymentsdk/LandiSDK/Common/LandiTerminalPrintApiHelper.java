@@ -81,6 +81,7 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(cancelable);
 
     }
+
     /**
      * Show dialog by resource id.
      */
@@ -114,7 +115,6 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
     }
 
 
-
     public ISuccessResponse successResponse = null;
 
     private static final int FONT_SIZE_SMALL = 0;
@@ -123,7 +123,6 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
     //Context _context,
 
     /**
-     *
      * @param _context
      * @param toast
      * @param dialog
@@ -139,7 +138,7 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
 
     public void execute(String value, PrintReciept reciept, String Header) throws RemoteException {
         if (value.equals(getContext().getString(R.string.print))) {
-            print(reciept,Header);
+            print(reciept, Header);
 
         } else if (value.equals(getContext().getString(R.string.get_printer_status))) {
             getStatus();
@@ -156,9 +155,10 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
 //            printMultiLanguages();
 //        }
     }
+
     public void executePrint(String value, List<PrintFormat> AllLines, String Header) throws RemoteException {
         if (value.equals(getContext().getString(R.string.print))) {
-            printCustom(AllLines,Header);
+            printCustom(AllLines, Header);
 
         } else if (value.equals(getContext().getString(R.string.get_printer_status))) {
             getStatus();
@@ -177,73 +177,64 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
     }
 
     private void printCustom(List<PrintFormat> AllLines, String Header) throws RemoteException {
-        Log.d(Constant.Messages_TAG,"[printCustom]");
+        Log.d(Constant.Messages_TAG, "[printCustom]");
         Printer.getInstance().getStatus();
 
-        int CurrentFontLetters =48; //48-> small    32-> medium    24-> large
+        int CurrentFontLetters = 48; //48-> small    32-> medium    24-> large
         // Show dialog
-        showDialog(R.string.waiting_for_printing, false);
+        //showDialog(R.string.waiting_for_printing, false);
         setFontSpec(FONT_SIZE_SMALL);
-               // Set gray
+        // Set gray
         Printer.getInstance().setPrnGray(6);        // Print image
-        if ( isAssetExists("print_logo.bmp") ) {  // the resouce exists...
+        if (isAssetExists("print_logo.bmp")) {  // the resouce exists...
             Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile("print_logo.bmp"));
         }
 
 
-        for (PrintFormat format:AllLines) {
-            if(!format.isText())
-            {
-                switch (format.getValue().toLowerCase())
-                {
-                    case"small":
-                    {
+        for (PrintFormat format : AllLines) {
+            if (!format.isText()) {
+                switch (format.getValue().toLowerCase()) {
+                    case "small": {
                         CurrentFontLetters = 48;
                         setFontSpec(FONT_SIZE_SMALL);
                         break;
 
                     }
-                    case"normal":
-                    {
-                        CurrentFontLetters=32;
+                    case "normal": {
+                        CurrentFontLetters = 32;
                         setFontSpec(FONT_SIZE_NORMAL);
                         break;
 
                     }
-                    case "large":
-                    {
-                        CurrentFontLetters=24;
+                    case "large": {
+                        CurrentFontLetters = 24;
                         setFontSpec(FONT_SIZE_LARGE);
                         break;
 
                     }
-                    case "linespace":
-                    {
+                    case "linespace": {
                         Printer.getInstance().feedLine(Integer.valueOf(format.getAlignMode()));
 
                         break;
 
                     }
-                    case "image":
-                    {
+                    case "image": {
                         //Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile(format.getAlignMode()));
 
                         break;
                     }
-                    case "qrcode":
-                    {
+                    case "qrcode": {
                         // Print QR code
                         Printer.getInstance().addQrCode(AlignMode.CENTER, 340, ECLevel.ECLEVEL_Q, format.getAlignMode());
 
                         break;
                     }
-                    case "barcode":
-                    {
+                    case "barcode": {
                         // Print Bar code
 
-                        Printer.getInstance().addBarCode(AlignMode.CENTER, 4,  120, format.getAlignMode());
+                        Printer.getInstance().addBarCode(AlignMode.CENTER, 4, 120, format.getAlignMode());
 
-                     //   Printer.getInstance().addBarCode(AlignMode.CENTER, 340, ECLevel.ECLEVEL_Q, format.getAlignMode());
+                        //   Printer.getInstance().addBarCode(AlignMode.CENTER, 340, ECLevel.ECLEVEL_Q, format.getAlignMode());
                         break;
                     }
                     case "acquirerimage": {
@@ -251,14 +242,12 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
                             //Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile(format.getAlignMode()));
                         }
                     }
-                    default:
-                    {
+                    default: {
                         setFontSpec(FONT_SIZE_SMALL);
                     }
                 }
             }
-            if(format.isText())
-            {
+            if (format.isText()) {
                 switch (format.getAlignMode().toLowerCase()) {
 
                     case "left": {
@@ -287,10 +276,10 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
         }
 
         setFontSpec(FONT_SIZE_SMALL);
-        if(Header != null && Header.length() > 0)
+        if (Header != null && Header.length() > 0)
             Printer.getInstance().addText(AlignMode.CENTER, Header);
 
-        Printer.getInstance().addText(AlignMode.CENTER,"Version V-"+ Constant.VER);
+        Printer.getInstance().addText(AlignMode.CENTER, "Version V-" + Constant.VER);
 
         // Print QR code
         //    Printer.getInstance().addQrCode(AlignMode.LEFT, 240, ECLevel.ECLEVEL_Q, "www.landicorp.com");
@@ -306,7 +295,7 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
             public void onFinish() {
                 hideDialog();
                 successResponse.processFinish("");
-               // showToast(R.string.succeed);
+                // showToast(R.string.succeed);
             }
 
             @Override
@@ -320,72 +309,70 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
             }
         });
     }
-    private void handleMultiLinePrint(int perLineChars,String text,int textAlignMode )
-    {
+
+    private void handleMultiLinePrint(int perLineChars, String text, int textAlignMode) {
         try {
             int TotalCharsLeftToPrint = text != null ? text.length() : 0;
             int currentPrintIndex = 0;
             do {
                 if (TotalCharsLeftToPrint > perLineChars) {
 
-                    String ValueToPrint =text.substring(currentPrintIndex,currentPrintIndex +(perLineChars-1));
+                    String ValueToPrint = text.substring(currentPrintIndex, currentPrintIndex + (perLineChars - 1));
                     Printer.getInstance().addText(textAlignMode, ValueToPrint);
-                    currentPrintIndex=currentPrintIndex+perLineChars;
-                    TotalCharsLeftToPrint = TotalCharsLeftToPrint-perLineChars;
+                    currentPrintIndex = currentPrintIndex + perLineChars;
+                    TotalCharsLeftToPrint = TotalCharsLeftToPrint - perLineChars;
 
 
                 } else {
 
-                    String ValueToPrint = text.substring(currentPrintIndex, currentPrintIndex +  TotalCharsLeftToPrint);
+                    String ValueToPrint = text.substring(currentPrintIndex, currentPrintIndex + TotalCharsLeftToPrint);
                     Printer.getInstance().addText(textAlignMode, ValueToPrint);
                     TotalCharsLeftToPrint = 0;
                     currentPrintIndex = 0;
 
                 }
             } while (TotalCharsLeftToPrint != 0);
-        }
-        catch (Exception ex)
-        {
-            Log.e("print Error",ex.getLocalizedMessage());
+        } catch (Exception ex) {
+            Log.e("print Error", ex.getLocalizedMessage());
         }
     }
 
     /**
      * Print.
      */
-    private void print(PrintReciept receipt,String Header) throws RemoteException {
+    private void print(PrintReciept receipt, String Header) throws RemoteException {
         // Get statue
         Printer.getInstance().getStatus();
 
         // Show dialog
-        showDialog(R.string.waiting_for_printing, false);
+        //showDialog(R.string.waiting_for_printing, false);
         setFontSpec(FONT_SIZE_SMALL);
         Printer.getInstance().addText(AlignMode.CENTER, Header);
         // Set gray
         Printer.getInstance().setPrnGray(6);
 
-        if ( isAssetExists("print_logo.bmp") ) {  // the resouce exists...
+        if (isAssetExists("print_logo.bmp")) {  // the resouce exists...
             Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile("print_logo.bmp"));
         }
 
         // Print text with normal font size
         setFontSpec(FONT_SIZE_NORMAL);
-     //   Printer.getInstance().addText(AlignMode.CENTER, "BCA");
-     //   Printer.getInstance().addText(AlignMode.CENTER, "BCA TEST OUTLET");
-     //   Printer.getInstance().addText(AlignMode.CENTER, "MOTI NAGAR");
-     //   Printer.getInstance().addText(AlignMode.CENTER,"---------------------------------");
+        //   Printer.getInstance().addText(AlignMode.CENTER, "BCA");
+        //   Printer.getInstance().addText(AlignMode.CENTER, "BCA TEST OUTLET");
+        //   Printer.getInstance().addText(AlignMode.CENTER, "MOTI NAGAR");
+        //   Printer.getInstance().addText(AlignMode.CENTER,"---------------------------------");
 
         // Print text with small font size
         setFontSpec(FONT_SIZE_SMALL);
-        Printer.getInstance().addText(AlignMode.LEFT, "Date: "+ receipt.getDate() +"     "+"Time: "+ receipt.getTime()  );
+        Printer.getInstance().addText(AlignMode.LEFT, "Date: " + receipt.getDate() + "     " + "Time: " + receipt.getTime());
 
-        Printer.getInstance().addText(AlignMode.LEFT, "MID: "+ receipt.getMMID());
+        Printer.getInstance().addText(AlignMode.LEFT, "MID: " + receipt.getMMID());
         Printer.getInstance().addText(AlignMode.LEFT, "TID: " + receipt.getMTID());
-        Printer.getInstance().addText(AlignMode.LEFT, "MOB./CARD: "+receipt.getMobile());
+        Printer.getInstance().addText(AlignMode.LEFT, "MOB./CARD: " + receipt.getMobile());
         Printer.getInstance().addText(AlignMode.LEFT, "BATCH: " + receipt.getBatch());
         Printer.getInstance().addText(AlignMode.LEFT, "PAYMENT ID: " + receipt.getPayID());
         Printer.getInstance().addText(AlignMode.LEFT, "INVOICE NO: " + receipt.getInvoiceNo());
-        Printer.getInstance().addText(AlignMode.CENTER,  receipt.getSaleType());
+        Printer.getInstance().addText(AlignMode.CENTER, receipt.getSaleType());
 
         setFontSpec(FONT_SIZE_NORMAL);
         Printer.getInstance().addText(AlignMode.CENTER, receipt.getIssuerType());
@@ -393,17 +380,16 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
 
         // Print text with small font size
         setFontSpec(FONT_SIZE_SMALL);
-        Printer.getInstance().addText(AlignMode.LEFT, "AMOUNT:"+receipt.getAmount());
-        Printer.getInstance().addText(AlignMode.LEFT, "DISCOUNT:"+receipt.getDiscount());
-        Printer.getInstance().addText(AlignMode.LEFT, "ET AMOUNT:"+receipt.getET_Amount());
+        Printer.getInstance().addText(AlignMode.LEFT, "AMOUNT:" + receipt.getAmount());
+        Printer.getInstance().addText(AlignMode.LEFT, "DISCOUNT:" + receipt.getDiscount());
+        Printer.getInstance().addText(AlignMode.LEFT, "ET AMOUNT:" + receipt.getET_Amount());
         setFontSpec(FONT_SIZE_NORMAL);
-        Printer.getInstance().addText(AlignMode.CENTER,"---------------------------------");
+        Printer.getInstance().addText(AlignMode.CENTER, "---------------------------------");
         setFontSpec(FONT_SIZE_SMALL);
-        Printer.getInstance().addText(AlignMode.LEFT, "NET AMOUNT:"+receipt.getNet_Amount());
-        Printer.getInstance().addText(AlignMode.LEFT, "AUTH CODE:"+receipt.getAuth_Code());
+        Printer.getInstance().addText(AlignMode.LEFT, "NET AMOUNT:" + receipt.getNet_Amount());
+        Printer.getInstance().addText(AlignMode.LEFT, "AUTH CODE:" + receipt.getAuth_Code());
         setFontSpec(FONT_SIZE_NORMAL);
-        Printer.getInstance().addText(AlignMode.CENTER,"---------------------------------");
-
+        Printer.getInstance().addText(AlignMode.CENTER, "---------------------------------");
 
 
         // Print text with small font size
@@ -412,7 +398,6 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
         Printer.getInstance().addText(AlignMode.CENTER, receipt.getFooterText2());
         Printer.getInstance().addText(AlignMode.CENTER, receipt.getFooterText3());
         Printer.getInstance().addText(AlignMode.CENTER, receipt.getFooterText4());
-
 
 
         // Print QR code
@@ -439,7 +424,7 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
 
                 hideDialog();
                 successResponse.processFailed("printError");
-               // showToast(context.getString( Printer.getErrorId(error)));
+                // showToast(context.getString( Printer.getErrorId(error)));
 
 
             }
@@ -500,15 +485,16 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
             }
         }
     }
-    private boolean isAssetExists(String pathInAssetsDir){
+
+    private boolean isAssetExists(String pathInAssetsDir) {
         AssetManager assetManager = context.getResources().getAssets();
         InputStream inputStream = null;
         try {
             inputStream = assetManager.open(pathInAssetsDir);
-            if(null != inputStream ) {
+            if (null != inputStream) {
                 return true;
             }
-        }  catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -520,8 +506,6 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
         }
         return false;
     }
-
-
 
 
 }
