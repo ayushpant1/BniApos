@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,16 +20,31 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.bniapos.R
+import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.databinding.ActivityHomeBinding
+import com.example.bniapos.helpers.InitializationHelper
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private val REQUEST_CODE = 101
 
+    private val apiResult = object : ApiResult {
+        override fun onSuccess(jsonResponse: Any) {
+
+        }
+
+        override fun onFailure(message: String) {
+            Log.d("Failure", message)
+            //handle failure
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (askForPermissions()) {
+            testInit()
             binding = ActivityHomeBinding.inflate(layoutInflater)
             setContentView(binding.root)
             val navView: BottomNavigationView = binding.navView
@@ -43,6 +59,12 @@ class HomeActivity : AppCompatActivity() {
             this,
             Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun testInit() {
+        var initHelper = InitializationHelper()
+        initHelper.init(this@HomeActivity, true, true, true, false, apiResult)
+        initHelper.PerformInitialization()
     }
 
     private fun askForPermissions(): Boolean {

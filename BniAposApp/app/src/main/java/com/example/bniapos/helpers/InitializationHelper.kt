@@ -15,7 +15,6 @@ import com.example.bniapos.utils.CommonUtility
 import java.lang.Exception
 
 
-
 class InitializationHelper {
     private var _fileName = "InitializationHelper.kt"
     private var _AddExtraAdminMenus = false
@@ -47,8 +46,8 @@ class InitializationHelper {
         val request = UpdateRequest()
         try {
             request.HSN = "20801451" //Constant.HSN
-            request.MMID="1020000000040495"
-            request.MTID="1040000000052280"
+            request.MMID = "1020000000040495"
+            request.MTID = "1040000000052280"
         } catch (ex: Exception) {
             delegate?.onFailure(ex.localizedMessage)
         }
@@ -89,7 +88,8 @@ class InitializationHelper {
     }
 
     private fun InitializationAction(request: UpdateRequest) {
-        val url = "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
+        val url =
+            "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/TestConnection"//"https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
         val apiResult: ApiResult = object : ApiResult {
             override fun onSuccess(response: Any) {
                 InitializationSuccess(response as UpdateResponse)
@@ -143,14 +143,14 @@ class InitializationHelper {
                         }
                     } else if (_currentChangeNo > 0) {
                         currentChangeNo = _currentChangeNo
-                   //     SingletonActivity.getInstance().setChangeNo(currentChangeNo)
+                        //     SingletonActivity.getInstance().setChangeNo(currentChangeNo)
                         if (ChangeType.equals(
                                 "TP",
                                 ignoreCase = true
                             )
                         ) _isUpdateDisplayMenu = true
                         if (ResponseXML != null && ResponseXML.length > 0)
-                           ParseResponse(
+                            ParseResponse(
                                 _context, ChangeType, ActionType,
                                 ResponseXML
                             )
@@ -189,7 +189,7 @@ class InitializationHelper {
                     val Params: TerminalParams? =
                         XMLParserHelper.ParseXMLTerminalParameters(XML, currentTerminalRecord)
                     if (Params != null) {
-              //UPDATE IN TERMINAL RECORD DB
+                        //UPDATE IN TERMINAL RECORD DB
                         //STORE VALUES IN SHARED PREFERENCES
 //
 

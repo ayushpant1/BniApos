@@ -39,28 +39,12 @@ class MenuActivity : AppCompatActivity() {
     private val actionType = "action"
     private val nonSelectedPosition = -1
 
-    private val apiResult = object : ApiResult {
-        override fun onSuccess(jsonResponse: Any) {
 
-        }
 
-        override fun onFailure(message: String) {
-            Log.d("Failure", message)
-            //handle failure
-        }
-
-    }
-    fun testInit()
-    {
-       var initHelper = InitializationHelper()
-        initHelper.init(this@MenuActivity,true,true,true,false,apiResult)
-        initHelper.PerformInitialization()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
-        testInit()
         gridview = findViewById(R.id.grid_menu)
         val json = loadJSONFromAsset()
         menuList = Gson().fromJson(json, Array<MenuList>::class.java).asList()
