@@ -27,6 +27,8 @@
     <string name="client_secret">Client Secret</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="full_init">Full Init</string>
+    <string name="partial_init">Partial Init</string>
 
 
 </resources>

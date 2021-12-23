@@ -3,6 +3,7 @@ package com.example.bniapos.helpers
 import android.app.Activity
 
 import android.content.Context
+import com.example.bniapos.alerts.ProgressDialog
 
 import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.models.TerminalParams
@@ -89,8 +90,8 @@ class InitializationHelper {
     }
 
     private fun InitializationAction(request: UpdateRequest) {
-        val url =
-            "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"//"https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
+      
+        val url = "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
         val apiResult: ApiResult = object : ApiResult {
             override fun onSuccess(response: Any) {
                 InitializationSuccess(response as UpdateResponse)
@@ -137,6 +138,7 @@ class InitializationHelper {
                             if (_isPrintSlipAfterSuccess) {
                                 //add function for printing action
                             }
+                            ProgressDialog.dismissDialog()
                             ShowDisplayDialog(
                                 true,
                                 "Initialization Success!!", "Success"
@@ -144,6 +146,7 @@ class InitializationHelper {
                         }
                     } else if (_currentChangeNo > 0) {
                         currentChangeNo = _currentChangeNo
+                       
                         SharedPreferenceUtils.getInstance(_context).setChangeNo(currentChangeNo)
                         if (ChangeType.equals(
                                 "TP",
@@ -158,7 +161,7 @@ class InitializationHelper {
                         Initialization()
                     }
                 } else {
-
+                    ProgressDialog.dismissDialog()
                     ShowDisplayDialog(
                         false,
                         "Initialization Failed...",

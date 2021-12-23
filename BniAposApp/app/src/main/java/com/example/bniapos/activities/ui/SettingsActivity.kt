@@ -9,9 +9,11 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.example.bniapos.R
+import com.example.bniapos.activities.HomeActivity
 import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.callbacks.ButtonInterface
+import com.example.bniapos.helpers.InitializationHelper
 import com.example.bniapos.models.responsemodels.LogonResponse
 import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.CommonUtility
@@ -36,7 +38,11 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     private var etUsername: EditText? = null
     private var etPassword: EditText? = null
 
-    private val apiResult = object : ApiResult {
+
+    private var btnPartialInit: Button? = null
+    private var btnFullInit: Button? = null
+
+    private val apiResultLogon = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
             val logonResponse = Gson().fromJson(jsonResponse.toString(), LogonResponse::class.java)
 
@@ -58,6 +64,20 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                     buttonInterface
                 )
             }
+        }
+
+        override fun onFailure(message: String) {
+            Log.d("Failure", message)
+            //handle failure
+        }
+
+    }
+
+
+    private val apiResultInit = object : ApiResult {
+        override fun onSuccess(jsonResponse: Any) {
+            val intent = Intent(this@SettingsActivity, HomeActivity::class.java)
+            startActivity(intent)
         }
 
         override fun onFailure(message: String) {
@@ -91,6 +111,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         etClientSecret = findViewById(R.id.et_client_secret)
         etUsername = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
+
+        btnPartialInit = findViewById(R.id.btn_partial_init)
+        btnFullInit = findViewById(R.id.btn_full_init)
     }
 
     private fun showUI() {
@@ -109,6 +132,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         btnLogon?.setOnClickListener(this)
         imgBack?.setOnClickListener(this)
 
+        btnFullInit?.setOnClickListener(this)
+        btnPartialInit?.setOnClickListener(this)
+
     }
 
     override fun onClick(p0: View?) {
@@ -121,7 +147,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                     val password = etPassword?.text.toString()
                     CommonUtility.performLogon(
                         this@SettingsActivity,
-                        apiResult,
+                        apiResultLogon,
                         clientId,
                         clientSecret,
                         username,
@@ -132,7 +158,41 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.img_back -> {
                 onBackPressed()
             }
+
+            R.id.btn_full_init -> {
+                fullInit()
+            }
+
+            R.id.btn_partial_init -> {
+                partialInit()
+            }
         }
+    }
+
+    fun fullInit() {
+        val initHelper = InitializationHelper()
+        initHelper.init(
+            this@SettingsActivity,
+            forceInit = true,
+            isDisplayResultDialog = true,
+            isPrintSlipAfterSuccess = true,
+            isAddExtraAdminMenus = false,
+            responseCarrier = apiResultInit
+        )
+        initHelper.PerformInitialization()
+    }
+
+    fun partialInit() {
+        val initHelper = InitializationHelper()
+        initHelper.init(
+            this@SettingsActivity,
+            forceInit = false,
+            isDisplayResultDialog = true,
+            isPrintSlipAfterSuccess = true,
+            isAddExtraAdminMenus = false,
+            responseCarrier = apiResultInit
+        )
+        initHelper.PerformInitialization()
     }
 
     private fun checkMandatoryFields(): Boolean {

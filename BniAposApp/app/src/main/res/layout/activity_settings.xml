@@ -91,15 +91,46 @@
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_logon"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="@dimen/dimen_15dp"
-        android:background="@drawable/bg_btn"
-        android:text="@string/logon"
-        android:textColor="@color/white" />
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btn_logon"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_btn"
+            android:text="@string/logon"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_partial_init"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn"
+            android:paddingLeft="@dimen/dimen_2dp"
+            android:paddingRight="@dimen/dimen_2dp"
+            android:text="@string/partial_init"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_full_init"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn"
+            android:text="@string/full_init"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 </RelativeLayout>

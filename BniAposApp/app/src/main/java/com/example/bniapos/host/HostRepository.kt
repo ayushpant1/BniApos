@@ -189,7 +189,7 @@ class HostRepository : HostRepositoryInterface {
                     call: Call<UpdateResponse>?,
                     response: Response<UpdateResponse>?
                 ) {
-                    ProgressDialog.dismissDialog()
+
                     apiResult.onSuccess(response!!.body())
                 }
 

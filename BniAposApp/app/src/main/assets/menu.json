@@ -8,7 +8,7 @@
         "DisplayText": "Payment",
         "SortOrder": 1,
         "TxnType": 0,
-        "Type": "BP",
+        "Type": "CAT",
         "IconName": "Payment",
         "LinkId": 1,
         "ReceiptTemplate": {
@@ -38,7 +38,7 @@
         "DisplayText": "Card Payment",
         "SortOrder": 3,
         "TxnType": 429,
-        "Type": "CP",
+        "Type": "CAT",
         "IconName": "CardPayment",
         "LinkId": 1,
         "ReceiptTemplate": {
@@ -605,7 +605,7 @@
         "WorkflowId": 0,
         "DisplayText": "PURCHASE",
         "SortOrder": 39,
-        "Type": "BP",
+        "Type": "CAT",
         "IconName": "PURCHASE",
         "LinkId": 1,
         "ReceiptTemplate": {
@@ -725,7 +725,7 @@
         "DisplayText": "TRANSFER",
         "SortOrder": 47,
         "IconName": "TRANSFER",
-        "Type": "BP",
+        "Type": "CAT",
         "LinkId": 1,
         "ReceiptTemplate": {
           "Id": 1
@@ -768,7 +768,7 @@
         "WorkflowId": 0,
         "DisplayText": "DIGITAL FINANCE SERVICE",
         "SortOrder": 50,
-        "Type": "BP",
+        "Type": "CAT",
         "IconName": "DIGITAL_FINANCE_SERVICE",
         "LinkId": 1,
         "ReceiptTemplate": {
@@ -1034,7 +1034,7 @@
         "WorkflowId": 0,
         "DisplayText": "CDN",
         "SortOrder": 68,
-        "Type": "BP",
+        "Type": "CAT",
         "IconName": "CDN",
         "LinkId": 1,
         "ReceiptTemplate": {

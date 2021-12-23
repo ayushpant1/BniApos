@@ -76,15 +76,15 @@ class HomeFragment : Fragment(), View.OnClickListener {
         })
 
         filterMenuList?.addAll(menuList!!.filter {
-             it.type.equals("CP", true) &&
+            it.type.equals("CP", true) &&
                     it.txnType.toString() in allowedTransactionType.split(
                 ","
             )
         })
-
+        filterMenuList?.addAll(menuList?.filter { it.parentId == 0 }!!)
         menuList = filterMenuList
-        menuFilterList = filterMenuList!!.filter { s ->
-            s.parentId == 0
+        menuFilterList = menuList!!.filter { s ->
+            s.parentId == 0 && isChildAvailable(menuList, s)
         }.sortedWith(compareBy { it.sortOrder })
 
 
@@ -94,6 +94,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
         imgSettings?.setOnClickListener(this)
 
         return root
+    }
+
+    private fun isChildAvailable(menuFilterList: List<MenuLink>?, s: MenuLink): Boolean {
+        if (s.type == "CAT") {
+            val updatedMenuList = menuFilterList?.filter { it.parentId == s.id }
+            return !updatedMenuList.isNullOrEmpty()
+        }
+        return true
     }
 
     override fun onDestroyView() {

@@ -44,13 +44,13 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (askForPermissions()) {
-            testInit()
             binding = ActivityHomeBinding.inflate(layoutInflater)
             setContentView(binding.root)
             val navView: BottomNavigationView = binding.navView
 
             val navController = findNavController(R.id.nav_host_fragment_activity_home)
             navView.setupWithNavController(navController)
+            //testInit()
         }
     }
 
@@ -61,11 +61,7 @@ class HomeActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun testInit() {
-        var initHelper = InitializationHelper()
-        initHelper.init(this@HomeActivity, true, true, true, false, apiResult)
-        initHelper.PerformInitialization()
-    }
+
 
     private fun askForPermissions(): Boolean {
         if (!isPermissionsAllowed()) {
