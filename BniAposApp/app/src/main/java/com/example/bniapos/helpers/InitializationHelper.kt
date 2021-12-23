@@ -6,6 +6,7 @@ import android.content.Context
 import com.example.bniapos.alerts.ProgressDialog
 
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.models.SchemaParams
 import com.example.bniapos.models.TerminalParams
 
 import com.example.bniapos.models.UpdateRequest
@@ -226,7 +227,20 @@ class InitializationHelper {
                     }
                 }
                 "RECEIPT" -> {
-                    //STORE IN DB
+                    try {
+                        val param: Map<Int, String>? = XMLParserHelper.ParseXMLReceipt(XML!!)
+                        if (param != null) {
+                            for (ID in param.keys) {
+                                val printValues = param[ID]
+                                var receiptParams:SchemaParams= SchemaParams()
+                                receiptParams.Schema_Id = ID
+                                receiptParams.Receipt_Line_Item = printValues
+                                //STORE IN DB
+                            }
+                        }
+                    } catch (ex: Exception) {
+                    }
+
                 }
 
             }
