@@ -1,11 +1,18 @@
 package com.example.bniapos.utils
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.MasterPrintFormat
 import com.example.bniapos.models.UpdateRequest
+import com.example.paymentsdk.sdk.Common.ISuccessResponse
+import com.example.paymentsdk.sdk.Common.PrintFormat
+import com.example.paymentsdk.sdk.Common.TerminalFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
@@ -81,5 +88,34 @@ object CommonUtility {
         val gson = Gson()
         val type = object : TypeToken<ArrayList<MasterPrintFormat>>() {}.type
         return gson.fromJson<Any>(json, type) as ArrayList<MasterPrintFormat>
+    }
+
+    fun getSchemaParamBySchemaId(context: Activity, receiptId: Int): String? {
+        val schemaParam = DatabaseClient.getInstance(context)?.appDatabase?.schemaParamDao()
+            ?.getSchemaParamBySchemaId(receiptId)
+        return schemaParam?.receiptLineItem
+    }
+
+    fun print(context: Activity, allPrintFormats: ArrayList<PrintFormat>) {
+        val toast = Toast(context)
+        val dialog = AlertDialog.Builder(context).create()
+        val successResponse = object : ISuccessResponse {
+            override fun processFinish(output: String?) {
+                Log.d("output", output.toString())
+            }
+
+            override fun processFailed(Exception: String?) {
+                Log.d("output", Exception.toString())
+            }
+
+            override fun processTimeOut() {
+                Log.d("output", "TimeOut")
+            }
+
+        }
+        val printer = TerminalFactory.GetPrinterContext(context, toast, dialog, successResponse)
+
+        printer.executePrint("Print", allPrintFormats, "")
+
     }
 }

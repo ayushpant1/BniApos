@@ -6,6 +6,8 @@ import android.content.Context
 import com.example.bniapos.alerts.ProgressDialog
 
 import com.example.bniapos.callback.ApiResult
+import com.example.bniapos.database.DatabaseClient
+import com.example.bniapos.database.entities.SchemaParamTable
 import com.example.bniapos.models.SchemaParams
 import com.example.bniapos.models.TerminalParams
 
@@ -92,7 +94,7 @@ class InitializationHelper {
     }
 
     private fun InitializationAction(request: UpdateRequest) {
-      
+
         val url = "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
         val apiResult: ApiResult = object : ApiResult {
             override fun onSuccess(response: Any) {
@@ -141,16 +143,16 @@ class InitializationHelper {
                             if (_isPrintSlipAfterSuccess) {
                                 //add function for printing action
                             }
-                        
+
                             ShowDisplayDialog(
                                 true,
                                 "Initialization Success!!", "Success"
                             )
                         }
                     } else if (_currentChangeNo > 0) {
-                      
+
                         currentChangeNo = _currentChangeNo
-                       
+
                         SharedPreferenceUtils.getInstance(_context).setChangeNo(currentChangeNo)
 
                         if (ResponseXML != null && ResponseXML != "") {
@@ -167,21 +169,19 @@ class InitializationHelper {
                                     ResponseXML
                                 )
                             Initialization()
-                        }
-                        else
-                        {
+                        } else {
                             ShowDisplayDialog(
                                 false,
                                 "Initialization Failed...",
                                 "No data received : response @${response.CN} is ${response.CD}"
                             )
-                       
-                       
+
+
                         }
                     }
 
                 } else {
-                  
+
                     ShowDisplayDialog(
                         false,
                         "Initialization Failed...",
@@ -215,11 +215,16 @@ class InitializationHelper {
                     if (Params != null) {
                         //UPDATE IN TERMINAL RECORD DB
                         //STORE VALUES IN SHARED PREFERENCES
-                        SharedPreferenceUtils.getInstance(_context).setAllowedPaymentTypes(Params.AllowedPayments)
-                        SharedPreferenceUtils.getInstance(_context).setAllowedTransactionTypes(Params.AllowedTransactions)
-                        SharedPreferenceUtils.getInstance(_context).setTbId(Params.BatchNo.toString())
-                        SharedPreferenceUtils.getInstance(_context).setMmId(Params.Merchant_Id.toString())
-                        SharedPreferenceUtils.getInstance(_context).setMtId(Params.Terminal_Id.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setAllowedPaymentTypes(Params.AllowedPayments)
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setAllowedTransactionTypes(Params.AllowedTransactions)
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setTbId(Params.BatchNo.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setMmId(Params.Merchant_Id.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setMtId(Params.Terminal_Id.toString())
 
 
 //
@@ -232,10 +237,19 @@ class InitializationHelper {
                         if (param != null) {
                             for (ID in param.keys) {
                                 val printValues = param[ID]
-                                var receiptParams:SchemaParams= SchemaParams()
-                                receiptParams.Schema_Id = ID
-                                receiptParams.Receipt_Line_Item = printValues
-                                //STORE IN DB
+                                var receiptParams: SchemaParamTable = SchemaParamTable()
+                                receiptParams.schemaId = ID
+                                receiptParams.receiptLineItem = printValues
+                                when (Action) {
+                                    "U", "A" -> {
+                                        DatabaseClient.getInstance(_context!!)?.appDatabase?.schemaParamDao()
+                                            ?.insert(receiptParams)
+                                    }
+                                    "D" -> {
+                                        DatabaseClient.getInstance(_context!!)?.appDatabase?.schemaParamDao()
+                                            ?.delete(ID)
+                                    }
+                                }
                             }
                         }
                     } catch (ex: Exception) {
@@ -254,18 +268,18 @@ class InitializationHelper {
 
     private fun ShowDisplayDialog(isSuccess: Boolean, Title: String, Message: String) {
         val _ActivityResponse: ApiResult? = delegate
-      
+
 //        if (_isDisplayResultDialogs) {
 //            //handle UI to display success message
 //
 //        } else {
-            if (isSuccess) {
-                delegate?.onSuccess("Success")
-            } else {
-                delegate?.onFailure(Message)
-            }
-       
-       // }
+        if (isSuccess) {
+            delegate?.onSuccess("Success")
+        } else {
+            delegate?.onFailure(Message)
+        }
+
+        // }
     }
 }
 

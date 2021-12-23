@@ -17,11 +17,15 @@ import com.example.bniapos.convertToDataString
 import com.example.bniapos.database.DatabaseClient
 import com.example.bniapos.database.entities.ControlTable
 import com.example.bniapos.enums.BpControlType
+import com.example.bniapos.helpers.TransactionPrintingHelper
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.AppConstants
+import com.example.bniapos.utils.CommonUtility
 import com.example.bniapos.utils.Configuration
+import com.example.bniapos.utils.TerminalPrintUtils
+import com.example.paymentsdk.sdk.Common.PrintFormat
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -70,11 +74,27 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
+            val allPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
             val jsonRequestString = Gson().toJson(jsonResponse)
             val type: Type = object : TypeToken<Map<String?, Any>>() {}.type
             val requestMap: Map<String, Any> = Gson().fromJson(jsonRequestString, type)
             output = requestMap.toMutableMap()
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
+                val printValue = CommonUtility.getSchemaParamBySchemaId(
+                    this@BpControlsActivity,
+                    menu?.receiptTemplate!!.id
+                )
+                allPrintFormats.addAll(
+                    TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
+                        TransactionPrintingHelper.ProcessPrintingTags(
+                            this@BpControlsActivity,
+                            CommonUtility.JsonToPrintFormatList(printValue),
+                            jsonResponse as JSONObject,
+                            jsonResponse as JSONObject
+                        )
+                    )
+                )
+                CommonUtility.print(this@BpControlsActivity, allPrintFormats)
                 finish()
             } else {
                 currentWorkflow =

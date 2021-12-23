@@ -26,6 +26,7 @@ import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.*
+
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.sdk.Common.ISuccessResponse_Card
 import com.example.paymentsdk.sdk.Common.PrintFormat
@@ -34,7 +35,6 @@ import com.example.paymentsdk.sdk.Common.TerminalFactory
 import com.example.paymentsdk.sdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -81,14 +81,33 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var bpWorkflowOutputData = ""
     private var menu: MenuLink? = null
-    private var txnType: Int =0
+
+    private var txnType: Int = 0
 
     private val submit = "Submit"
     private val next = "Next"
 
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
+            val allPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
+                val printValue = CommonUtility.getSchemaParamBySchemaId(
+                    this@CpControlsActivity,
+                    menu?.receiptTemplate!!.id
+                )
+                if (!isBpWorkflow) {
+                    allPrintFormats.addAll(
+                        TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
+                            TransactionPrintingHelper.ProcessPrintingTags(
+                                this@CpControlsActivity,
+                                CommonUtility.JsonToPrintFormatList(printValue),
+                                jsonResponse as JSONObject,
+                                jsonResponse as JSONObject
+                            )
+                        )
+                    )
+                    CommonUtility.print(this@CpControlsActivity, allPrintFormats)
+                }
                 finish()
             } else {
                 currentWorkflow = workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
@@ -101,25 +120,18 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             }
-            val AllPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
-            AllPrintFormats.addAll(
-                TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
-                    TransactionPrintingHelper.ProcessPrintingTags(
-                        this@CpControlsActivity,
-                        CommonUtility.JsonToPrintFormatList(""),
-                        jsonResponse as JSONObject,
-                        jsonResponse as JSONObject
-                    )
-                )
-            )
+
 
         }
 
         override fun onFailure(message: String) {
             val buttonInterface: ButtonInterface = object : ButtonInterface {
                 override fun onClicked(alertDialogBuilder: AlertDialog?) {
-                    val intent = Intent(this@CpControlsActivity,
-                        HomeActivity::class.java)
+
+                    val intent = Intent(
+                        this@CpControlsActivity,
+                        HomeActivity::class.java
+                    )
                     startActivity(intent)
                     finish()
                 }
@@ -441,13 +453,18 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
                                 })
                         transactionConfig = TransactionConfig()
-                        transactionConfig?.amount = output?.get( TransactionRequestKeys.AMT.name).let{it.toString().toLong()}?:run{0}
+
+                        transactionConfig?.amount = output?.get(TransactionRequestKeys.AMT.name)
+                            .let { it.toString().toLong() } ?: run { 0 }
                         transactionConfig?.isContactIcCardSupported = true
-                        transactionConfig?.isMagCardSupported=true
-                        transactionConfig?.isRfCardSupported=true
+
+                        transactionConfig?.isMagCardSupported = true
+                        transactionConfig?.isRfCardSupported = true
                         emvProcessor!!.startCardScan(
                             transactionConfig,
-                            SharedPreferenceUtils.getInstance(this@CpControlsActivity).getStan().toString(), false
+
+                            SharedPreferenceUtils.getInstance(this@CpControlsActivity).getStan()
+                                .toString(), false
                         )
                     }
 
