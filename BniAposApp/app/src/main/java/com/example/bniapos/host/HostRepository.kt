@@ -95,29 +95,38 @@ class HostRepository : HostRepositoryInterface {
                             ProgressDialog.dismissDialog()
                             DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
                                 ?.getAll()
-                            val buttonInterface: ButtonInterface = object : ButtonInterface {
-
-                          
-                                override fun onClicked(alertDialogBuilder: AlertDialog?) {
-                                    if (isBpWorkflow) {
-                                        val returnIntent = Intent()
-                                        returnIntent.putExtra(
-                                            "response",
-                                            Gson().toJson(jsonObject)
-                                        )
-                                        context.setResult(Activity.RESULT_OK, returnIntent)
-                                    }
-                                    apiResult.onSuccess(jsonObject)
-                                }
-                              
+//                            val buttonInterface: ButtonInterface = object : ButtonInterface {
+//
+//
+//                                override fun onClicked(alertDialogBuilder: AlertDialog?) {
+//                                    if (isBpWorkflow) {
+//                                        val returnIntent = Intent()
+//                                        returnIntent.putExtra(
+//                                            "response",
+//                                            Gson().toJson(jsonObject)
+//                                        )
+//                                        context.setResult(Activity.RESULT_OK, returnIntent)
+//                                    }
+//                                    apiResult.onSuccess(jsonObject)
+//                                }
+//
+//                            }
+//
+//                            Alerts.customWebViewAlert(
+//                                context,
+//                                "Transaction Response Recieved \n\n" +
+//                                        responseFormatter,
+//                                buttonInterface
+//                            )
+                            if (isBpWorkflow) {
+                                val returnIntent = Intent()
+                                returnIntent.putExtra(
+                                    "response",
+                                    Gson().toJson(jsonObject)
+                                )
+                                context.setResult(Activity.RESULT_OK, returnIntent)
                             }
-                      
-                            Alerts.customWebViewAlert(
-                                context,
-                                "Transaction Response Recieved \n\n" +
-                                        responseFormatter,
-                                buttonInterface
-                            )
+                            apiResult.onSuccess(jsonObject)
 
                   
                         } else {

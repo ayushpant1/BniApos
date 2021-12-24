@@ -20,7 +20,7 @@ object XMLParserHelper {
         var ReceiptID = 0
         try {
             // auto-detect the encoding from the stream
-            parser.setInput(StringReader(XML.toUpperCase()))
+            parser.setInput(StringReader(XML))
             var eventType = parser.eventType
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -30,7 +30,7 @@ object XMLParserHelper {
                     }
                     XmlPullParser.START_TAG -> {
                         name = parser.name
-                        when (name) {
+                        when (name.toUpperCase()) {
                             "RECEIPT" -> {
                             }
                             "ID" -> {
@@ -42,25 +42,25 @@ object XMLParserHelper {
                             }
                             "TAG" -> {
                                 val currentTAG: MasterPrintFormat = MasterPrintFormat()
-                                val Text = parser.getAttributeValue(null, "TEXT")
+                                val Text = parser.getAttributeValue(null, "Text")
                                 if (Text != null) currentTAG.Printheader = Text
-                                val Name = parser.getAttributeValue(null, "NAME")
+                                val Name = parser.getAttributeValue(null, "Name")
                                 if (Name != null) currentTAG.Key = Name
-                                val Order = parser.getAttributeValue(null, "ORDER")
+                                val Order = parser.getAttributeValue(null, "Order")
                                 if (Order != null) {
                                     if (Order != null && Order.trim { it <= ' ' }.length > 0 && InputUtility.isValidInt(
                                             Order
                                         )
                                     ) currentTAG.Order = Order.toInt()
                                 }
-                                val Font = parser.getAttributeValue(null, "FONT")
+                                val Font = parser.getAttributeValue(null, "Font")
                                 if (Font != null) {
                                     if (Font != null && Font.trim { it <= ' ' }.length > 0 && InputUtility.isValidInt(
                                             Font
                                         )
                                     ) currentTAG.Font = Font.toInt()
                                 } else currentTAG.Font = 3
-                                val Alignment = parser.getAttributeValue(null, "ALIGN")
+                                val Alignment = parser.getAttributeValue(null, "Align")
                                 if (Alignment != null) {
                                     currentTAG.Alignment = Alignment
                                 }

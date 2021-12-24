@@ -219,7 +219,7 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
 
                     }
                     case "image": {
-                        //Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile(format.getAlignMode()));
+                        Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile(format.getAlignMode()));
 
                         break;
                     }
@@ -239,7 +239,7 @@ public class LandiTerminalPrintApiHelper extends TerminalPrintApiHelper {
                     }
                     case "acquirerimage": {
                         if (isAssetExists(format.getAlignMode())) {  // the resouce exists...
-                            //Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile(format.getAlignMode()));
+                            Printer.getInstance().addImage(AlignMode.CENTER, readAssetsFile(format.getAlignMode()));
                         }
                     }
                     default: {

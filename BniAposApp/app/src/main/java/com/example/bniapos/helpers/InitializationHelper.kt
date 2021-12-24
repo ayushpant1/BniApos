@@ -226,6 +226,17 @@ class InitializationHelper {
                         SharedPreferenceUtils.getInstance(_context)
                             .setMtId(Params.Terminal_Id.toString())
 
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setMerchantName(Params.Merchant_Name.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setAddressLine1(Params.Outlet_Name.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setAddressLine2(Params.Merchant_Address.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setMerchantCity(Params.Merchant_City.toString())
+                        SharedPreferenceUtils.getInstance(_context)
+                            .setAcquirerName(Params.AcquirerName.toString())
+
 
 //
 

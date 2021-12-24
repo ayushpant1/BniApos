@@ -25,6 +25,7 @@ import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.CommonUtility
 import com.example.bniapos.utils.Configuration
 import com.example.bniapos.utils.TerminalPrintUtils
+import com.example.paymentsdk.sdk.Common.ISuccessResponse
 import com.example.paymentsdk.sdk.Common.PrintFormat
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -71,6 +72,19 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private var tvTitle: TextView? = null
     private var imgBack: ImageView? = null
 
+    private val printResult: ISuccessResponse = object: ISuccessResponse {
+        override fun processFinish(output: String?) {
+            finish()
+        }
+
+        override fun processFailed(Exception: String?) {
+            finish()
+        }
+
+        override fun processTimeOut() {
+            finish()
+        }
+    }
 
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
@@ -84,18 +98,35 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                     this@BpControlsActivity,
                     menu?.receiptTemplate!!.id
                 )
-                allPrintFormats.addAll(
-                    TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
-                        TransactionPrintingHelper.ProcessPrintingTags(
-                            this@BpControlsActivity,
-                            CommonUtility.JsonToPrintFormatList(printValue),
-                            JSONObject(jsonResponse.toString()),
-                            JSONObject(jsonResponse.toString())
-                        )
+
+                    val buttonInterface: ButtonInterface = object : ButtonInterface {
+                        override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                            if (!printValue.isNullOrBlank()) {
+                                allPrintFormats.addAll(
+                                    TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
+                                        TransactionPrintingHelper.ProcessPrintingTags(
+                                            this@BpControlsActivity,
+                                            CommonUtility.JsonToPrintFormatList(printValue),
+                                            JSONObject(jsonResponse.toString()),
+                                            JSONObject(jsonResponse.toString())
+                                        )
+                                    )
+
+                                )
+                                CommonUtility.print(
+                                    this@BpControlsActivity,
+                                    allPrintFormats,
+                                    printResult
+                                )
+                            } else finish()
+                        }
+                    }
+                    Alerts.customAlert(
+                        this@BpControlsActivity,
+                        "Transaction Successful",
+                        buttonInterface
                     )
-                )
-                CommonUtility.print(this@BpControlsActivity, allPrintFormats)
-                finish()
+
             } else {
                 currentWorkflow =
                     workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }

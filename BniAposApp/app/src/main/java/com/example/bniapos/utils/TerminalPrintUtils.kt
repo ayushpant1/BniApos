@@ -158,6 +158,8 @@ object TerminalPrintUtils {
                         currentParam.Text.toLowerCase().toString() + ".bmp"
                     )
                 )
+            } else {
+                _retval.add(PrintFormat("acquirerimage", false, "009.bmp"))
             }
         } else if (printHeader.toLowerCase().startsWith("-qrcode")) {
             if (currentParam.Text != null && currentParam.Text.length > 0) {

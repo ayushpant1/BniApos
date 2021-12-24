@@ -36,7 +36,7 @@ object CurrencyUtility {
 
         val decimalFormat = DecimalFormat("#,##0")
         val firstNumberAsString = decimalFormat.format(Amount)
-        return negativeValue + if (isShowCurrency) "Rp " else "" + firstNumberAsString
+        return negativeValue + if (isShowCurrency) "Rp " + firstNumberAsString else "" + firstNumberAsString
 
 
     }

@@ -6,6 +6,7 @@ import com.example.bniapos.models.MasterPrintFormat
 import com.example.bniapos.utils.CurrencyUtility
 import com.example.bniapos.utils.DateTimeUtils
 import com.example.bniapos.utils.SharedPreferenceUtils
+import com.google.gson.JsonObject
 import org.json.JSONObject
 import java.lang.Exception
 import java.util.*
@@ -25,6 +26,7 @@ object TransactionPrintingHelper {
                         eachParam!!.Key?:""//Here we are using Key .. .so Need to Remove all other Data from here...
                     when (TAG) {
 
+                        "TAMT",
                         "amount",
                         TransactionRequestKeys.AMT.name -> {
                             var Amount = ProcessFromResponse("AMT",jsonParamRequest,jsonParamResponse)
@@ -171,6 +173,15 @@ object TransactionPrintingHelper {
             if (!jsonParamRequest.isNull(Key)) {
                 return jsonParamRequest[Key].toString()
             }
+            var jsonDataResponse = jsonParamResponse.get("data") as JsonObject
+            if (jsonDataResponse != null && (jsonDataResponse).has(Key)) {
+                return jsonDataResponse[Key].toString()
+            }
+            var jsonDataRequest = jsonParamRequest.get("data") as JsonObject
+            if (jsonDataRequest != null && (jsonDataRequest).has(Key)) {
+                return jsonDataRequest[Key].toString()
+            }
+
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

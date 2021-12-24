@@ -96,20 +96,23 @@ object CommonUtility {
         return schemaParam?.receiptLineItem
     }
 
-    fun print(context: Activity, allPrintFormats: ArrayList<PrintFormat>) {
+    fun print(context: Activity, allPrintFormats: ArrayList<PrintFormat>,responseListener:ISuccessResponse) {
         val toast = Toast(context)
         val dialog = AlertDialog.Builder(context).create()
         val successResponse = object : ISuccessResponse {
             override fun processFinish(output: String?) {
                 Log.d("output", output.toString())
+                responseListener.processFinish(output)
             }
 
             override fun processFailed(Exception: String?) {
                 Log.d("output", Exception.toString())
+                responseListener.processFailed(Exception)
             }
 
             override fun processTimeOut() {
                 Log.d("output", "TimeOut")
+                responseListener.processTimeOut()
             }
 
         }

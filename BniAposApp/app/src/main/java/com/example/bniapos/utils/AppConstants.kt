@@ -15,16 +15,14 @@ object AppConstants {
 
 
     const val DEFAULT_INVOICE_NO = "0001"
-   
-    
 
 
     //Settings Screen Constants
     const val SETTINGS_TITLE = "Settings"
-    const val DEFAULT_CLIENT_ID = "clientId"
-    const val DEFAULT_CLIENT_SECRET = "clientSecret"
-    const val DEFAULT_USERNAME = "username"
-    const val DEFAULT_PASSWORD = "password"
+    const val DEFAULT_CLIENT_ID = "9198eb2c-4573-475b-b243-fb192f374072"
+    const val DEFAULT_CLIENT_SECRET = "256639c3-2e3e-47bd-9e58-c406281b4ebc"
+    const val DEFAULT_USERNAME = "DUMMYMK06B6J"
+    const val DEFAULT_PASSWORD = "99DA88fLGxFTaBbI"
 
     const val DEFAULT_TBID = "0009"
     const val DEFAULT_MMID = "1020000000040495"

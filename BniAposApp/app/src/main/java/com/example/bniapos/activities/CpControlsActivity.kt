@@ -2,6 +2,7 @@ package com.example.bniapos.activities
 
 import MenuLink
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -28,10 +29,7 @@ import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.*
 
 import com.example.paymentsdk.CardReadOutput
-import com.example.paymentsdk.sdk.Common.ISuccessResponse_Card
-import com.example.paymentsdk.sdk.Common.PrintFormat
-import com.example.paymentsdk.sdk.Common.TerminalCardApiHelper
-import com.example.paymentsdk.sdk.Common.TerminalFactory
+import com.example.paymentsdk.sdk.Common.*
 import com.example.paymentsdk.sdk.util.transaction.TransactionConfig
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -87,28 +85,55 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private val submit = "Submit"
     private val next = "Next"
 
+    private val printResult:ISuccessResponse = object:ISuccessResponse{
+        override fun processFinish(output: String?) {
+            finish()
+        }
+
+        override fun processFailed(Exception: String?) {
+            finish()
+        }
+
+        override fun processTimeOut() {
+            finish()
+        }
+    }
+
+
+
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
             val allPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
                 val printValue = CommonUtility.getSchemaParamBySchemaId(
                     this@CpControlsActivity,
-                    menu?.receiptTemplate!!.id
+                    menu?.receiptTemplate?.id?:0
                 )
-                if (!isBpWorkflow) {
-                    allPrintFormats.addAll(
-                        TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
-                            TransactionPrintingHelper.ProcessPrintingTags(
-                                this@CpControlsActivity,
-                                CommonUtility.JsonToPrintFormatList(printValue),
-                                JSONObject(jsonResponse.toString()),
-                                JSONObject(jsonResponse.toString())
+                if (!isBpWorkflow && !printValue.isNullOrBlank()) {
+                    val buttonInterface: ButtonInterface = object : ButtonInterface {
+                        override fun onClicked(alertDialogBuilder: AlertDialog?) {
+
+                            allPrintFormats.addAll(
+                                TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
+                                    TransactionPrintingHelper.ProcessPrintingTags(
+                                        this@CpControlsActivity,
+                                        CommonUtility.JsonToPrintFormatList(printValue),
+                                        JSONObject(jsonResponse.toString()),
+                                        JSONObject(jsonResponse.toString())
+                                    )
+                                )
                             )
-                        )
+                            CommonUtility.print(this@CpControlsActivity, allPrintFormats, printResult)
+                        }
+                    }
+                    Alerts.customAlert(
+                        this@CpControlsActivity,
+                        "Transaction Successful",
+                        buttonInterface
                     )
-                    CommonUtility.print(this@CpControlsActivity, allPrintFormats)
-                }
-                finish()
+
+                } else
+                    finish()
             } else {
                 currentWorkflow = workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
                 controlList = currentWorkflow?.cTRLS
@@ -260,8 +285,19 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                     output?.put(controls.kEY, editText.text.toString())
                     controls.dVAL = (output?.get(controls.kEY) ?: "").toString()
                 }
-                CpControlType.CARDNO.name, CpControlType.PIN.name -> {
+                CpControlType.CARDNO.name -> {
+                  //  output?.put(controls.kEY, cardReadOutput!!)
+                }
+                CpControlType.PIN.name->{
                     output?.put(controls.kEY, cardReadOutput!!)
+                    output?.put("CARDNAME", cardReadOutput?.customerName)
+                   // output?.put("CARDTYPE",cardReadOutput?.cardAppName)
+                    output?.put("APPNAME",cardReadOutput?.cardAppName)
+                    output?.put("AID",cardReadOutput?.cardAID)
+                    output?.put("TSI",cardReadOutput?.tsiData)
+                    output?.put("TC",cardReadOutput?.transactionCertificate)
+                    output?.put("TVR",cardReadOutput?.tvrData)
+                    output?.put("MCARDNO",cardReadOutput?.maskedCardNo)
                 }
             }
         }
