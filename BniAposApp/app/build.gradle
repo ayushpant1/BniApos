@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-
+    implementation fileTree(include: ['*.jar', '*.aar'], exclude: 'test_aar*', dir: 'libs')
     //Android libraries
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
@@ -66,6 +66,13 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:2.3.0")
+
+
+    //PAX library
+    implementation files('libs/ant.jar')
+    implementation files('libs/PaxNeptuneApi_V1.00.00_20161025.jar')
+    implementation files('libs/sqlcipherandroid_V20160922.jar')
+    implementation files('libs/zxing.jar')
 
 
 

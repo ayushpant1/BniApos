@@ -19,7 +19,7 @@
         <activity android:name=".activities.ui.SettingsActivity"></activity>
         <activity android:name=".activities.SubMenuActivity" />
         <activity
-            android:name=".activities.HomeActivity"
+            android:name="com.example.paxpoc.PAXMainActivity"
             android:label="@string/title_activity_home" />
         <activity android:name=".activities.CpControlsActivity" />
         <activity android:name=".activities.BpControlsActivity" />
