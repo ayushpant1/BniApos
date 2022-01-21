@@ -43,13 +43,13 @@ class HostRepository : HostRepositoryInterface {
 
         val jsonRequest = jsonObject.toTransactionRequest(currentWORKFLOW, transactionType, context)
         Util.deepMerge(jsonRequest, jsonObject)!!
-      
+
         Log.d("HTTP Url - ", url)
         Log.d("HTTP Request - ", jsonRequest.toString())
         ProgressDialog.showDialog(context)
         apiInterface.postToHost(url, jsonRequest)
             .enqueue(object : Callback<JsonObject> {
-              
+
                 override fun onResponse(
                     call: Call<JsonObject>?,
                     response: Response<JsonObject>?
@@ -75,14 +75,14 @@ class HostRepository : HostRepositoryInterface {
                                     }
                                 }
                             }
-                  
+
                             val splitResponseData = currentWORKFLOW.dataResponse.split(",")
                             if (!splitResponseData.isNullOrEmpty() && response?.body()
                                     ?.has("data") ?: false
                             ) {
                                 val responseBodyData = response?.body()?.get("data") as JsonObject
                                 splitResponseData.forEach {
-                               if (responseBodyData.has(it)) {
+                                    if (responseBodyData.has(it)) {
                                         val value = responseBodyData?.get(it)?.asString
                                         if (value != null) {
                                             jsonObject.addProperty(it, value)
@@ -91,7 +91,7 @@ class HostRepository : HostRepositoryInterface {
                                     }
                                 }
                             }
-                     
+
                             ProgressDialog.dismissDialog()
                             DatabaseClient.getInstance(context)?.appDatabase?.transactionResponseDao()
                                 ?.getAll()
@@ -128,7 +128,7 @@ class HostRepository : HostRepositoryInterface {
                             }
                             apiResult.onSuccess(jsonObject)
 
-                  
+
                         } else {
                             ProgressDialog.dismissDialog()
                             if (responseBody?.has("RSPM") && responseBody?.get("RSPM") != null) {
@@ -176,6 +176,7 @@ class HostRepository : HostRepositoryInterface {
 
             })
     }
+
     override suspend fun performIntialization(
         context: Activity,
         url: String,
@@ -183,22 +184,17 @@ class HostRepository : HostRepositoryInterface {
         apiResult: ApiResult
 
     ) {
-
-     
-
         apiInterface.performInit(url, updateRequest)
             .enqueue(object : Callback<UpdateResponse> {
                 override fun onResponse(
                     call: Call<UpdateResponse>?,
                     response: Response<UpdateResponse>?
                 ) {
-                   
 
 
-                    if(response?.body() !=null)
-                    apiResult.onSuccess(response!!.body())
-                    else
-                    {
+                    if (response?.body() != null)
+                        apiResult.onSuccess(response!!.body())
+                    else {
                         Log.d("failure", "init failed!! No Response")
 
                         apiResult.onFailure("init failed!! No Response - $url $updateRequest")
@@ -207,7 +203,7 @@ class HostRepository : HostRepositoryInterface {
 
                 override fun onFailure(call: Call<UpdateResponse>?, t: Throwable?) {
                     Log.d("failure", t?.message!!)
-                  
+
 
                     apiResult.onFailure(t.message!!)
                 }

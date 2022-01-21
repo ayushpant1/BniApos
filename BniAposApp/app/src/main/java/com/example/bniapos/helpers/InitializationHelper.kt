@@ -181,14 +181,25 @@ class InitializationHelper {
                     }
 
                 } else {
-
                     ShowDisplayDialog(
                         false,
                         "Initialization Failed...",
                         "No data received from server for update., Please try again"
                     )
                 }
+            } else {
+                ShowDisplayDialog(
+                    false,
+                    "Initialization Failed...",
+                    "Invalid response from server"
+                )
             }
+        } else {
+            ShowDisplayDialog(
+                false,
+                "Initialization Failed...",
+                "No data received from server for update., Please try again"
+            )
         }
     }
 
