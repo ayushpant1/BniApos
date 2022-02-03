@@ -85,7 +85,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private val submit = "Submit"
     private val next = "Next"
 
-    private val printResult:ISuccessResponse = object:ISuccessResponse{
+    private val printResult: ISuccessResponse = object : ISuccessResponse {
         override fun processFinish(output: String?) {
             finish()
         }
@@ -100,14 +100,13 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
             val allPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
                 val printValue = CommonUtility.getSchemaParamBySchemaId(
                     this@CpControlsActivity,
-                    menu?.receiptTemplate?.id?:0
+                    menu?.receiptTemplate?.id ?: 0
                 )
                 if (!isBpWorkflow && !printValue.isNullOrBlank()) {
                     val buttonInterface: ButtonInterface = object : ButtonInterface {
@@ -123,7 +122,11 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                                     )
                                 )
                             )
-                            CommonUtility.print(this@CpControlsActivity, allPrintFormats, printResult)
+                            CommonUtility.print(
+                                this@CpControlsActivity,
+                                allPrintFormats,
+                                printResult
+                            )
                         }
                     }
                     Alerts.customAlert(
@@ -196,7 +199,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         }
         tvTitle?.text = menu?.displayText
         val json = Configuration.getWorkflowConfig(this)
-        val jsonTable = loadTableJSONFromAsset()
+        val jsonTable = Configuration.getControlDataConfig(this)
         val gson = Gson()
         var workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
         workflowList = workflowList.filter { it.tYPE == "CP" }
@@ -286,18 +289,18 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                     controls.dVAL = (output?.get(controls.kEY) ?: "").toString()
                 }
                 CpControlType.CARDNO.name -> {
-                  //  output?.put(controls.kEY, cardReadOutput!!)
+                    //  output?.put(controls.kEY, cardReadOutput!!)
                 }
-                CpControlType.PIN.name->{
+                CpControlType.PIN.name -> {
                     output?.put(controls.kEY, cardReadOutput!!)
                     output?.put("CARDNAME", cardReadOutput?.customerName)
-                   // output?.put("CARDTYPE",cardReadOutput?.cardAppName)
-                    output?.put("APPNAME",cardReadOutput?.cardAppName)
-                    output?.put("AID",cardReadOutput?.cardAID)
-                    output?.put("TSI",cardReadOutput?.tsiData)
-                    output?.put("TC",cardReadOutput?.transactionCertificate)
-                    output?.put("TVR",cardReadOutput?.tvrData)
-                    output?.put("MCARDNO",cardReadOutput?.maskedCardNo)
+                    // output?.put("CARDTYPE",cardReadOutput?.cardAppName)
+                    output?.put("APPNAME", cardReadOutput?.cardAppName)
+                    output?.put("AID", cardReadOutput?.cardAID)
+                    output?.put("TSI", cardReadOutput?.tsiData)
+                    output?.put("TC", cardReadOutput?.transactionCertificate)
+                    output?.put("TVR", cardReadOutput?.tvrData)
+                    output?.put("MCARDNO", cardReadOutput?.maskedCardNo)
                 }
             }
         }
@@ -598,28 +601,6 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         emvProcessor?.close()
     }
 
-    /**
-     * Load control list data from assets which will be responsible for data given to controls
-     */
-    private fun loadTableJSONFromAsset(): String? {
-        val charset: Charset = Charsets.UTF_8
-        var json: String? = null
-        json = try {
-            val `is`: InputStream = assets.open("control_table_data.json")
-            val size: Int = `is`.available()
-            val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
-            String(buffer, charset)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        val jsonObject = JSONObject(json!!)
-        val jsonArray = jsonObject.getJSONArray("controlTableData")
-
-        return jsonArray.toString()
-    }
 
     /**
      * method responsible to store dataset of the controls

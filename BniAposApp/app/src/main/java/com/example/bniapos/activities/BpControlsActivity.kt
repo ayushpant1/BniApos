@@ -72,7 +72,7 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
     private var tvTitle: TextView? = null
     private var imgBack: ImageView? = null
 
-    private val printResult: ISuccessResponse = object: ISuccessResponse {
+    private val printResult: ISuccessResponse = object : ISuccessResponse {
         override fun processFinish(output: String?) {
             finish()
         }
@@ -99,33 +99,33 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                     menu?.receiptTemplate!!.id
                 )
 
-                    val buttonInterface: ButtonInterface = object : ButtonInterface {
-                        override fun onClicked(alertDialogBuilder: AlertDialog?) {
-                            if (!printValue.isNullOrBlank()) {
-                                allPrintFormats.addAll(
-                                    TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
-                                        TransactionPrintingHelper.ProcessPrintingTags(
-                                            this@BpControlsActivity,
-                                            CommonUtility.JsonToPrintFormatList(printValue),
-                                            JSONObject(jsonResponse.toString()),
-                                            JSONObject(jsonResponse.toString())
-                                        )
+                val buttonInterface: ButtonInterface = object : ButtonInterface {
+                    override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                        if (!printValue.isNullOrBlank()) {
+                            allPrintFormats.addAll(
+                                TerminalPrintUtils.PrintInvoiceFormat_LineFormatting(
+                                    TransactionPrintingHelper.ProcessPrintingTags(
+                                        this@BpControlsActivity,
+                                        CommonUtility.JsonToPrintFormatList(printValue),
+                                        JSONObject(jsonResponse.toString()),
+                                        JSONObject(jsonResponse.toString())
                                     )
+                                )
 
-                                )
-                                CommonUtility.print(
-                                    this@BpControlsActivity,
-                                    allPrintFormats,
-                                    printResult
-                                )
-                            } else finish()
-                        }
+                            )
+                            CommonUtility.print(
+                                this@BpControlsActivity,
+                                allPrintFormats,
+                                printResult
+                            )
+                        } else finish()
                     }
-                    Alerts.customAlert(
-                        this@BpControlsActivity,
-                        "Transaction Successful",
-                        buttonInterface
-                    )
+                }
+                Alerts.customAlert(
+                    this@BpControlsActivity,
+                    "Transaction Successful",
+                    buttonInterface
+                )
 
             } else {
                 currentWorkflow =
@@ -159,7 +159,6 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
         llParentBody = findViewById(R.id.ll_parent_body)
         btnNext = findViewById(R.id.btn_next)
@@ -169,7 +168,7 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
         menu = intent.getSerializableExtra(SubMenuActivity.MENU) as MenuLink
         tvTitle?.text = menu?.displayText
         val json = Configuration.getWorkflowConfig(this)
-        val jsonTable = loadTableJSONFromAsset()
+        val jsonTable = Configuration.getControlDataConfig(this)
         val gson = Gson()
         workflowId = intent.getIntExtra(SubMenuActivity.WORKFLOW_ID, 0)
         workflowList = gson.fromJson(json, Array<WORKFLOW>::class.java).asList()
@@ -517,29 +516,6 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
-    /**
-     * Load control list data from assets which will be responsible for data given to controls
-     */
-    private fun loadTableJSONFromAsset(): String? {
-        val charset: Charset = Charsets.UTF_8
-        var json: String? = null
-        json = try {
-            val `is`: InputStream = assets.open("control_table_data.json")
-            val size: Int = `is`.available()
-            val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
-            String(buffer, charset)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        val jsonObject = JSONObject(json!!)
-        val jsonArray = jsonObject.getJSONArray("controlTableData")
-
-        return jsonArray.toString()
-    }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
