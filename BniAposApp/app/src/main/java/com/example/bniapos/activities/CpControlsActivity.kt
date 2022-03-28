@@ -2,7 +2,6 @@ package com.example.bniapos.activities
 
 import MenuLink
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -37,10 +36,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.io.IOException
-import java.io.InputStream
 import java.lang.reflect.Type
-import java.nio.charset.Charset
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -177,7 +173,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_controls)
         llParentBody = findViewById(R.id.ll_parent_body)
         tvTitle = findViewById(R.id.tv_title)
         imgBack = findViewById(R.id.img_back)
