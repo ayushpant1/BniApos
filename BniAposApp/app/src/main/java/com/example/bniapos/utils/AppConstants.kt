@@ -1,17 +1,25 @@
 package com.example.bniapos.utils
 
+import com.example.bniapos.BniApplication
+
 object AppConstants {
     const val BASE_URL = "https://bniapi.payment2go.co.id/AndroidApi"
-    const val BP_URL = "https://bniapi.payment2go.co.id/AndroidApi/Payment"
-    const val CP_URL = "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost"
-    
-   
+    var BP_URL = SharedPreferenceUtils.getInstance(BniApplication.appContext).getBpUrl()
+    var CP_URL = SharedPreferenceUtils.getInstance(BniApplication.appContext).getCpUrl()
+    var INIT_URL = SharedPreferenceUtils.getInstance(BniApplication.appContext).getInitUrl()
+
+
+    const val DEFAULT_BP_URL = "https://bniapi.payment2go.co.id/AndroidApi/Payment"
+    const val DEFAULT_CP_URL = "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost"
+    const val DEFAULT_INIT_URL =
+        "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
+
+
     const val DEFAULT_STAN = 9
     const val LOGON_URL = "/Logon/token"
     const val LOGON_AUTHORIZATION =
         "Basic OTE5OGViMmMtNDU3My00NzViLWIyNDMtZmIxOTJmMzc0MDcyOjI1NjYzOWMzLTJlM2UtNDdiZC05ZTU4LWM0MDYyODFiNGViYw=="
     const val TEMP_GRANT_TYPE = "client_credentials"
-
 
 
     const val DEFAULT_INVOICE_NO = "0001"
@@ -28,4 +36,7 @@ object AppConstants {
     const val DEFAULT_MMID = "1020000000040495"
     const val DEFAULT_MTID = "1040000000052280"
     const val DEFAULT_AGEN_COUNTER_CODE = 9
+
+
+    const val URL_SETTINGS_TITLE = "Url Settings"
 }

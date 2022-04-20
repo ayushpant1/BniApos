@@ -6,6 +6,8 @@ import com.example.paymentsdk.CTIApplication
 import kotlin.system.exitProcess
 
 class BniApplication : Application() {
+
+
     /**
      * Create.
      */
@@ -13,6 +15,7 @@ class BniApplication : Application() {
         super.onCreate()
         CTIApplication.setContext(applicationContext)
         bindSdkDeviceService(applicationContext)
+        appContext = applicationContext
     }
 
     override fun onTerminate() {
@@ -25,6 +28,7 @@ class BniApplication : Application() {
         private fun bindSdkDeviceService(context: Context) {
             CTIApplication.bindSdkDeviceService(context)
         }
+        lateinit  var appContext: Context
     }
 
 }

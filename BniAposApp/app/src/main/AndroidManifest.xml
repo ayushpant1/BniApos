@@ -16,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoActionBar">
-        <activity android:name=".activities.ui.SettingsActivity"></activity>
+        <activity
+            android:name=".activities.UrlSettingsActivity"
+            android:exported="false" />
+        <activity android:name=".activities.ui.SettingsActivity" />
         <activity android:name=".activities.SubMenuActivity" />
         <activity
             android:name=".activities.HomeActivity"

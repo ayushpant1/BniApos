@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.*
 import com.example.bniapos.R
 import com.example.bniapos.activities.HomeActivity
+import com.example.bniapos.activities.UrlSettingsActivity
 import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.alerts.ProgressDialog
 import com.example.bniapos.callback.ApiResult
@@ -42,6 +43,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var btnPartialInit: Button? = null
     private var btnFullInit: Button? = null
+
+    private var imgUrlSettings: ImageView? = null
 
     private val apiResultLogon = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
@@ -126,6 +129,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
         btnPartialInit = findViewById(R.id.btn_partial_init)
         btnFullInit = findViewById(R.id.btn_full_init)
+
+        imgUrlSettings = findViewById(R.id.url_settings)
     }
 
     private fun showUI() {
@@ -143,6 +148,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         imgBack?.setOnClickListener(this)
         btnFullInit?.setOnClickListener(this)
         btnPartialInit?.setOnClickListener(this)
+        imgUrlSettings?.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -173,6 +179,10 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.btn_partial_init -> {
                 partialInit()
+            }
+            R.id.url_settings -> {
+                val intent = Intent(this@SettingsActivity, UrlSettingsActivity::class.java)
+                startActivity(intent)
             }
         }
     }

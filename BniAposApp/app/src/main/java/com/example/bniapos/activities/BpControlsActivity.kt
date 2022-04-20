@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bniapos.BniApplication
 import com.example.bniapos.R
 import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.callback.ApiResult
@@ -21,10 +22,7 @@ import com.example.bniapos.helpers.TransactionPrintingHelper
 import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.WORKFLOW
-import com.example.bniapos.utils.AppConstants
-import com.example.bniapos.utils.CommonUtility
-import com.example.bniapos.utils.Configuration
-import com.example.bniapos.utils.TerminalPrintUtils
+import com.example.bniapos.utils.*
 import com.example.paymentsdk.sdk.Common.ISuccessResponse
 import com.example.paymentsdk.sdk.Common.PrintFormat
 import com.google.android.material.textfield.TextInputLayout
@@ -272,7 +270,7 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                 this@BpControlsActivity,
                 Gson().toJsonTree(output)
                     .asJsonObject,
-                AppConstants.BP_URL + "/" + currentWorkflow!!.eNDPOINT,
+                SharedPreferenceUtils.getInstance(BniApplication.appContext).getBpUrl() + "/" + currentWorkflow!!.eNDPOINT,
                 currentWorkflow!!,
                 apiResult,
                 menu!!.txnType

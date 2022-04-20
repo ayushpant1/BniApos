@@ -12,6 +12,7 @@ import android.view.View
 import android.view.View.GONE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bniapos.BniApplication
 import com.example.bniapos.R
 import com.example.bniapos.alerts.Alerts
 import com.example.bniapos.callback.ApiResult
@@ -265,7 +266,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
             hostRepository.postData(
                 this@CpControlsActivity,
                 Gson().toJsonTree(output).asJsonObject,
-                AppConstants.CP_URL + "/" + currentWorkflow?.eNDPOINT,
+                SharedPreferenceUtils.getInstance(BniApplication.appContext).getCpUrl() + "/" + currentWorkflow?.eNDPOINT,
                 currentWorkflow!!,
                 apiResult,
                 txnType,

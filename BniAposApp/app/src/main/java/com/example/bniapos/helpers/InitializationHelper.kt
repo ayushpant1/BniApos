@@ -3,6 +3,7 @@ package com.example.bniapos.helpers
 import android.app.Activity
 
 import android.content.Context
+import com.example.bniapos.BniApplication
 import com.example.bniapos.alerts.ProgressDialog
 
 import com.example.bniapos.callback.ApiResult
@@ -94,8 +95,7 @@ class InitializationHelper {
     }
 
     private fun InitializationAction(request: UpdateRequest) {
-
-        val url = "https://demo.payment2go.co.id/AposHost/AndroidApi/ApiHost/getupdates"
+        val url = SharedPreferenceUtils.getInstance(BniApplication.appContext).getInitUrl()
         val apiResult: ApiResult = object : ApiResult {
             override fun onSuccess(response: Any) {
                 InitializationSuccess(response as UpdateResponse)

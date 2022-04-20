@@ -29,6 +29,10 @@
     <string name="password">Password</string>
     <string name="full_init">Full Init</string>
     <string name="partial_init">Partial Init</string>
+    <string name="bp_url">BP Url</string>
+    <string name="cp_url">CP Url</string>
+    <string name="init_url">Init Url</string>
+    <string name="close">Close</string>
 
 
 </resources>

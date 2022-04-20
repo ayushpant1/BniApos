@@ -184,7 +184,7 @@ class HostRepository : HostRepositoryInterface {
         apiResult: ApiResult
 
     ) {
-        apiInterface.performInit(url, updateRequest)
+            apiInterface.performInit(url, updateRequest)
             .enqueue(object : Callback<UpdateResponse> {
                 override fun onResponse(
                     call: Call<UpdateResponse>?,

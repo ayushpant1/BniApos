@@ -20,10 +20,13 @@ class SharedPreferenceUtils {
         private const val PREF_ALLOW_PAYMENT_TYPE = "allowedPaymentTypes"
 
         private const val PREF_MERCHANT_NAME = "mrn"
-        private const val PREF_ADDRESS_LINE1="mal1"
-        private const val PREF_ADDRESS_LINE2="mal2"
-        private const val PREF_ADDRESS_CITY="city"
-        private const val PREF_ACQ_NAME="aqn"
+        private const val PREF_ADDRESS_LINE1 = "mal1"
+        private const val PREF_ADDRESS_LINE2 = "mal2"
+        private const val PREF_ADDRESS_CITY = "city"
+        private const val PREF_ACQ_NAME = "aqn"
+        private const val PREF_BP_URL = "bpUrl"
+        private const val PREF_CP_URL = "cpUrl"
+        private const val PREF_INIT_URL = "initUrl"
 
         private const val INVALID_INDEX = -1
 
@@ -167,26 +170,31 @@ class SharedPreferenceUtils {
         val editor = sharedPref?.edit()
         editor?.putInt(PREF_CHANGE_NO, changeNo)?.apply()
     }
+
     fun getChangeNo(): Int {
         val changeNo = sharedPref?.getInt(
             PREF_CHANGE_NO, 0
-        )?:0
+        ) ?: 0
         return changeNo
     }
+
     fun setAllowedPaymentTypes(paymentTypes: String?) {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_ALLOW_PAYMENT_TYPE, paymentTypes)?.apply()
     }
+
     fun getAllowedPaymentTypes(): String {
         val paymentTypes = sharedPref?.getString(
             PREF_ALLOW_PAYMENT_TYPE, ""
         )
         return paymentTypes.toString()
     }
+
     fun setAllowedTransactionTypes(transactionTypes: String?) {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_ALLOW_TXN_TYPE, transactionTypes)?.apply()
     }
+
     fun getAllowedTransactionTypes(): String {
         val transactionTypes = sharedPref?.getString(
             PREF_ALLOW_TXN_TYPE, ""
@@ -199,6 +207,7 @@ class SharedPreferenceUtils {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_MERCHANT_NAME, value)?.apply()
     }
+
     fun getMerchantName(): String {
         val value = sharedPref?.getString(
             PREF_MERCHANT_NAME, ""
@@ -211,6 +220,7 @@ class SharedPreferenceUtils {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_ADDRESS_LINE1, value)?.apply()
     }
+
     fun getAddressLine1(): String {
         val value = sharedPref?.getString(
             PREF_ADDRESS_LINE1, ""
@@ -219,11 +229,11 @@ class SharedPreferenceUtils {
     }
 
 
-
     fun setAddressLine2(value: String?) {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_ADDRESS_LINE2, value)?.apply()
     }
+
     fun getAddressLine2(): String {
         val value = sharedPref?.getString(
             PREF_ADDRESS_LINE2, ""
@@ -232,11 +242,11 @@ class SharedPreferenceUtils {
     }
 
 
-
     fun setMerchantCity(value: String?) {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_ADDRESS_CITY, value)?.apply()
     }
+
     fun getMerchantCity(): String {
         val value = sharedPref?.getString(
             PREF_ADDRESS_CITY, ""
@@ -249,10 +259,50 @@ class SharedPreferenceUtils {
         val editor = sharedPref?.edit()
         editor?.putString(PREF_ACQ_NAME, value)?.apply()
     }
+
     fun getAcquirerName(): String {
         val value = sharedPref?.getString(
             PREF_ACQ_NAME, ""
         )
         return value.toString()
     }
+
+    fun setBpUrl(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_BP_URL, value)?.apply()
+    }
+
+    fun getBpUrl(): String {
+        val value = sharedPref?.getString(
+            PREF_BP_URL, AppConstants.DEFAULT_BP_URL
+        )
+        return value.toString()
+    }
+
+
+    fun setCpUrl(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_CP_URL, value)?.apply()
+    }
+
+    fun getCpUrl(): String {
+        val value = sharedPref?.getString(
+            PREF_CP_URL, AppConstants.DEFAULT_CP_URL
+        )
+        return value.toString()
+    }
+
+
+    fun setInitUrl(value: String?) {
+        val editor = sharedPref?.edit()
+        editor?.putString(PREF_INIT_URL, value)?.apply()
+    }
+
+    fun getInitUrl(): String {
+        val value = sharedPref?.getString(
+            PREF_INIT_URL, AppConstants.DEFAULT_INIT_URL
+        )
+        return value.toString()
+    }
+
 }
