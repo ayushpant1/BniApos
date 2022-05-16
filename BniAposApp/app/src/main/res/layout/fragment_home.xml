@@ -29,12 +29,13 @@
 
             <ImageView
                 android:id="@+id/img_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/ic_logo" />
 
             <TextView
+                android:visibility="gone"
                 style="@style/textViewStyle"
                 android:layout_below="@+id/img_logo"
                 android:gravity="center"
@@ -51,6 +52,7 @@
         </RelativeLayout>
 
         <TextView
+            android:visibility="gone"
             style="@style/textViewStyle"
             android:gravity="center"
             android:text="Nomor Agen : BNI05071946"
@@ -61,6 +63,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_top_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

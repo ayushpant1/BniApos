@@ -184,19 +184,20 @@ class HostRepository : HostRepositoryInterface {
         apiResult: ApiResult
 
     ) {
-            apiInterface.performInit(url, updateRequest)
+        apiInterface.performInit(url, updateRequest)
             .enqueue(object : Callback<UpdateResponse> {
                 override fun onResponse(
                     call: Call<UpdateResponse>?,
                     response: Response<UpdateResponse>?
                 ) {
 
-
-                    if (response?.body() != null)
+                    Log.d("initialization: url ", url)
+                    Log.d("initialization: request", Gson().toJson(updateRequest))
+                    if (response?.body() != null) {
+                        Log.d("initialization:response", Gson().toJson(response.body()))
                         apiResult.onSuccess(response!!.body())
-                    else {
+                    } else {
                         Log.d("failure", "init failed!! No Response")
-
                         apiResult.onFailure("init failed!! No Response - $url $updateRequest")
                     }
                 }

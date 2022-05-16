@@ -24,10 +24,10 @@ fun String.menuTypeToDrawable(): Int {
 
 fun String.subMenuTypeToDrawable(): Int {
     return when (this) {
-        SubMenuType.ACCOUNT_OPENING.name -> R.drawable.ic_transfer_bni_1
+        SubMenuType.ACCOUNT_OPENING.name -> R.drawable.ic_ic___bayar_dan_beli
         SubMenuType.CASH_DEPOSIT.name -> R.drawable.ic_antar_bank
         SubMenuType.CASH_WITHDRAWAL.name -> R.drawable.ic_virtual_account_billing_1
         SubMenuType.CREATE_OTP.name -> R.drawable.ic_kiriman
-        else -> R.drawable.ic_transfer_bni_1
+        else -> R.drawable.ic_ic___bayar_dan_beli
     }
 }
