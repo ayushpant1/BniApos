@@ -26,7 +26,7 @@ import com.example.bniapos.host.HostRepository
 import com.example.bniapos.models.CTRLS
 import com.example.bniapos.models.WORKFLOW
 import com.example.bniapos.utils.*
-
+import com.example.bniapos.wrapper.BundleKeys
 import com.example.paymentsdk.CardReadOutput
 import com.example.paymentsdk.sdk.Common.*
 import com.example.paymentsdk.sdk.util.transaction.TransactionConfig
@@ -38,8 +38,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.lang.reflect.Type
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
@@ -80,17 +78,24 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val submit = "Submit"
     private val next = "Next"
+    private var hostResult: String = ""
 
     private val printResult: ISuccessResponse = object : ISuccessResponse {
         override fun processFinish(output: String?) {
+            val bundle = createBundle(false, hostResult, "00")
+            returnResult(bundle)
             finish()
         }
 
         override fun processFailed(Exception: String?) {
+            val bundle = createBundle(false, hostResult, "00")
+            returnResult(bundle)
             finish()
         }
 
         override fun processTimeOut() {
+            val bundle = createBundle(false, hostResult, "00")
+            returnResult(bundle)
             finish()
         }
     }
@@ -98,6 +103,7 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val apiResult: ApiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
+            hostResult = jsonResponse.toString()
             val allPrintFormats: ArrayList<PrintFormat> = ArrayList<PrintFormat>()
             if (currentWorkflow?.nEXTWORKFLOWID == 0) {
                 val printValue = CommonUtility.getSchemaParamBySchemaId(
@@ -131,8 +137,11 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
                         buttonInterface
                     )
 
-                } else
+                } else {
+                    val bundle = createBundle(false, hostResult, "00")
+                    returnResult(bundle)
                     finish()
+                }
             } else {
                 currentWorkflow = workflowList?.find { it.iD == currentWorkflow?.nEXTWORKFLOWID }
                 controlList = currentWorkflow?.cTRLS
@@ -151,12 +160,8 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         override fun onFailure(message: String) {
             val buttonInterface: ButtonInterface = object : ButtonInterface {
                 override fun onClicked(alertDialogBuilder: AlertDialog?) {
-
-                    val intent = Intent(
-                        this@CpControlsActivity,
-                        HomeActivity::class.java
-                    )
-                    startActivity(intent)
+                    val bundle = createBundle(false, message, "100")
+                    returnResult(bundle)
                     finish()
                 }
             }
@@ -205,6 +210,8 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         storeToDatabase(objectListTable)
         if (controlList.isNullOrEmpty()) {
             Toast.makeText(this, "Workflow not attached", Toast.LENGTH_LONG).show()
+            val bundle = createBundle(false, "Workflow not attached", "100")
+            returnResult(bundle)
             finish()
         } else {
             loadScreen(controlList!!, mainScreenId)
@@ -224,6 +231,21 @@ class CpControlsActivity : AppCompatActivity(), View.OnClickListener {
         imgBack?.setOnClickListener(this)
 
 
+    }
+
+    private fun createBundle(isSuccess: Boolean, response: String, responseCode: String): Bundle {
+        val bundle = Bundle()
+        bundle.putBoolean(BundleKeys.IS_SUCCESS, isSuccess)
+        bundle.putString(BundleKeys.RESPONSE, response)
+        bundle.putString(BundleKeys.RESPONSE_CODE, responseCode)
+        return bundle
+    }
+
+    private fun returnResult(result: Bundle) {
+        val returnIntent = Intent()
+        result.putSerializable(BundleKeys.RESPONSE_PARAM, output?.toMap() as HashMap)
+        returnIntent.putExtra("result", result)
+        setResult(RESULT_OK, returnIntent)
     }
 
     /**

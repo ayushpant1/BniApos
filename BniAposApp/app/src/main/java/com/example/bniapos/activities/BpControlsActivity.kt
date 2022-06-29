@@ -25,6 +25,7 @@ import com.example.bniapos.utils.AppConstants
 import com.example.bniapos.utils.CommonUtility
 import com.example.bniapos.utils.Configuration
 import com.example.bniapos.utils.TerminalPrintUtils
+import com.example.bniapos.wrapper.BundleKeys
 import com.example.paymentsdk.sdk.Common.ISuccessResponse
 import com.example.paymentsdk.sdk.Common.PrintFormat
 import com.google.android.material.textfield.TextInputLayout
@@ -68,19 +69,41 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var tvTitle: TextView? = null
     private var imgBack: ImageView? = null
+    private var hostResult: String = ""
 
     private val printResult: ISuccessResponse = object : ISuccessResponse {
         override fun processFinish(output: String?) {
+            val bundle = createBundle(false, hostResult, "00")
+            returnResult(bundle)
             finish()
         }
 
         override fun processFailed(Exception: String?) {
+            val bundle = createBundle(false, hostResult, "00")
+            returnResult(bundle)
             finish()
         }
 
         override fun processTimeOut() {
+            val bundle = createBundle(false, hostResult, "00")
+            returnResult(bundle)
             finish()
         }
+    }
+
+    private fun createBundle(isSuccess: Boolean, response: String, responseCode: String): Bundle {
+        val bundle = Bundle()
+        bundle.putBoolean(BundleKeys.IS_SUCCESS, isSuccess)
+        bundle.putString(BundleKeys.RESPONSE, response)
+        bundle.putString(BundleKeys.RESPONSE_CODE, responseCode)
+        return bundle
+    }
+
+    private fun returnResult(result: Bundle) {
+        val returnIntent = Intent()
+        result.putSerializable(BundleKeys.RESPONSE_PARAM, output.toMap() as HashMap)
+        returnIntent.putExtra("result", result)
+        setResult(RESULT_OK, returnIntent)
     }
 
     private val apiResult: ApiResult = object : ApiResult {
@@ -115,7 +138,11 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
                                 allPrintFormats,
                                 printResult
                             )
-                        } else finish()
+                        } else {
+                            val bundle = createBundle(false, hostResult, "00")
+                            returnResult(bundle)
+                            finish()
+                        }
                     }
                 }
                 Alerts.customAlert(
@@ -142,6 +169,8 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
         override fun onFailure(message: String) {
             val buttonInterface: ButtonInterface = object : ButtonInterface {
                 override fun onClicked(alertDialogBuilder: AlertDialog?) {
+                    val bundle = createBundle(false, message, "100")
+                    returnResult(bundle)
                     finish()
                 }
             }
@@ -176,6 +205,8 @@ class BpControlsActivity : AppCompatActivity(), View.OnClickListener {
         storeToDatabase(objectListTable)
         if (controlList.isNullOrEmpty()) {
             Toast.makeText(this, "Workflow not attached", Toast.LENGTH_LONG).show()
+            val bundle = createBundle(false, "Workflow not attached", "100")
+            returnResult(bundle)
             finish()
         } else
             loadScreen(controlList!!, mainScreenId)

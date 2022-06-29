@@ -13,6 +13,9 @@ import com.example.bniapos.alerts.ProgressDialog
 import com.example.bniapos.callback.ApiResult
 import com.example.bniapos.callbacks.ButtonInterface
 import com.example.bniapos.helpers.InitializationHelper
+import com.example.bniapos.wrapper.BniWrapper
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,24 +32,47 @@ class SplashActivity : AppCompatActivity() {
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.
 
-        testInit()
+        var bniWrapper = BniWrapper()
+        MainScope().launch {
+            //first call this method for initialization
+            val result = bniWrapper.initialize(this@SplashActivity)
+            Log.d("result", result.toString())
+
+
+          /*  val transactionResult = bniWrapper.showAllMenus(this@SplashActivity)
+            Log.d("transactionResult", transactionResult.toString())
+
+*/
+            /**
+             * use this method to start a transaction directly
+             */
+
+            val transactionResult = bniWrapper.startTransaction(2500114, this@SplashActivity)
+            Log.d("transactionResult", transactionResult.toString())
+        }
+
+        //testInit()
 //        Handler().postDelayed({
 //            val intent = Intent(this, HomeActivity::class.java)
 //            startActivity(intent)
 //            finish()
 //        }, 3000) // 3000 is the delayed time in milliseconds.
     }
+
     fun testInit() {
         ProgressDialog.showDialog(this@SplashActivity)
         var initHelper = InitializationHelper()
         initHelper.init(this@SplashActivity, false, true, true, false, apiResult)
         initHelper.PerformInitialization()
     }
+
     private val apiResult = object : ApiResult {
         override fun onSuccess(jsonResponse: Any) {
             ProgressDialog.dismissDialog()
-            val intent = Intent(this@SplashActivity,
-                HomeActivity::class.java)
+            val intent = Intent(
+                this@SplashActivity,
+                HomeActivity::class.java
+            )
             startActivity(intent)
             finish()
         }
