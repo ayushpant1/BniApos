@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Client Projects/BNI/BNIAgent46/BniApos/BniAposApp/app/src/main/res/layout/success_alert.xml" value="0.1" />
+        <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/bg_btn.xml" value="0.1585" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_alipay.xml" value="0.1585" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_antar_bank.xml" value="0.1585" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_back.xml" value="0.1585" />
@@ -11,7 +12,9 @@
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_exit_to_app.xml" value="0.1585" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_ic___bayar_dan_beli.xml" value="0.1585" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_logo.xml" value="0.1585" />
+        <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_settings.xml" value="0.1585" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/drawable/ic_transfer_bni_1.xml" value="0.1585" />
+        <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/layout/activity_home.xml" value="0.23802083333333332" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/layout/activity_main.xml" value="0.23435897435897435" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/layout/activity_settings.xml" value="0.23435897435897435" />
         <entry key="..\:/Users/ayush/Documents/BniApos/BniAposApp/app/src/main/res/layout/activity_splash.xml" value="0.23435897435897435" />

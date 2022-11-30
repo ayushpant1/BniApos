@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JTrust app</string>
+    <string name="app_name">DKI app</string>
     <string name="title_activity_home">MainActivity</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_home">Beranda</string>

@@ -2,15 +2,14 @@ package com.example.bniapos.host
 
 import com.example.bniapos.models.UpdateRequest
 import com.example.bniapos.models.UpdateResponse
-import com.example.bniapos.models.responsemodels.LogonResponse
 import com.example.bniapos.utils.AppConstants
 import com.google.gson.JsonObject
-import org.json.JSONObject
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 
@@ -36,18 +35,20 @@ interface ApiInterface {
     ): Call<UpdateResponse>
 
 
-
     companion object {
 
         fun create(): ApiInterface {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             val okHttpClient = OkHttpClient.Builder()
                 .connectTimeout(2, TimeUnit.MINUTES)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor(interceptor)
                 .build()
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(AppConstants.BASE_URL+"/")
+                .baseUrl(AppConstants.BASE_URL + "/")
                 .client(okHttpClient)
                 .build()
 
